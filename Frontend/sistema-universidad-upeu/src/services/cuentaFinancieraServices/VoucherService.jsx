@@ -23,8 +23,8 @@ class VoucherService {
         }
     }
 
-    postVoucher(voucher){
-        return(
+    postVoucher(voucher) {
+        return (
             axios.post(VOUCHER_DATABASE_REST_API_URL, voucher, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -33,8 +33,8 @@ class VoucherService {
         );
     }
 
-    putVoucher(idVoucher, voucher){
-        return(
+    putVoucher(idVoucher, voucher) {
+        return (
             axios.put(VOUCHER_DATABASE_REST_API_URL + "/" + idVoucher, voucher, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -43,8 +43,8 @@ class VoucherService {
         );
     }
 
-    getAllVouchers(){
-        return(
+    getAllVouchers() {
+        return (
             axios.get(VOUCHER_DATABASE_REST_API_URL, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -53,8 +53,8 @@ class VoucherService {
         );
     }
 
-    getVoucherById(idVoucher){
-        return(
+    getVoucherById(idVoucher) {
+        return (
             axios.get(VOUCHER_DATABASE_REST_API_URL + "/" + idVoucher, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -63,8 +63,8 @@ class VoucherService {
         );
     }
 
-    deleteVoucher(idVoucher){
-        return(
+    deleteVoucher(idVoucher) {
+        return (
             axios.delete(VOUCHER_DATABASE_REST_API_URL + "/" + idVoucher, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -73,8 +73,8 @@ class VoucherService {
         );
     }
 
-    getVoucherByCuentaFinanciera(idCuentaFinanciera){
-        return(
+    getVoucherByCuentaFinanciera(idCuentaFinanciera) {
+        return (
             axios.get(VOUCHER_DATABASE_REST_API_URL + "/porCuentaFinanciera/" + idCuentaFinanciera, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -83,8 +83,8 @@ class VoucherService {
         );
     }
 
-    getVoucherByCuentaYAnio(idCuentaFinanciera, anio){
-        return(
+    getVoucherByCuentaYAnio(idCuentaFinanciera, anio) {
+        return (
             axios.get(VOUCHER_DATABASE_REST_API_URL + "/buscar/" + idCuentaFinanciera + "/" + anio, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -93,8 +93,8 @@ class VoucherService {
         );
     }
 
-    postVoucherToCuentaFinanciera(idCuentaFinanciera, voucher){
-        return(
+    postVoucherToCuentaFinanciera(idCuentaFinanciera, voucher) {
+        return (
             axios.post(VOUCHER_DATABASE_REST_API_URL + "/cuenta/" + idCuentaFinanciera, voucher, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -103,8 +103,8 @@ class VoucherService {
         );
     }
 
-    getVoucherByEstado(estado){
-        return(
+    getVoucherByEstado(estado) {
+        return (
             axios.get(VOUCHER_DATABASE_REST_API_URL + "/estado/" + estado, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
@@ -112,6 +112,20 @@ class VoucherService {
             })
         );
     }
+
+    putEstadoVoucher(idVoucher, estado) {
+        const estadoLimpio = encodeURIComponent(estado.trim()); // Elimina espacios y codifica caracteres especiales
+        return axios.put(
+            `${VOUCHER_DATABASE_REST_API_URL}/actualizarEstado/${idVoucher}/${estadoLimpio}`,
+            null, // No envías un cuerpo en el método PUT
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            }
+        );
+    }
+
 }
 
 export default new VoucherService();

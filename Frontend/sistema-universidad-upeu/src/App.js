@@ -54,6 +54,8 @@ import ValidarPagoComponent from './components/administrativo/validacionDePago/V
 import ListVouchersComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/voucher/ListVouchersComponent';
 import AddVoucherComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/voucher/AddVoucherComponent';
 import VerVoucherComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/voucher/VerVoucherComponent';
+import MostrarBoletaOFacturaComponent from './components/administrativo/validacionDePago/MostrarBoletaOFacturaComponent';
+import VerComprobanteComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/comprobante/VerComprobanteComponent';
 
 const App = () => {
   const nombreDelRol = getUserRole();
@@ -436,6 +438,15 @@ const App = () => {
             }
           />
 
+          <Route
+            path='/mostrar-comprobante-generado/:comprobanteURL'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ADMINISTRATIVO']}>
+                <MostrarBoletaOFacturaComponent />
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
 
           {/* RUTAS DEL DOCENTE*/}
 
@@ -555,6 +566,15 @@ const App = () => {
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <VerVoucherComponent />
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
+          <Route
+            path='/ver-comprobante/:comprobanteUrl'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
+                <VerComprobanteComponent />
               </GeneralProtectedRouteComponent>
             }
           />

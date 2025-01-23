@@ -60,6 +60,14 @@ class MovimientoAcademicoService {
             }
         });
     }
+
+    postMovimientoAcademicoToCuentaFinanciera(idCuentaFinanciera, movimientoAcademico){
+        return axios.post(`${MOVIMIENTOACADEMICO_BASE_REST_API_URL}/cuenta/${idCuentaFinanciera}`, movimientoAcademico, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            }
+        });
+    }
 }
 
 export default new MovimientoAcademicoService();

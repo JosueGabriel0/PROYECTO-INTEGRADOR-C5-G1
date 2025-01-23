@@ -78,8 +78,40 @@ public class VoucherServiceImpl implements VoucherService {
     }
 
     @Override
+    public Voucher actualizarVoucherDeCuentaFinanciera(Long idVoucher, Voucher datosVoucherActualizados){
+        Voucher voucherActual = voucherRepository.findById(idVoucher).orElseThrow(() -> new RuntimeException("Voucher con ID "+ idVoucher +" no encontrado"));
+        voucherActual.setNombreBanco(datosVoucherActualizados.getNombreBanco());
+        voucherActual.setNumeroDeOperacion(datosVoucherActualizados.getNumeroDeOperacion());
+        voucherActual.setFechaDeOperacion(datosVoucherActualizados.getFechaDeOperacion());
+        voucherActual.setImporte(datosVoucherActualizados.getImporte());
+        voucherActual.setEstado(datosVoucherActualizados.getEstado());
+
+        CuentaFinanciera cuentaFinancieraEncontrada = cuentaFinancieraRepository.findByVouchersIdVoucher(idVoucher);
+        voucherActual.setCuentaFinanciera(cuentaFinancieraEncontrada);
+        return voucherRepository.save(voucherActual);
+    }
+
     @Transactional
+    @Override
     public List<Voucher> buscarPorEstado(String estado){
         return voucherRepository.findByEstado(estado);
+    }
+
+    @Transactional
+    @Override
+    public Voucher actualizarEstadoVoucher(Long id, String estado){
+        validarEstado(estado);
+        Voucher voucherEncontrado = voucherRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No se encontro el voucher con ID: " + id));
+        voucherEncontrado.setEstado(estado);
+        return voucherRepository.save(voucherEncontrado);
+    }
+
+    private void validarEstado(String estado){
+        estado = estado.trim();
+
+        List<String> estadosPermitidos = List.of("REGISTRADO","VERIFICADO","PROCESADO","RECHAZADO");
+        if(!estadosPermitidos.contains(estado)){
+            throw new IllegalArgumentException("Estado invalido: " + estado);
+        }
     }
 }

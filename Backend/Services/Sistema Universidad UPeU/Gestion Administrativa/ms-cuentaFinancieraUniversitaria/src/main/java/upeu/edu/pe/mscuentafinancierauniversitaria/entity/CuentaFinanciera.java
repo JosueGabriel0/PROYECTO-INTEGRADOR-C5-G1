@@ -22,7 +22,10 @@ public class CuentaFinanciera {
     private double sumasCredito;
     private double saldoFinalDebito;
     private double saldoFinalCredito;
-    private double saldoAfavor;
+
+    @OneToMany(mappedBy = "cuentaFinanciera", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<SaldoAFavor> saldosAFavor;
 
     private LocalDateTime fechaCreacionCuentaFinanciera;
     private LocalDateTime fechaModificacionCuentaFinanciera;

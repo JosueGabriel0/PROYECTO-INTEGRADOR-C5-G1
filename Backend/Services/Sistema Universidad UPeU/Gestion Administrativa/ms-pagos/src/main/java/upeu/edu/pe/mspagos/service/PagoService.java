@@ -13,11 +13,11 @@ public interface PagoService {
 
     public Pago buscarPagoPorId(Long id);
 
-    public void crearPagoConBoleta(PagoBoletaRequest pagoBoletaRequest);
+    public PagoBoletaRequest crearPagoConBoleta(PagoBoletaRequest pagoBoletaRequest);
 
-    public void crearPagoConFactura(PagoFacturaRequest pagoFacturaRequest);
+    public PagoFacturaRequest crearPagoConFactura(PagoFacturaRequest pagoFacturaRequest);
 
-    public void actualizarPagoConComprobante(Long idPago, PagoRequest pagoRequest);
+    public PagoRequest actualizarPagoConComprobante(Long idPago, PagoRequest pagoRequest);
 
     public void eliminarPago(Long id);
 }

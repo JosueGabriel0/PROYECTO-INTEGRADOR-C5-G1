@@ -4,8 +4,9 @@ import EstudianteService from "../../../../../services/estudianteServices/estudi
 import { getInscripcionId } from "../../../../../services/authServices/authService";
 import InscripcionService from "../../../../../services/inscripcionServices/InscripcionService";
 import PersonaService from "../../../../../services/personaServices/PersonaService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MovimientoAcademicoService from "../../../../../services/cuentaFinancieraServices/MovimientoAcademicoService";
+import PagoService from "../../../../../services/pagoServices/PagoService";
 
 function EstadoFinancieroComponent() {
     const [imagendePersona, setImagenDePersona] = useState("")
@@ -40,6 +41,9 @@ function EstadoFinancieroComponent() {
 
 
     const idInscripcion = getInscripcionId();
+
+    //React Router Dom
+    const navigate = useNavigate();
 
     function obtenerFotoPersona() {
         InscripcionService.getInscripcionById(idInscripcion).then(async (response) => {
@@ -78,12 +82,18 @@ function EstadoFinancieroComponent() {
 
             // Llamada a listarMovimientosAcademicos
             try {
-                await listarMovimientosAcademicos(idCuentaFinanciera, tempAnio); // Si listarMovimientosAcademicos es async
+                listarMovimientosAcademicos(idCuentaFinanciera, tempAnio); // Si listarMovimientosAcademicos es async
                 console.log("Movimientos académicos filtrados correctamente.");
             } catch (error) {
                 console.error("Error al listar movimientos académicos:", error);
             }
         };
+
+        useEffect(() => {
+            if (idCuentaFinanciera && filtroAnio) {
+                handleFiltrar(); // Ejecutar el filtrado automáticamente una vez que los datos estén listos
+            }
+        }, [idCuentaFinanciera, filtroAnio]);
 
         return (
             <div>
@@ -108,6 +118,14 @@ function EstadoFinancieroComponent() {
                 </div>
             </div>
         );
+    }
+
+    function verComprobante(idPago) {
+        PagoService.getPagoById(idPago).then((response) => {
+            console.log("Este es el response: " + JSON.stringify(response.data, null, 2));
+            const comprobanteUrl = response.data.boleta ? response.data.boleta.boletaUrl : response.data.factura.facturaUrl;
+            navigate(`/ver-comprobante/${comprobanteUrl}`)
+        })
     }
 
     useEffect(() => {
@@ -278,7 +296,9 @@ function EstadoFinancieroComponent() {
                                         <td>{movimiento.descripcion}</td>
                                         <td>{movimiento.debito}</td>
                                         <td>{movimiento.credito}</td>
-                                        <td>{movimiento.idPago}</td>
+                                        <td>
+                                            <button onClick={(e) => {verComprobante(movimiento.idPago)}}>Ver comprobante</button>
+                                        </td>
                                     </tr>
                                 ))
                             ) : (
@@ -286,10 +306,22 @@ function EstadoFinancieroComponent() {
                                     <td colSpan="10">No hay movimientos disponibles</td>
                                 </tr>
                             )}
+                            <tr>
+                                <td colSpan="6"></td>
+                                <td colSpan="1">Saldo Final:</td>
+                                <td colSpan="1">0.00</td>
+                                <td colSpan="1"></td>
+                                <td colSpan="1"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            
+            <label><b>Ud. tiene a favor un saldo de</b></label>
+            <label><br /><b>{saldoAfavor}</b><br /></label>
+            <label><b>nuevos Soles</b></label>
         </div>
     );
 }

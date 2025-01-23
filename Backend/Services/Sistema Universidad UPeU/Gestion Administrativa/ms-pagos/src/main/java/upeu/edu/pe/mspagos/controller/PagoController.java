@@ -1,6 +1,8 @@
 package upeu.edu.pe.mspagos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +10,7 @@ import upeu.edu.pe.mspagos.entity.*;
 import upeu.edu.pe.mspagos.service.PagoService;
 import upeu.edu.pe.mspagos.service.PdfService;
 
+import java.io.File;
 import java.util.List;
 
 @RestController
@@ -19,39 +22,56 @@ public class PagoController {
     @Autowired
     private PdfService pdfService;
 
+    @GetMapping("/pdf/{fileName}")
+    public ResponseEntity<FileSystemResource> getPdf(@PathVariable String fileName) {
+        // Define el directorio donde están los archivos
+        String directorio = "src/main/resources/static";
+
+        // Crea la ruta completa del archivo
+        File archivo = new File(directorio, fileName);
+
+        // Verifica si el archivo existe
+        if (archivo.exists()) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archivo.getName() + "\"")
+                    .body(new FileSystemResource(archivo));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
     @PostMapping("/boleta")
-    public String crearPagoConBoleta(@RequestBody PagoBoletaRequest pagoBoletaRequest) {
+    public ResponseEntity<PagoBoletaRequest> crearPagoConBoleta(@RequestBody PagoBoletaRequest pagoBoletaRequest) {
         try {
-            pagoService.crearPagoConBoleta(pagoBoletaRequest);
-            return "Pago con Boleta creada y PDF generado correctamente.";
+            PagoBoletaRequest response = pagoService.crearPagoConBoleta(pagoBoletaRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error al generar el pago con boleta o el PDF.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PostMapping("/factura")
-    public String crearPagoConFactura(@RequestBody PagoFacturaRequest pagoFacturaRequest) {
+    public ResponseEntity<PagoFacturaRequest> crearPagoConFactura(@RequestBody PagoFacturaRequest pagoFacturaRequest) {
         try {
-            pagoService.crearPagoConFactura(pagoFacturaRequest);
-            return "Pago con Factura creada y PDF generado correctamente.";
+            PagoFacturaRequest response = pagoService.crearPagoConFactura(pagoFacturaRequest);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error al generar el pago con la factura o el PDF.";
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @PutMapping("/pagoConComprobante/{idPago}")
-    public ResponseEntity<String> actualizarPagoConComprobante(
+    public ResponseEntity<PagoRequest> actualizarPagoConComprobante(
             @PathVariable Long idPago,
             @RequestBody PagoRequest pagoRequest) {
         try {
-            pagoService.actualizarPagoConComprobante(idPago, pagoRequest);
-            return ResponseEntity.ok("El pago y su comprobante fueron actualizados correctamente.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            PagoRequest response = pagoService.actualizarPagoConComprobante(idPago, pagoRequest);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error al actualizar el pago.");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 

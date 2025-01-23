@@ -165,7 +165,7 @@ spring:
         - id: ms-cuentaFinancieraUniversitaria-service
           uri: lb://ms-cuentaFinancieraUniversitaria-service
           predicates:
-            - Path=/cuentaFinanciera/**, /movimientoAcademico/**, /voucher/**
+            - Path=/cuentaFinanciera/**, /movimientoAcademico/**, /voucher/**, /saldoAFavor/**
           filters:
             - AuthFilter
 

@@ -33,7 +33,6 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
             cuenta1.setSumasCredito(8000.0);
             cuenta1.setSaldoFinalDebito(2000.0);
             cuenta1.setSaldoFinalCredito(0.0);
-            cuenta1.setSaldoAfavor(2000.0);
 
             MovimientoAcademico movimiento1 = new MovimientoAcademico();
             movimiento1.setFecha(LocalDate.of(2023, 12, 1));

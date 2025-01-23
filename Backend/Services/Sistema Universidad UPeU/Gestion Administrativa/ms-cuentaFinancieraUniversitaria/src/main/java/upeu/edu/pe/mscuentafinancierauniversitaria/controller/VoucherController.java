@@ -61,29 +61,6 @@ public class VoucherController {
         return ResponseEntity.ok(nuevoVoucher);
     }
 
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Voucher> actualizarVoucher(@PathVariable(required = true) Long id, @ModelAttribute Voucher voucher, @RequestParam("file") MultipartFile voucherURL) {
-        voucher.setIdVoucher(id);
-        if(!voucherURL.isEmpty()) {
-            Path directorioImagenes = Paths.get("src//main//resources//static/images");
-            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
-            try {
-                byte[] bytesImg = voucherURL.getBytes();
-                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + voucherURL.getOriginalFilename());
-                Files.write(rutaCompleta, bytesImg);
-
-                voucher.setVoucherURL(voucherURL.getOriginalFilename());
-            } catch (IOException e) {
-                e.printStackTrace();
-                return ResponseEntity.internalServerError().build();
-            }
-        }
-
-        System.out.println("Este es el voucher que se esta actualizando mediante el controller y el service: "+voucher);
-        Voucher voucherActualizado = voucherService.actualizar(voucher);
-        return ResponseEntity.ok(voucherActualizado);
-    }
-
     @GetMapping
     public ResponseEntity<List<Voucher>> listarVouchers() {
         return ResponseEntity.ok(voucherService.listarTodos());
@@ -143,8 +120,35 @@ public class VoucherController {
         return ResponseEntity.ok(nuevoVoucher);
     }
 
+    @PutMapping(value = "cuenta/voucher/{idVoucher}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Voucher> actualizarVoucher(@PathVariable(required = true) Long idVoucher, @ModelAttribute Voucher datosVoucherActualizados, @RequestParam("file") MultipartFile voucherURL) {
+        if(!voucherURL.isEmpty()) {
+            Path directorioImagenes = Paths.get("src//main//resources//static/images");
+            String rutaAbsoluta = directorioImagenes.toFile().getAbsolutePath();
+            try {
+                byte[] bytesImg = voucherURL.getBytes();
+                Path rutaCompleta = Paths.get(rutaAbsoluta + "//" + voucherURL.getOriginalFilename());
+                Files.write(rutaCompleta, bytesImg);
+
+                datosVoucherActualizados.setVoucherURL(voucherURL.getOriginalFilename());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return ResponseEntity.internalServerError().build();
+            }
+        }
+
+        System.out.println("Este es el voucher que se esta actualizando mediante el controller y el service: "+ datosVoucherActualizados);
+        Voucher voucherActualizado = voucherService.actualizarVoucherDeCuentaFinanciera(idVoucher, datosVoucherActualizados);
+        return ResponseEntity.ok(voucherActualizado);
+    }
+
     @GetMapping("/estado/{estado}")
     public ResponseEntity<List<Voucher>> buscarPorEstado(@PathVariable String estado) {
         return ResponseEntity.ok(voucherService.buscarPorEstado(estado));
+    }
+
+    @PutMapping("/actualizarEstado/{idVoucher}/{estado}")
+    public ResponseEntity<Voucher> actualizarEstado(@PathVariable Long idVoucher, @PathVariable String estado) {
+        return ResponseEntity.ok(voucherService.actualizarEstadoVoucher(idVoucher, estado));
     }
 }

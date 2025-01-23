@@ -48,7 +48,7 @@ public class PagoServiceImpl implements PagoService {
 
     @Override
     @Transactional
-    public void crearPagoConBoleta(PagoBoletaRequest pagoBoletaRequest) {
+    public PagoBoletaRequest crearPagoConBoleta(PagoBoletaRequest pagoBoletaRequest) {
         Pago pago = pagoBoletaRequest.getPago();
         Boleta boleta = pagoBoletaRequest.getBoleta();
 
@@ -61,7 +61,7 @@ public class PagoServiceImpl implements PagoService {
         BigDecimal valorDescuento = valorTotal.multiply((boleta.getValorDescuento()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         BigDecimal valorTotalConDescuento = valorTotal.subtract(valorDescuento);
 
-        BigDecimal igvPorcentage = BigDecimal.ZERO;
+        BigDecimal igvPorcentaje = BigDecimal.ZERO;
         BigDecimal igv = BigDecimal.ZERO;
         BigDecimal precioVentaTotal = BigDecimal.ZERO;
         BigDecimal operacionGravada = BigDecimal.ZERO;
@@ -76,10 +76,16 @@ public class PagoServiceImpl implements PagoService {
 
             operacionGravada = valorTotalConDescuento;
 
-            igvPorcentage = BigDecimal.valueOf(18);
-            igv = operacionGravada.multiply(igvPorcentage.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            igvPorcentaje = BigDecimal.valueOf(18);
+            igv = operacionGravada.multiply(igvPorcentaje.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
 
             precioVentaTotal = operacionGravada.add(igv);
+
+            boleta.setOperacionGravada(precioVentaTotal);
+            boleta.setOperacionInafecta(BigDecimal.ZERO);
+            boleta.setOperacionExonerada(BigDecimal.ZERO);
+            boleta.setOperacionGratuita(BigDecimal.ZERO);
+
 
         } else if ((boleta.getOperacionInafecta() != null && boleta.getOperacionInafecta().compareTo(BigDecimal.ZERO) > 0) &&
                 (boleta.getOperacionGravada() == null || boleta.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -89,6 +95,11 @@ public class PagoServiceImpl implements PagoService {
             operacionInafecta = valorTotalConDescuento;
             precioVentaTotal = operacionInafecta;
 
+            boleta.setOperacionInafecta(precioVentaTotal);
+            boleta.setOperacionGravada(BigDecimal.ZERO);
+            boleta.setOperacionExonerada(BigDecimal.ZERO);
+            boleta.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((boleta.getOperacionExonerada() != null && boleta.getOperacionExonerada().compareTo(BigDecimal.ZERO) > 0) &&
                 (boleta.getOperacionGravada() == null || boleta.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (boleta.getOperacionInafecta() == null || boleta.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -96,6 +107,11 @@ public class PagoServiceImpl implements PagoService {
 
             operacionExonerada = valorTotalConDescuento;
             precioVentaTotal = operacionExonerada;
+
+            boleta.setOperacionExonerada(precioVentaTotal);
+            boleta.setOperacionGravada(BigDecimal.ZERO);
+            boleta.setOperacionInafecta(BigDecimal.ZERO);
+            boleta.setOperacionGratuita(BigDecimal.ZERO);
 
         } else if ((boleta.getOperacionGratuita() != null && boleta.getOperacionGratuita().compareTo(BigDecimal.ZERO) > 0) &&
                 (boleta.getOperacionGravada() == null || boleta.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -105,23 +121,23 @@ public class PagoServiceImpl implements PagoService {
             operacionesGratuitas = valorTotalConDescuento;
             precioVentaTotal = operacionesGratuitas;
 
+            boleta.setOperacionGratuita(precioVentaTotal);
+            boleta.setOperacionGravada(BigDecimal.ZERO);
+            boleta.setOperacionInafecta(BigDecimal.ZERO);
+            boleta.setOperacionExonerada(BigDecimal.ZERO);
+
         } else {
             throw new IllegalArgumentException("Solo se puede ingresar una operación. Vuelva a intentarlo.");
         }
 
         //Guardar los calculos
-        boleta.setValorDescuento(valorDescuento);
         boleta.setValorTotal(valorTotalConDescuento);
-        boleta.setOperacionGravada(operacionGravada);
-        boleta.setOperacionInafecta(operacionInafecta);
-        boleta.setOperacionExonerada(operacionExonerada);
-        boleta.setOperacionGratuita(operacionesGratuitas);
         boleta.setDescuentosTotales(valorDescuento);
         boleta.setIgv(igv);
         boleta.setPrecioVentaTotal(precioVentaTotal);
 
         boleta.setPago(pago);
-        boleta.setBoletaUrl("src/main/resources/static/boleta_" + boleta.getNumeroBoleta() + ".pdf");
+        boleta.setBoletaUrl("boleta_" + boleta.getNumeroBoleta() + ".pdf");
         boletaRepository.save(boleta);
 
         // Generar el PDF de la boleta
@@ -130,11 +146,12 @@ public class PagoServiceImpl implements PagoService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return new PagoBoletaRequest(pago, boleta);
     }
 
     @Override
     @Transactional
-    public void crearPagoConFactura(PagoFacturaRequest pagoFacturaRequest) {
+    public PagoFacturaRequest crearPagoConFactura(PagoFacturaRequest pagoFacturaRequest) {
         Pago pago = pagoFacturaRequest.getPago();
         Factura factura = pagoFacturaRequest.getFactura();
 
@@ -147,7 +164,7 @@ public class PagoServiceImpl implements PagoService {
         BigDecimal valorDescuento = valorTotal.multiply((factura.getValorDescuento()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         BigDecimal valorTotalConDescuento = valorTotal.subtract(valorDescuento);
 
-        BigDecimal igvPorcentage = BigDecimal.ZERO;
+        BigDecimal igvPorcentaje = BigDecimal.ZERO;
         BigDecimal igv = BigDecimal.ZERO;
         BigDecimal precioVentaTotal = BigDecimal.ZERO;
         BigDecimal operacionGravada = BigDecimal.ZERO;
@@ -162,10 +179,15 @@ public class PagoServiceImpl implements PagoService {
 
             operacionGravada = valorTotalConDescuento;
 
-            igvPorcentage = BigDecimal.valueOf(18);
-            igv = operacionGravada.multiply(igvPorcentage.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            igvPorcentaje = BigDecimal.valueOf(18);
+            igv = operacionGravada.multiply(igvPorcentaje.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
 
             precioVentaTotal = operacionGravada.add(igv);
+
+            factura.setOperacionGravada(precioVentaTotal);
+            factura.setOperacionInafecta(BigDecimal.ZERO);
+            factura.setOperacionExonerada(BigDecimal.ZERO);
+            factura.setOperacionGratuita(BigDecimal.ZERO);
 
         } else if ((factura.getOperacionInafecta() != null && factura.getOperacionInafecta().compareTo(BigDecimal.ZERO) > 0) &&
                 (factura.getOperacionGravada() == null || factura.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -176,6 +198,11 @@ public class PagoServiceImpl implements PagoService {
 
             precioVentaTotal = operacionInafecta;
 
+            factura.setOperacionInafecta(precioVentaTotal);
+            factura.setOperacionGravada(BigDecimal.ZERO);
+            factura.setOperacionExonerada(BigDecimal.ZERO);
+            factura.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((factura.getOperacionExonerada() != null && factura.getOperacionExonerada().compareTo(BigDecimal.ZERO) > 0) &&
                 (factura.getOperacionGravada() == null || factura.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (factura.getOperacionInafecta() == null || factura.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -185,6 +212,11 @@ public class PagoServiceImpl implements PagoService {
 
             precioVentaTotal = operacionExonerada;
 
+            factura.setOperacionExonerada(precioVentaTotal);
+            factura.setOperacionGravada(BigDecimal.ZERO);
+            factura.setOperacionInafecta(BigDecimal.ZERO);
+            factura.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((factura.getOperacionGratuita() != null && factura.getOperacionGratuita().compareTo(BigDecimal.ZERO) > 0) &&
                 (factura.getOperacionGravada() == null || factura.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (factura.getOperacionInafecta() == null || factura.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -193,23 +225,23 @@ public class PagoServiceImpl implements PagoService {
             operacionesGratuitas = valorTotalConDescuento;
             precioVentaTotal = operacionesGratuitas;
 
+            factura.setOperacionGratuita(precioVentaTotal);
+            factura.setOperacionGravada(BigDecimal.ZERO);
+            factura.setOperacionInafecta(BigDecimal.ZERO);
+            factura.setOperacionExonerada(BigDecimal.ZERO);
+
         } else {
             throw new IllegalArgumentException("Solo se puede ingresar una operación. Vuelva a intentarlo.");
         }
 
         //Guardar los calculos
-        factura.setValorDescuento(valorDescuento);
         factura.setValorTotal(valorTotalConDescuento);
-        factura.setOperacionGravada(operacionGravada);
-        factura.setOperacionInafecta(operacionInafecta);
-        factura.setOperacionExonerada(operacionExonerada);
-        factura.setOperacionGratuita(operacionesGratuitas);
         factura.setDescuentosTotales(valorDescuento);
         factura.setIgv(igv);
         factura.setPrecioVentaTotal(precioVentaTotal);
 
         factura.setPago(pago);
-        factura.setFacturaUrl("src/main/resources/static/factura_" + factura.getNumeroFactura() + ".pdf");
+        factura.setFacturaUrl("factura_" + factura.getNumeroFactura() + ".pdf");
         facturaRepository.save(factura);
 
         // Generar el PDF de la factura
@@ -218,6 +250,8 @@ public class PagoServiceImpl implements PagoService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return new PagoFacturaRequest(pago, factura);
     }
 
     private void actualizarDatosBoleta(Boleta boletaExistente, Boleta datosActualizados) {
@@ -227,7 +261,7 @@ public class PagoServiceImpl implements PagoService {
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         BigDecimal valorTotalConDescuento = valorTotal.subtract(valorDescuento);
 
-        BigDecimal igvPorcentage = BigDecimal.ZERO;
+        BigDecimal igvPorcentaje = BigDecimal.ZERO;
         BigDecimal igv = BigDecimal.ZERO;
         BigDecimal operacionGravada = BigDecimal.ZERO;
         BigDecimal precioVentaTotal = BigDecimal.ZERO;
@@ -242,10 +276,15 @@ public class PagoServiceImpl implements PagoService {
 
             operacionGravada = valorTotalConDescuento;
 
-            igvPorcentage = BigDecimal.valueOf(18);
-            igv = operacionGravada.multiply(igvPorcentage.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            igvPorcentaje = BigDecimal.valueOf(18);
+            igv = operacionGravada.multiply(igvPorcentaje.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
 
             precioVentaTotal = operacionGravada.add(igv);
+
+            boletaExistente.setOperacionGravada(precioVentaTotal);
+            boletaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            boletaExistente.setOperacionExonerada(BigDecimal.ZERO);
+            boletaExistente.setOperacionGratuita(BigDecimal.ZERO);
 
         } else if ((datosActualizados.getOperacionInafecta() != null && datosActualizados.getOperacionInafecta().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -255,6 +294,11 @@ public class PagoServiceImpl implements PagoService {
             operacionInafecta = valorTotalConDescuento;
             precioVentaTotal = operacionInafecta;
 
+            boletaExistente.setOperacionInafecta(precioVentaTotal);
+            boletaExistente.setOperacionGravada(BigDecimal.ZERO);
+            boletaExistente.setOperacionExonerada(BigDecimal.ZERO);
+            boletaExistente.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((datosActualizados.getOperacionExonerada() != null && datosActualizados.getOperacionExonerada().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (datosActualizados.getOperacionInafecta() == null || datosActualizados.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -263,6 +307,11 @@ public class PagoServiceImpl implements PagoService {
             operacionExonerada = valorTotalConDescuento;
             precioVentaTotal = operacionExonerada;
 
+            boletaExistente.setOperacionExonerada(precioVentaTotal);
+            boletaExistente.setOperacionGravada(BigDecimal.ZERO);
+            boletaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            boletaExistente.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((datosActualizados.getOperacionGratuita() != null && datosActualizados.getOperacionGratuita().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (datosActualizados.getOperacionInafecta() == null || datosActualizados.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -270,6 +319,11 @@ public class PagoServiceImpl implements PagoService {
 
             operacionesGratuitas = valorTotalConDescuento;
             precioVentaTotal = operacionesGratuitas;
+
+            boletaExistente.setOperacionGratuita(precioVentaTotal);
+            boletaExistente.setOperacionGravada(BigDecimal.ZERO);
+            boletaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            boletaExistente.setOperacionExonerada(BigDecimal.ZERO);
 
         } else {
             throw new IllegalArgumentException("Solo se puede ingresar una operación. Vuelva a intentarlo.");
@@ -292,9 +346,7 @@ public class PagoServiceImpl implements PagoService {
 
         boletaExistente.setCantidad(datosActualizados.getCantidad());
         boletaExistente.setValorUnitario(datosActualizados.getValorUnitario());
-        boletaExistente.setValorDescuento(valorDescuento);
         boletaExistente.setValorTotal(valorTotalConDescuento);
-        boletaExistente.setOperacionGravada(operacionGravada);
         boletaExistente.setDescuentosTotales(valorDescuento);
         boletaExistente.setIgv(igv);
         boletaExistente.setPrecioVentaTotal(precioVentaTotal);
@@ -308,7 +360,7 @@ public class PagoServiceImpl implements PagoService {
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
         BigDecimal valorTotalConDescuento = valorTotal.subtract(valorDescuento);
 
-        BigDecimal igvPorcentage = BigDecimal.ZERO;
+        BigDecimal igvPorcentaje = BigDecimal.ZERO;
         BigDecimal igv = BigDecimal.ZERO;
         BigDecimal precioVentaTotal = BigDecimal.ZERO;
         BigDecimal operacionGravada = BigDecimal.ZERO;
@@ -324,10 +376,16 @@ public class PagoServiceImpl implements PagoService {
 
             operacionGravada = valorTotalConDescuento;
 
-            igvPorcentage = BigDecimal.valueOf(18);
-            igv = operacionGravada.multiply(igvPorcentage.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
+            igvPorcentaje = BigDecimal.valueOf(18);
+            igv = operacionGravada.multiply(igvPorcentaje.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP));
 
             precioVentaTotal = operacionGravada.add(igv);
+
+            facturaExistente.setOperacionGravada(precioVentaTotal);
+            facturaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            facturaExistente.setOperacionExonerada(BigDecimal.ZERO);
+            facturaExistente.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((datosActualizados.getOperacionInafecta() != null && datosActualizados.getOperacionInafecta().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (datosActualizados.getOperacionExonerada() == null || datosActualizados.getOperacionExonerada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -336,6 +394,11 @@ public class PagoServiceImpl implements PagoService {
             operacionInafecta = valorTotalConDescuento;
 
             precioVentaTotal = operacionInafecta;
+
+            facturaExistente.setOperacionInafecta(precioVentaTotal);
+            facturaExistente.setOperacionGravada(BigDecimal.ZERO);
+            facturaExistente.setOperacionExonerada(BigDecimal.ZERO);
+            facturaExistente.setOperacionGratuita(BigDecimal.ZERO);
 
         } else if ((datosActualizados.getOperacionExonerada() != null && datosActualizados.getOperacionExonerada().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
@@ -346,6 +409,11 @@ public class PagoServiceImpl implements PagoService {
 
             precioVentaTotal = operacionExonerada;
 
+            facturaExistente.setOperacionExonerada(precioVentaTotal);
+            facturaExistente.setOperacionGravada(BigDecimal.ZERO);
+            facturaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            facturaExistente.setOperacionGratuita(BigDecimal.ZERO);
+
         } else if ((datosActualizados.getOperacionGratuita() != null && datosActualizados.getOperacionGratuita().compareTo(BigDecimal.ZERO) > 0) &&
                 (datosActualizados.getOperacionGravada() == null || datosActualizados.getOperacionGravada().compareTo(BigDecimal.ZERO) == 0) &&
                 (datosActualizados.getOperacionInafecta() == null || datosActualizados.getOperacionInafecta().compareTo(BigDecimal.ZERO) == 0) &&
@@ -353,6 +421,11 @@ public class PagoServiceImpl implements PagoService {
 
             operacionesGratuitas = valorTotalConDescuento;
             precioVentaTotal = operacionesGratuitas;
+
+            facturaExistente.setOperacionGratuita(precioVentaTotal);
+            facturaExistente.setOperacionGravada(BigDecimal.ZERO);
+            facturaExistente.setOperacionInafecta(BigDecimal.ZERO);
+            facturaExistente.setOperacionExonerada(BigDecimal.ZERO);
 
         } else {
             throw new IllegalArgumentException("Solo se puede ingresar una operación. Vuelva a intentarlo.");
@@ -376,9 +449,7 @@ public class PagoServiceImpl implements PagoService {
 
         facturaExistente.setCantidad(datosActualizados.getCantidad());
         facturaExistente.setValorUnitario(datosActualizados.getValorUnitario());
-        facturaExistente.setValorDescuento(valorDescuento);
         facturaExistente.setValorTotal(valorTotalConDescuento);
-        facturaExistente.setOperacionGravada(operacionGravada);
         facturaExistente.setDescuentosTotales(valorDescuento);
         facturaExistente.setIgv(igv);
         facturaExistente.setPrecioVentaTotal(precioVentaTotal);
@@ -387,7 +458,7 @@ public class PagoServiceImpl implements PagoService {
 
     @Override
     @Transactional
-    public void actualizarPagoConComprobante(Long idPago, PagoRequest pagoRequest) {
+    public PagoRequest actualizarPagoConComprobante(Long idPago, PagoRequest pagoRequest) {
         // Buscar el pago existente o lanzar una excepción si no se encuentra
         Pago pagoExistente = pagoRepository.findById(idPago)
                 .orElseThrow(() -> new IllegalArgumentException("No se encontró el pago con ID " + idPago));
@@ -403,9 +474,12 @@ public class PagoServiceImpl implements PagoService {
         pagoExistente.setFechaPago(datosPagoActualizados.getFechaPago());
 
         // Determinar si el pago tiene boleta o factura y actualizar según corresponda
+        Boleta boletaExistente = null;
+        Factura facturaExistente = null;
+
         if (pagoExistente.getBoleta() != null) {
             // Actualizar boleta
-            Boleta boletaExistente = pagoExistente.getBoleta();
+            boletaExistente = pagoExistente.getBoleta();
             Boleta datosBoletaActualizados = pagoRequest.getBoleta();
 
             actualizarDatosBoleta(boletaExistente, datosBoletaActualizados);
@@ -419,7 +493,7 @@ public class PagoServiceImpl implements PagoService {
             }
         } else if (pagoExistente.getFactura() != null) {
             // Actualizar factura
-            Factura facturaExistente = pagoExistente.getFactura();
+            facturaExistente = pagoExistente.getFactura();
             Factura datosFacturaActualizados = pagoRequest.getFactura();
 
             actualizarDatosFactura(facturaExistente, datosFacturaActualizados);
@@ -437,6 +511,7 @@ public class PagoServiceImpl implements PagoService {
 
         // Guardar los cambios en el pago
         pagoRepository.save(pagoExistente);
+        return new PagoRequest(pagoExistente, boletaExistente, facturaExistente);
     }
 
 
