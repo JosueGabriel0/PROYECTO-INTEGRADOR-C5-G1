@@ -1,7 +1,5 @@
 package upeu.edu.pe.msinscripciones.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,6 +9,7 @@ import java.util.List;
 
 @Data
 public class RegistroAcademico {
+
     private Long id;
 
     private Estudiante estudiante;

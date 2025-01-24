@@ -1,6 +1,7 @@
 package upeu.edu.pe.msnivelesdeensenanza.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upeu.edu.pe.msnivelesdeensenanza.entity.NivelEnsenanza;
@@ -42,7 +43,7 @@ public class NivelEnsenanzaController {
     }
 
     @GetMapping("/por-opcion/{idOpcionNivel}")
-    public NivelEnsenanza obtenerNivelEnsenanzaPorIdOpcionNivel(@PathVariable Long idOpcionNivel) {
-        return nivelEnsenanzaService.obtenerNivelEnsenanzaPorIdOpcionNivel(idOpcionNivel);
+    public ResponseEntity<NivelEnsenanza> obtenerNivelEnsenanzaPorIdOpcionNivel(@PathVariable Long idOpcionNivel) {
+        return ResponseEntity.status(HttpStatus.OK).body(nivelEnsenanzaService.obtenerNivelEnsenanzaPorIdOpcionNivel(idOpcionNivel));
     }
 }

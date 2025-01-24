@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "../authServices/authService";
 
-const OPCIONNIVEL_BASE_REST_API_URL = `${process.env.REACT_APP_API_BASE_URL}/opciones-nivel`;
+const OPCIONNIVEL_BASE_REST_API_URL = `${process.env.REACT_APP_API_BASE_URL}/opcionNivel`;
 
 class OpcionNivelService {
     getOpcionesNivelByNivelEnsenanza(idNivelEnsenanza){
@@ -68,7 +68,7 @@ class OpcionNivelService {
         return(
             axios.get(`${OPCIONNIVEL_BASE_REST_API_URL}/por-estudiante/${idEstudiante}`, {
                 headers: {
-                    Authorization: `Berar ${getToken()}`
+                    Authorization: `Bearer ${getToken()}`
                 }
             })
         );

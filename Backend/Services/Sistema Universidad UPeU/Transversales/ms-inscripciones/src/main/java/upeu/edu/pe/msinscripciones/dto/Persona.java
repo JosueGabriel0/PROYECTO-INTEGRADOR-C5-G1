@@ -1,13 +1,10 @@
 package upeu.edu.pe.msinscripciones.dto;
 
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Transient;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 public class Persona {
@@ -16,7 +13,7 @@ public class Persona {
     private String nombres;
     private String apellido_paterno;
     private String apellido_materno;
-    private String fecha_nacimiento;
+    private LocalDate fecha_nacimiento;
     private String genero;
     private String nacionalidad;
     private String tipoDocumento;
@@ -31,7 +28,6 @@ public class Persona {
     private String estadoCivil;
     private String fotoPerfil;
     private String tipoSangre;
-    private String responsableFinanciero;
     private String contactoEmergenciaNombre;
     private String contactoEmergenciaTelefono;
     private String contactoEmergenciaEmail;
@@ -41,6 +37,7 @@ public class Persona {
     private LocalDateTime fechaRegistro;
 
     private long idUsuario;
+    @Transient
     private Usuario usuario;
 
     private LocalDateTime fechaCreacionPersona;

@@ -22,8 +22,6 @@ public class CuentaFinancieraServiceImpl implements CuentaFinancieraService {
     @Autowired
     private CuentaFinancieraRepository cuentaFinancieraRepository;
     @Autowired
-    private MovimientoAcademicoRepository movimientoAcademicoRepository;
-    @Autowired
     private SaldoAFavorRepository saldoAFavorRepository;
     @Autowired
     private MovimientoAcademicoService movimientoAcademicoService;

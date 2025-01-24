@@ -124,7 +124,7 @@ const GeneralViewProfileComponent = () => {
   const [tipoEstudiante, setTipoEstudiante] = useState("");
   const [beca, setBeca] = useState("");
   const [numeroMatricula, setNumeroMatricula] = useState("");
-  const [carrerasIngresadas, setCarrerasIngresadas] = useState([]);
+  const [carrerasIngresadasIds, setCarrerasIngresadasIds] = useState([]);
   const [nuevaCarrera, setNuevaCarrera] = useState(""); // Carrera a agregar
   const [asignaturasMatriculadas, setAsignaturasMatriculadas] = useState([]);
   const [nuevaAsignatura, setNuevaAsignatura] = useState("");
@@ -145,6 +145,8 @@ const GeneralViewProfileComponent = () => {
 
   const datosDelPerfil = () => {
     InscripcionService.getInscripcionById(inscripcionId).then(async (response) => {
+
+      console.log("Estos son los datos de la inscripcion: " + JSON.stringify(response.data, null, 2));
       //Rol
       setNombreRol(response.data.rol.nombreRol);
       setDescription(response.data.rol.description);
@@ -183,6 +185,7 @@ const GeneralViewProfileComponent = () => {
         console.warn("La Persona no tiene una foto de Perfil definida.")
       }
 
+
       setTipoSangre(response.data.persona.tipoSangre);
       setResponsableFinanciero(response.data.persona.responsableFinanciero);
       setContactoEmergenciaNombre(response.data.persona.contactoEmergenciaNombre);
@@ -192,6 +195,8 @@ const GeneralViewProfileComponent = () => {
       setContactoEmergenciaCiudad(response.data.persona.contactoEmergenciaCiudad);
       setContactoEmergenciaParentesco(response.data.persona.contactoEmergenciaParentesco);
 
+
+      console.log("Este es el nombre del rol: " + response.data.rol.nombreRol);
       if (response.data.rol.nombreRol === "ADMINISTRADOR") {
 
         setActividadReciente(response.data.administrador.actividadReciente);
@@ -236,6 +241,23 @@ const GeneralViewProfileComponent = () => {
 
       } else if (response.data.rol.nombreRol === "ESTUDIANTE") {
 
+        console.log("Estos son los 15 datos del estudiante: ");
+        console.log(response.data.estudiante.matricula)
+        console.log(response.data.estudiante.cicloActual)
+        console.log(response.data.estudiante.promedioGeneral)
+        console.log(response.data.estudiante.fechaIngreso)
+        console.log(response.data.estudiante.estado)
+        console.log(response.data.estudiante.tipoEstudiante)
+        console.log(response.data.estudiante.beca)
+        console.log(response.data.estudiante.numeroMatricula)
+        console.log(response.data.estudiante.carrerasIngresadasIds)
+        console.log(response.data.estudiante.asignaturasMatriculadas)
+        console.log(response.data.estudiante.horario)
+        console.log(response.data.estudiante.consejeroAcademico)
+        console.log(response.data.estudiante.fechaGraduacion)
+        console.log(response.data.estudiante.practicasRealizadas)
+        console.log(response.data.estudiante.historialAcademico)
+
         setMatricula(response.data.estudiante.matricula);
         setCicloActual(response.data.estudiante.cicloActual);
         setPromedioGeneral(response.data.estudiante.promedioGeneral);
@@ -244,7 +266,7 @@ const GeneralViewProfileComponent = () => {
         setTipoEstudiante(response.data.estudiante.tipoEstudiante);
         setBeca(response.data.estudiante.beca);
         setNumeroMatricula(response.data.estudiante.numeroMatricula);
-        setCarrerasIngresadas(response.data.estudiante.carrerasIngresadas);
+        setCarrerasIngresadasIds(response.data.estudiante.carrerasIngresadasIds);
         setAsignaturasMatriculadas(response.data.estudiante.asignaturasMatriculadas);
         setHorarioEstudiante(response.data.estudiante.horario);
         setConsejeroAcademico(response.data.estudiante.consejeroAcademico);
@@ -529,7 +551,7 @@ const GeneralViewProfileComponent = () => {
         <div>
           <strong>Carreras Ingresadas:</strong>
           <ul>
-            {carrerasIngresadas.map((carrera, index) => (
+            {carrerasIngresadasIds.map((carrera, index) => (
               <li key={index}>{carrera}</li>
             ))}
           </ul>

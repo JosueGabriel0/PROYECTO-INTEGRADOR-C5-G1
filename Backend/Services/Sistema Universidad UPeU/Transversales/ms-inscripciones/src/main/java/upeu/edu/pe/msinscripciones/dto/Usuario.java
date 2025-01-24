@@ -1,6 +1,5 @@
 package upeu.edu.pe.msinscripciones.dto;
 
-import jakarta.persistence.Transient;
 import lombok.Data;
 
 import java.time.Instant;
@@ -16,10 +15,7 @@ public class Usuario {
     private boolean enabled; // Indica si el usuario está activo o no
 
     private long idRol;
-    @Transient
     private Rol rol;
-
-    private String resetToken; // Asegúrate de que esta propiedad exista
 
     private LocalDateTime ultimoLogin; // Última fecha de acceso del usuario
 

@@ -3,6 +3,7 @@ package upeu.edu.pe.msinscripciones.dto;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class CuentaFinanciera {
@@ -16,4 +17,6 @@ public class CuentaFinanciera {
     private double saldoFinalDebito;
     private double saldoFinalCredito;
     private double saldoAfavor;
+
+    private List<MovimientoAcademico> movimientosAcademicos;
 }

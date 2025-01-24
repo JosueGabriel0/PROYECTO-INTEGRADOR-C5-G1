@@ -1,6 +1,5 @@
 package upeu.edu.pe.msinscripciones.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+
 public class Estudiante {
     private Long idEstudiante;
 
-
+    private String codigoUniversitario;
     private String matricula;
     private int cicloActual;
     private double promedioGeneral;
@@ -25,14 +25,12 @@ public class Estudiante {
     private String numeroMatricula;
 
     private Long idCuentaFinanciera;
-    @Transient
     private CuentaFinanciera cuentaFinanciera;
 
     private Long idMovimientoAcademico;
-    @Transient
     private MovimientoAcademico movimientoAcademico;
 
-    private List<String> carrerasIngresadas = new ArrayList<String>();
+    private List<Long> carrerasIngresadasIds = new ArrayList<Long>();
 
     private List<String> asignaturasMatriculadas = new ArrayList<String>();
 
@@ -43,8 +41,9 @@ public class Estudiante {
 
     private List<String> practicasRealizadas = new ArrayList<String>();
 
-
     private List<RegistroAcademico> historialAcademico;
+
+    private ResponsableFinanciero responsableFinanciero;
 
     private long idPersona;
     private Persona persona;

@@ -17,6 +17,8 @@ public class MovimientoAcademico {
     private String debito;
     private String credito;
 
-    private Long idBoleta;
-    private Long idFactura;
+    private Long idPago;
+    private Pago pago;
+
+    private CuentaFinanciera cuentaFinanciera;
 }

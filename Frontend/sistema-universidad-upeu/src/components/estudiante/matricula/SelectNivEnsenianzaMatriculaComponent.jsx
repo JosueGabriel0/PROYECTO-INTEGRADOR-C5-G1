@@ -5,15 +5,17 @@ import MatriculaService from "../../../services/matriculaServices/MatriculaServi
 import { getInscripcionId } from "../../../services/authServices/authService";
 import InscripcionService from "../../../services/inscripcionServices/InscripcionService";
 import OpcionNivelService from "../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
+import NivelEnsenanzaService from "../../../services/nivelDeEnsenanzaServices/NivelEnsenanzaService";
+import "../../../style-sheets/generalMomentaneo.css";
 
 function SelectNivEnsenianzaMatriculaComponent() {
     const idInscripcion = getInscripcionId();
 
-    //Datos estudiante
-    const [carrerasIngresadas, setCarrerasIngresadas] = useState([]);
-
     //Datos de opciones de nivel de ensenanza
     const [opcionesNivel, setOpcionesNivel] = useState([]);
+
+    //Datos de nivel ensenanza
+    const [nombresNivel, setNombresNivel] = useState({});
 
     //Datos loading
     const [mensaje, setMensaje] = useState('');
@@ -37,19 +39,32 @@ function SelectNivEnsenianzaMatriculaComponent() {
         validarEstudiante();
     }, [idInscripcion]);
 
-    function obtenerOpcionesNivelYNivelEnsenanza() {
-        InscripcionService.getInscripcionById(idInscripcion).then((inscripcion) => {
-            console.log("Esta es la inscripcion: " + JSON.stringify(inscripcion.data, null, 2));
-            const idESTUDIANTE = inscripcion.data.idEstudiante;
-            OpcionNivelService.getOpcionesNivelPorCarrerasEstudiante(idESTUDIANTE).then((response) => {
-                console.log("Estas son las opciones de nivel de ensenanza: " + JSON.stringify(response.data, null, 2));
-                setOpcionesNivel(response.data);
-            })
-        })
+    async function obtenerOpcionesNivel() {
+        try {
+            const inscripcion = await InscripcionService.getInscripcionById(idInscripcion);
+            const idEstudiante = inscripcion.data.idEstudiante;
+            console.log("Este es el id del estudiante: " + inscripcion.data.idEstudiante);
+            const response = await OpcionNivelService.getOpcionesNivelPorCarrerasEstudiante(idEstudiante);
+            setOpcionesNivel(response.data);
+
+            // Obtener nombres de nivel en paralelo
+            const nombres = {};
+            await Promise.all(
+                response.data.map(async (opcionNivel) => {
+                    const nivelResponse = await NivelEnsenanzaService.getNivelEnsenanzaByIdOpcionNivel(opcionNivel.idOpcionNivel);
+                    nombres[opcionNivel.idOpcionNivel] = nivelResponse.data.nombre;
+                })
+            );
+            setNombresNivel(nombres);
+        } catch (error) {
+            console.error('Error al obtener las opciones de nivel:', error);
+        } finally {
+            setCargando(false);
+        }
     }
 
     useEffect(() => {
-        obtenerCarrerasEstudiante();
+        obtenerOpcionesNivel();
     }, [])
 
     return (
@@ -58,7 +73,26 @@ function SelectNivEnsenianzaMatriculaComponent() {
                 <div>Cargando...</div>
             ) : (mensaje === 'Estudiante validado' ? (
                 <div>
-                    <h1>Seleccione un nivel de enseñanza para su matricula.</h1>
+                    <h1>Seleccione una opcion Nivel.</h1>
+                    {opcionesNivel ? (
+                        opcionesNivel.map((opcionNivel) => {
+                            return (
+                                <div className="card" key={opcionNivel.idOpcionNivel}>
+                                    <h2 className="card-title">{nombresNivel[opcionNivel.idOpcionNivel] || 'Cargando...'}</h2>
+                                    <div className="card-content">
+                                        <p><strong>Semestre:</strong>{opcionNivel.semestre}</p>
+                                        <p><strong>Campus:</strong>{opcionNivel.campus}</p>
+                                        <p><strong>Plan:</strong>{opcionNivel.idPLanificacionAcademica}</p>
+                                        <p><strong>Programa de estudio</strong>{opcionNivel.idCarrera}</p>
+                                        <p><strong>Modalidad de estudio</strong>{opcionNivel.modalidad}</p>
+                                        <p><strong>Estado:</strong>{opcionNivel.estado}</p>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    ) : (
+                        <p>No hay niveles de enseñanza</p>
+                    )}
                 </div>
             ) : (
                 <div>
@@ -68,4 +102,5 @@ function SelectNivEnsenianzaMatriculaComponent() {
         </div>
     );
 }
+
 export default SelectNivEnsenianzaMatriculaComponent;

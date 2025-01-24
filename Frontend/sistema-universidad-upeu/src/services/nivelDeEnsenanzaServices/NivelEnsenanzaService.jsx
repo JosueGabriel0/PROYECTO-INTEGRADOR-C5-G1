@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getToken } from "../authServices/authService";
 
-const NIVELENSENANZA_BASE_REST_API_URL = `${process.env.REACT_APP_API_BASE_URL}/niveles-ensenanza`;
+const NIVELENSENANZA_BASE_REST_API_URL = `${process.env.REACT_APP_API_BASE_URL}/nivelEnsenanza`;
 class NivelEnsenanzaService {
     getAllNivelesEnsenanza(){
         return(
@@ -53,9 +53,9 @@ class NivelEnsenanzaService {
         );
     }
 
-    deleteNivelEnsenanza(idOpcionNivel){
+    getNivelEnsenanzaByIdOpcionNivel(idOpcionNivel){
         return(
-            axios.delete(`${NIVELENSENANZA_BASE_REST_API_URL}/por-opcion/${idOpcionNivel}`, {
+            axios.get(`${NIVELENSENANZA_BASE_REST_API_URL}/por-opcion/${idOpcionNivel}`, {
                 headers: {
                     Authorization: `Bearer ${getToken()}`
                 }
@@ -63,3 +63,5 @@ class NivelEnsenanzaService {
         );
     }
 }
+
+export default new NivelEnsenanzaService();
