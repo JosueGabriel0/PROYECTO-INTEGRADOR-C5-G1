@@ -41,4 +41,9 @@ public class NivelEnsenanzaServiceImpl implements NivelEnsenanzaService {
     public void eliminar(Long id) {
         nivelEnsenanzaRepository.deleteById(id);
     }
+
+    @Override
+    public NivelEnsenanza obtenerNivelEnsenanzaPorIdOpcionNivel(Long idOpcionNivel) {
+        return nivelEnsenanzaRepository.findNivelEnsenanzaByOpcionNivelId(idOpcionNivel);
+    }
 }

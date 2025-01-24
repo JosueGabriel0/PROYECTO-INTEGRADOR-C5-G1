@@ -3,14 +3,17 @@ import { useEffect, useState } from "react";
 
 import MatriculaService from "../../../services/matriculaServices/MatriculaService";
 import { getInscripcionId } from "../../../services/authServices/authService";
-import EstudianteService from "../../../services/estudianteServices/estudiante/EstudianteService";
 import InscripcionService from "../../../services/inscripcionServices/InscripcionService";
+import OpcionNivelService from "../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
 
 function SelectNivEnsenianzaMatriculaComponent() {
     const idInscripcion = getInscripcionId();
 
     //Datos estudiante
     const [carrerasIngresadas, setCarrerasIngresadas] = useState([]);
+
+    //Datos de opciones de nivel de ensenanza
+    const [opcionesNivel, setOpcionesNivel] = useState([]);
 
     //Datos loading
     const [mensaje, setMensaje] = useState('');
@@ -34,14 +37,13 @@ function SelectNivEnsenianzaMatriculaComponent() {
         validarEstudiante();
     }, [idInscripcion]);
 
-    function obtenerCarrerasEstudiante() {
+    function obtenerOpcionesNivelYNivelEnsenanza() {
         InscripcionService.getInscripcionById(idInscripcion).then((inscripcion) => {
             console.log("Esta es la inscripcion: " + JSON.stringify(inscripcion.data, null, 2));
             const idESTUDIANTE = inscripcion.data.idEstudiante;
-            EstudianteService.getEstudianteById(idESTUDIANTE).then((estudiante) => {
-                console.log("Este es el estudiante: " + JSON.stringify(estudiante.data, null, 2));
-                console.log("Estas son las carreras ingresadas: " + JSON.stringify(estudiante.data.carrerasIngresadasIds, null, 2));
-                setCarrerasIngresadas(estudiante.data.carrerasIngresadasIds);
+            OpcionNivelService.getOpcionesNivelPorCarrerasEstudiante(idESTUDIANTE).then((response) => {
+                console.log("Estas son las opciones de nivel de ensenanza: " + JSON.stringify(response.data, null, 2));
+                setOpcionesNivel(response.data);
             })
         })
     }

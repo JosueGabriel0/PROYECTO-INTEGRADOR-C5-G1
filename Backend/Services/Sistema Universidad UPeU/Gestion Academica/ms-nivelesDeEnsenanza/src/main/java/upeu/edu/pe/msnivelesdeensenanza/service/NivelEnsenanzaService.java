@@ -10,4 +10,5 @@ public interface NivelEnsenanzaService {
     public NivelEnsenanza crear(NivelEnsenanza nivelEnsenanza);
     public NivelEnsenanza actualizar(Long id, NivelEnsenanza nivelEnsenanzaActualizado);
     public void eliminar(Long id);
+    public NivelEnsenanza obtenerNivelEnsenanzaPorIdOpcionNivel(Long idOpcionNivel);
 }

@@ -20,8 +20,8 @@ public class OpcionNivelController {
     @Autowired
     private EstudianteFeign estudianteFeign;
 
-    @GetMapping("/{nivelId}/opciones")
-    public ResponseEntity<List<OpcionNivel>> listarOpcionesPorNivel(@PathVariable Long nivelId) {
+    @GetMapping("/nivelEnsenanza/{nivelId}")
+    public ResponseEntity<List<OpcionNivel>> listarOpcionesNivelPorNivel(@PathVariable Long nivelId) {
         return ResponseEntity.ok(opcionNivelService.obtenerOpcionesPorNivel(nivelId));
     }
 
@@ -52,10 +52,10 @@ public class OpcionNivelController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/por-estudiante/{estudianteId}")
-    public List<OpcionNivel> obtenerOpcionesPorEstudiante(@PathVariable Long estudianteId) {
+    @GetMapping("/por-estudiante/{idEstudiante}")
+    public List<OpcionNivel> obtenerOpcionesPorEstudiante(@PathVariable Long idEstudiante) {
         // Supongamos que tienes un servicio de Estudiante para obtenerlo por ID
-        Estudiante estudiante = estudianteFeign.listarEstudianteDtoPorId(estudianteId).getBody();
+        Estudiante estudiante = estudianteFeign.listarEstudianteDtoPorId(idEstudiante).getBody();
         return opcionNivelService.listarOpcionesPorCarreras(estudiante.getCarrerasIngresadasIds());
     }
 }

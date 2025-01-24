@@ -1,5 +1,6 @@
 package upeu.edu.pe.msnivelesdeensenanza.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class OpcionNivel {
 
     @ManyToOne
     @JoinColumn(name = "nivel_id")
+    @JsonBackReference
     private NivelEnsenanza nivelEnsenanza;
 
     private String tipoEstudio;

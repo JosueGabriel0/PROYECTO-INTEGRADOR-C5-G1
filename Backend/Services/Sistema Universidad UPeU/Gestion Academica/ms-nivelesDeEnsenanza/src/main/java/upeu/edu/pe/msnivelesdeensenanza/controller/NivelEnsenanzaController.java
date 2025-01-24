@@ -40,4 +40,9 @@ public class NivelEnsenanzaController {
         nivelEnsenanzaService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/por-opcion/{idOpcionNivel}")
+    public NivelEnsenanza obtenerNivelEnsenanzaPorIdOpcionNivel(@PathVariable Long idOpcionNivel) {
+        return nivelEnsenanzaService.obtenerNivelEnsenanzaPorIdOpcionNivel(idOpcionNivel);
+    }
 }
