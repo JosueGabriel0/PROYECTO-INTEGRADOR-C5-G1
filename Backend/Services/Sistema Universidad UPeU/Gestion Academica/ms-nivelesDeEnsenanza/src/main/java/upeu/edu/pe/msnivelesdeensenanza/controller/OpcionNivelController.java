@@ -3,7 +3,9 @@ package upeu.edu.pe.msnivelesdeensenanza.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upeu.edu.pe.msnivelesdeensenanza.dto.Estudiante;
 import upeu.edu.pe.msnivelesdeensenanza.entity.OpcionNivel;
+import upeu.edu.pe.msnivelesdeensenanza.feign.EstudianteFeign;
 import upeu.edu.pe.msnivelesdeensenanza.service.OpcionNivelService;
 
 import java.util.List;
@@ -14,6 +16,9 @@ public class OpcionNivelController {
 
     @Autowired
     private OpcionNivelService opcionNivelService;
+
+    @Autowired
+    private EstudianteFeign estudianteFeign;
 
     @GetMapping("/{nivelId}/opciones")
     public ResponseEntity<List<OpcionNivel>> listarOpcionesPorNivel(@PathVariable Long nivelId) {
@@ -45,5 +50,12 @@ public class OpcionNivelController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         opcionNivelService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/por-estudiante/{estudianteId}")
+    public List<OpcionNivel> obtenerOpcionesPorEstudiante(@PathVariable Long estudianteId) {
+        // Supongamos que tienes un servicio de Estudiante para obtenerlo por ID
+        Estudiante estudiante = estudianteFeign.listarEstudianteDtoPorId(estudianteId).getBody();
+        return opcionNivelService.listarOpcionesPorCarreras(estudiante.getCarrerasIngresadasIds());
     }
 }

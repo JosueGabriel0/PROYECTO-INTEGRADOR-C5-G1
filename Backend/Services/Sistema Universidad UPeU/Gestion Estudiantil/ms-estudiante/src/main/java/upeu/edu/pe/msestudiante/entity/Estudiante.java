@@ -42,9 +42,9 @@ public class Estudiante {
     private MovimientoAcademico movimientoAcademico;
 
     @ElementCollection
-    @CollectionTable(name = "carreras_ingresadas", joinColumns = @JoinColumn(name = "estudiante_id"))
-    @Column(name = "carreras")
-    private List<String> carrerasIngresadas = new ArrayList<String>();
+    @CollectionTable(name = "carreras_ingresadas_ids", joinColumns = @JoinColumn(name = "estudiante_id"))
+    @Column(name = "carreras_ids")
+    private List<Long> carrerasIngresadasIds = new ArrayList<Long>();
 
     @ElementCollection
     @CollectionTable(name = "asignaturas_matriculadas", joinColumns = @JoinColumn(name = "estudiante_id"))

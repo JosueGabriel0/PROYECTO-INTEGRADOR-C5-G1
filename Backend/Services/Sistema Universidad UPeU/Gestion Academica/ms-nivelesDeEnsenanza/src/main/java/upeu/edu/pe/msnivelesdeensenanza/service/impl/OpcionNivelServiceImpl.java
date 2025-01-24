@@ -113,4 +113,9 @@ public class OpcionNivelServiceImpl implements OpcionNivelService {
     public void eliminar(Long id) {
         opcionNivelRepository.deleteById(id);
     }
+
+    @Override
+    public List<OpcionNivel> listarOpcionesPorCarreras(List<Long> carrerasIds) {
+        return opcionNivelRepository.findByIdCarreraIn(carrerasIds);
+    }
 }

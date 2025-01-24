@@ -38,10 +38,10 @@ public class SaldoAFavorServiceImpl implements SaldoAFavorService {
     }
 
     @Override
-    public SaldoAFavor buscarSaldoAFavorPorAnio(Integer anio) {
+    public SaldoAFavor buscarPorCuentaYAnio(Long idCuentaFinanciera, Integer anio) {
         LocalDate startDate = LocalDate.of(anio, 1, 1);
         LocalDate endDate = LocalDate.of(anio, 12, 31);
-        SaldoAFavor saldoAFavorEncontrado = saldoAFavorRepository.getSaldoAFavorByAnioSaldoAFavorBetween(startDate, endDate);
+        SaldoAFavor saldoAFavorEncontrado = saldoAFavorRepository.findByCuentaFinancieraIdCuentaFinancieraAndFechaSaldoAFavorBetween(idCuentaFinanciera, startDate, endDate);
         return saldoAFavorEncontrado;
     }
 
@@ -49,7 +49,7 @@ public class SaldoAFavorServiceImpl implements SaldoAFavorService {
     public SaldoAFavor actualizarSaldoAFavor(Long idSaldoAFavor, SaldoAFavor saldoAFavorActualizado) {
         SaldoAFavor saldoAFavorExistente = saldoAFavorRepository.findById(idSaldoAFavor).orElseThrow(() -> new IllegalArgumentException("Saldo A Favor con ID " + idSaldoAFavor + " no encontrado"));
         saldoAFavorExistente.setMontoSaldoAFavor(saldoAFavorActualizado.getMontoSaldoAFavor());
-        saldoAFavorExistente.setAnioSaldoAFavor(saldoAFavorActualizado.getAnioSaldoAFavor());
+        saldoAFavorExistente.setFechaSaldoAFavor(saldoAFavorActualizado.getFechaSaldoAFavor());
 
         SaldoAFavor ActualizacionSaldoAFavor = saldoAFavorRepository.save(saldoAFavorExistente);
         return ActualizacionSaldoAFavor;

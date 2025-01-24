@@ -11,4 +11,5 @@ public interface CuentaFinancieraService {
     public CuentaFinanciera actualizar(CuentaFinanciera cuentaFinanciera);
     public void eliminar(Long id);
     public CuentaFinanciera buscarPorVoucher(Long id);
+    public void actualizarSaldoAFavorPorAnio(Long cuentaFinancieraId, Integer anio);
 }

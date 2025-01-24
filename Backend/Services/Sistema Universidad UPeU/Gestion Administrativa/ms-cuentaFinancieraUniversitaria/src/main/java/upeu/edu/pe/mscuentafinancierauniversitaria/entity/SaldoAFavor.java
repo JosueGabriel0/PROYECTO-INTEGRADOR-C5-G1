@@ -17,7 +17,7 @@ public class SaldoAFavor {
 
     private BigDecimal montoSaldoAFavor;
 
-    private LocalDate anioSaldoAFavor;
+    private LocalDate fechaSaldoAFavor;
 
     private LocalDateTime fecheCreacionSaldoAFavor;
     private LocalDateTime fechaModificacionSaldoAFavor;

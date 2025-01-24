@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface OpcionNivelRepository extends JpaRepository<OpcionNivel, Long> {
     List<OpcionNivel> findByNivelEnsenanzaIdNivelEnsenanza(Long nivelId);
+    List<OpcionNivel> findByIdCarreraIn(List<Long> carrerasIds);
 }

@@ -8,5 +8,5 @@ import java.time.LocalDate;
 
 @Repository
 public interface SaldoAFavorRepository extends JpaRepository<SaldoAFavor, Long> {
-    public SaldoAFavor getSaldoAFavorByAnioSaldoAFavorBetween(LocalDate startDate, LocalDate endDate);
+    SaldoAFavor findByCuentaFinancieraIdCuentaFinancieraAndFechaSaldoAFavorBetween(Long idCuentaFinanciera, LocalDate startDate, LocalDate endDate);
 }

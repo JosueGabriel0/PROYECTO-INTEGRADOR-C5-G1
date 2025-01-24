@@ -35,9 +35,9 @@ public class SaldoAFavorController {
         return ResponseEntity.status(HttpStatus.OK).body(saldoAFavorEncontrado);
     }
 
-    @GetMapping("/anio/{anio}")
-    ResponseEntity<SaldoAFavor> buscarSaldoAFavorPorAnio(@PathVariable Integer anio){
-        SaldoAFavor saldoAFavorEncontrado = saldoAFavorService.buscarSaldoAFavorPorAnio(anio);
+    @GetMapping("/cuentaYAnio/{idCuentaFinanciera}/{anio}")
+    ResponseEntity<SaldoAFavor> buscarPorCuentaYAnio(@PathVariable Long idCuentaFinanciera, @PathVariable Integer anio){
+        SaldoAFavor saldoAFavorEncontrado = saldoAFavorService.buscarPorCuentaYAnio(idCuentaFinanciera, anio);
         return ResponseEntity.status(HttpStatus.OK).body(saldoAFavorEncontrado);
     }
 

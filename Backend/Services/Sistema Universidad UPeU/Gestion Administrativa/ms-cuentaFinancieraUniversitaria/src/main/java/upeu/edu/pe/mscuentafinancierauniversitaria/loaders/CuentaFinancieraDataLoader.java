@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import upeu.edu.pe.mscuentafinancierauniversitaria.entity.CuentaFinanciera;
 import upeu.edu.pe.mscuentafinancierauniversitaria.entity.MovimientoAcademico;
+import upeu.edu.pe.mscuentafinancierauniversitaria.entity.SaldoAFavor;
 import upeu.edu.pe.mscuentafinancierauniversitaria.entity.Voucher;
 import upeu.edu.pe.mscuentafinancierauniversitaria.repository.CuentaFinancieraRepository;
 
@@ -67,9 +68,15 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
             voucher1.setVoucherURL("Voucher1.png");
             voucher1.setCuentaFinanciera(cuenta1);
 
+            SaldoAFavor saldoAFavor1 = new SaldoAFavor();
+            saldoAFavor1.setMontoSaldoAFavor(BigDecimal.ZERO);
+            saldoAFavor1.setFechaSaldoAFavor(LocalDate.of(2025, 1, 1));
+            saldoAFavor1.setCuentaFinanciera(cuenta1);
+
 
             cuenta1.setMovimientosAcademicos(List.of(movimiento1, movimiento2));
             cuenta1.setVouchers(List.of(voucher1));
+            cuenta1.setSaldosAFavor(List.of(saldoAFavor1));
 
             // Crear CuentaFinanciera 2 con movimientos
             CuentaFinanciera cuenta2 = new CuentaFinanciera();
@@ -80,7 +87,6 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
             cuenta2.setSumasCredito(14000.0);
             cuenta2.setSaldoFinalDebito(1000.0);
             cuenta2.setSaldoFinalCredito(0.0);
-            cuenta2.setSaldoAfavor(1000.0);
 
             MovimientoAcademico movimiento3 = new MovimientoAcademico();
             movimiento3.setFecha(LocalDate.of(2024, 1, 5));
@@ -103,8 +109,14 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
             voucher2.setVoucherURL("Voucher1.png");
             voucher2.setCuentaFinanciera(cuenta2);
 
+            SaldoAFavor saldoAFavor2 = new SaldoAFavor();
+            saldoAFavor2.setMontoSaldoAFavor(BigDecimal.ZERO);
+            saldoAFavor2.setFechaSaldoAFavor(LocalDate.of(2024, 1, 1));
+            saldoAFavor2.setCuentaFinanciera(cuenta2);
+
             cuenta2.setMovimientosAcademicos(List.of(movimiento3));
             cuenta2.setVouchers(List.of(voucher2));
+            cuenta2.setSaldosAFavor(List.of(saldoAFavor2));
 
             // Guardar en la base de datos
             cuentaFinancieraRepository.saveAll(List.of(cuenta1, cuenta2));

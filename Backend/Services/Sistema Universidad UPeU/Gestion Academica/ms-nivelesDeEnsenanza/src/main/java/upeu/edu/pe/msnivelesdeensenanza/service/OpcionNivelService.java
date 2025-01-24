@@ -11,4 +11,5 @@ public interface OpcionNivelService {
     public OpcionNivel crear(OpcionNivel opcionNivel);
     public OpcionNivel actualizar(OpcionNivel opcionNivel);
     public void eliminar(Long id);
+    public List<OpcionNivel> listarOpcionesPorCarreras(List<Long> carrerasIds);
 }

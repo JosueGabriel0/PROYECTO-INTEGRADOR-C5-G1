@@ -2,6 +2,7 @@ package upeu.edu.pe.mscuentafinancierauniversitaria.service.impl;
 
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import upeu.edu.pe.mscuentafinancierauniversitaria.dto.Pago;
@@ -9,6 +10,7 @@ import upeu.edu.pe.mscuentafinancierauniversitaria.entity.CuentaFinanciera;
 import upeu.edu.pe.mscuentafinancierauniversitaria.entity.MovimientoAcademico;
 import upeu.edu.pe.mscuentafinancierauniversitaria.exception.ResourceNotFoundException;
 import upeu.edu.pe.mscuentafinancierauniversitaria.feign.PagoFeign;
+import upeu.edu.pe.mscuentafinancierauniversitaria.listener.MovimientoAcademicoCreadoEvent;
 import upeu.edu.pe.mscuentafinancierauniversitaria.repository.CuentaFinancieraRepository;
 import upeu.edu.pe.mscuentafinancierauniversitaria.repository.MovimientoAcademicoRepository;
 import upeu.edu.pe.mscuentafinancierauniversitaria.service.MovimientoAcademicoService;
@@ -24,6 +26,8 @@ public class MovimientoAcademicoServiceImpl implements MovimientoAcademicoServic
     private CuentaFinancieraRepository cuentaFinancieraRepository;
     @Autowired
     private MovimientoAcademicoRepository movimientoAcademicoRepository;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     @Autowired
     private PagoFeign pagoFeign;
@@ -102,8 +106,11 @@ public class MovimientoAcademicoServiceImpl implements MovimientoAcademicoServic
             // Asociar el voucher con la cuenta financiera
             movimientoAcademico.setCuentaFinanciera(cuentaFinanciera);
 
+            MovimientoAcademico savedMovimiento = movimientoAcademicoRepository.save(movimientoAcademico);
+
+            eventPublisher.publishEvent(new MovimientoAcademicoCreadoEvent(this, savedMovimiento));
             // Guardar el movimiento academico
-            return movimientoAcademicoRepository.save(movimientoAcademico);
+            return savedMovimiento;
         } else {
             throw new RuntimeException("Movimiento Academico no encontrado con el ID: " + idCuentaFinanciera);
         }

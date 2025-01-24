@@ -7,6 +7,7 @@ import PersonaService from "../../../../../services/personaServices/PersonaServi
 import { Link, useNavigate } from "react-router-dom";
 import MovimientoAcademicoService from "../../../../../services/cuentaFinancieraServices/MovimientoAcademicoService";
 import PagoService from "../../../../../services/pagoServices/PagoService";
+import SaldoAFavorService from "../../../../../services/cuentaFinancieraServices/SaldoAFavorService";
 
 function EstadoFinancieroComponent() {
     const [imagendePersona, setImagenDePersona] = useState("")
@@ -20,7 +21,10 @@ function EstadoFinancieroComponent() {
     const [sumasCredito, setSumasCredito] = useState("");
     const [saldoFinalDebito, setSaldoFinalDebito] = useState("");
     const [saldoFinalCredito, setSaldoFinalCredito] = useState("");
-    const [saldoAfavor, setSaldoAfavor] = useState("");
+
+    //Datos de Saldo A Favor
+    const [montoSaldoAFavor, setMontoSaldoAFavor] = useState("");
+    const [fechaSaldoAFavor, setFechaSaldoAFavor] = useState("");
 
     //Datos Personales
     const [nombreCompleto, setNombreCompleto] = useState("");
@@ -66,6 +70,17 @@ function EstadoFinancieroComponent() {
         });
     }
 
+    function listarSaldoAFavor(idCuentaFinanciera, anio){
+        SaldoAFavorService.getSaldoAFavorByCuentaYAnio(idCuentaFinanciera, anio).then((response) => {
+            console.log("Este es el response: " + JSON.stringify(response.data, null, 2));
+            console.log("Este es el monto del saldo a favor: " + response.data.montoSaldoAFavor + " y esta la fecha: " + response.data.fechaSaldoAFavor)
+            setMontoSaldoAFavor(response.data.montoSaldoAFavor);
+            setFechaSaldoAFavor(response.data.fechaSaldoAFavor);
+        }).catch((error) => {
+            console.log(error);
+        });
+    }
+
     function YearFilter() {
         const currentYear = new Date().getFullYear();
         const years = Array.from({ length: currentYear - 2001 }, (_, i) => 2002 + i);
@@ -84,6 +99,9 @@ function EstadoFinancieroComponent() {
             try {
                 listarMovimientosAcademicos(idCuentaFinanciera, tempAnio); // Si listarMovimientosAcademicos es async
                 console.log("Movimientos académicos filtrados correctamente.");
+
+                listarSaldoAFavor(idCuentaFinanciera, tempAnio);
+                console.log("Saldo a Favor filtrado correctamente.");
             } catch (error) {
                 console.error("Error al listar movimientos académicos:", error);
             }
@@ -171,7 +189,6 @@ function EstadoFinancieroComponent() {
                         setSumasCredito(response.data.sumasCredito);
                         setSaldoFinalDebito(response.data.saldoFinalDebito);
                         setSaldoFinalCredito(response.data.saldoFinalCredito);
-                        setSaldoAfavor(response.data.saldoAfavor);
                         console.log("Este es el id de la cuenta financiera: " + response.data.idCuentaFinanciera + " y este es el anio: " + filtroAnio);
                         setIdCuentaFinanciera(response.data.idCuentaFinanciera);
                     });
@@ -265,7 +282,6 @@ function EstadoFinancieroComponent() {
             <div>
                 <div>
                     <h4>Mis depositos: </h4>
-                    <button>Ver</button>
                 </div>
                 <div>
                     <table>
@@ -310,7 +326,7 @@ function EstadoFinancieroComponent() {
                                 <td colSpan="6"></td>
                                 <td colSpan="1">Saldo Final:</td>
                                 <td colSpan="1">0.00</td>
-                                <td colSpan="1"></td>
+                                <td colSpan="1">{montoSaldoAFavor}</td>
                                 <td colSpan="1"></td>
                             </tr>
                         </tbody>
@@ -320,7 +336,7 @@ function EstadoFinancieroComponent() {
 
             
             <label><b>Ud. tiene a favor un saldo de</b></label>
-            <label><br /><b>{saldoAfavor}</b><br /></label>
+            <label><br /><b>{montoSaldoAFavor}</b><br /></label>
             <label><b>nuevos Soles</b></label>
         </div>
     );
