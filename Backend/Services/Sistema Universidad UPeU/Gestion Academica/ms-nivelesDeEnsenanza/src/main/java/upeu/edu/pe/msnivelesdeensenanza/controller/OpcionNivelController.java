@@ -11,7 +11,7 @@ import upeu.edu.pe.msnivelesdeensenanza.service.OpcionNivelService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/opciones-nivel")
+@RequestMapping("/opcionNivel")
 public class OpcionNivelController {
 
     @Autowired

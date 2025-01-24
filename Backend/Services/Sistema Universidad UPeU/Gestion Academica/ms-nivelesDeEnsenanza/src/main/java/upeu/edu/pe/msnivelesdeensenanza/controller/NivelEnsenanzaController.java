@@ -9,7 +9,7 @@ import upeu.edu.pe.msnivelesdeensenanza.service.NivelEnsenanzaService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/niveles-ensenanza")
+@RequestMapping("/nivelEnsenanza")
 public class NivelEnsenanzaController {
 
     @Autowired

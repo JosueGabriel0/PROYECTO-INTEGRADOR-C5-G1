@@ -158,7 +158,7 @@ spring:
         - id: ms-nivelesDeEnsenanza-service
           uri: lb://ms-nivelesDeEnsenanza-service
           predicates:
-            - Path=/niveles-ensenanza/**, /opciones-nivel/**, /cicloDetalle/**, /cursoDetalle/**, /horario/**, /horarioDetalle/**
+            - Path=/nivelEnsenanza/**, /opcionNivel/**, /cicloDetalle/**, /cursoDetalle/**, /horario/**, /horarioDetalle/**
           filters:
             - AuthFilter
 
