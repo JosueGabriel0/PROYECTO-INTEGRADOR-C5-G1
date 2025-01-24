@@ -39,7 +39,6 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante1.setBeca("Beca 100%");
             estudiante1.setNumeroMatricula("123456");
             estudiante1.setIdCuentaFinanciera(1L);
-            estudiante1.setIdMovimientoAcademico(1L);
             estudiante1.setCarrerasIngresadasIds(Arrays.asList(1L,2L));
             estudiante1.setAsignaturasMatriculadas(Arrays.asList("Matemáticas", "Programación"));
             estudiante1.setHorario("Lunes a Viernes 8am - 2pm");
@@ -49,6 +48,7 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante1.setHistorialAcademico(createHistorialAcademico(estudiante1));
             estudiante1.setResponsableFinanciero(createResponsableFinanciero(estudiante1));
             estudiante1.setIdPersona(4L);
+            estudiante1.setIdPLanificacionAcademica(1L);
 
             // Crear estudiante 2
             Estudiante estudiante2 = new Estudiante();
@@ -62,7 +62,6 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante2.setBeca("Beca parcial");
             estudiante2.setNumeroMatricula("654321");
             estudiante2.setIdCuentaFinanciera(2L);
-            estudiante2.setIdMovimientoAcademico(2L);
             estudiante2.setCarrerasIngresadasIds(Arrays.asList(1L));
             estudiante2.setAsignaturasMatriculadas(Arrays.asList("Química", "Física"));
             estudiante2.setHorario("Lunes a Viernes 9am - 3pm");
@@ -72,6 +71,7 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante2.setHistorialAcademico(createHistorialAcademico(estudiante2));
             estudiante2.setResponsableFinanciero(createResponsableFinanciero(estudiante2));
             estudiante2.setIdPersona(5L);
+            estudiante2.setIdPLanificacionAcademica(1L);
 
             // Guardar estudiantes en la base de datos
             estudianteRepository.saveAll(Arrays.asList(estudiante1, estudiante2));

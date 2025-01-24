@@ -36,7 +36,7 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 opcion1.setSemestre("2024-I");
                 opcion1.setCampus("Campus Central");
                 opcion1.setIdCarrera(1L);
-                opcion1.setIdPLanificacionAcademica(101L);
+                opcion1.setIdPLanificacionAcademica(1L);
                 opcion1.setModalidad("Presencial");
                 opcion1.setEstado("Activo");
                 opcion1.setCostoDeMatricula(1500.0);

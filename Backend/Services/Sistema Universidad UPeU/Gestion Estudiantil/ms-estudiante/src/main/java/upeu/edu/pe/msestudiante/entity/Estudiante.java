@@ -6,6 +6,7 @@ import lombok.Data;
 import upeu.edu.pe.msestudiante.dto.CuentaFinanciera;
 import upeu.edu.pe.msestudiante.dto.MovimientoAcademico;
 import upeu.edu.pe.msestudiante.dto.Persona;
+import upeu.edu.pe.msestudiante.dto.PlanificacionAcademica;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,10 +37,6 @@ public class Estudiante {
     private Long idCuentaFinanciera;
     @Transient
     private CuentaFinanciera cuentaFinanciera;
-
-    private Long idMovimientoAcademico;
-    @Transient
-    private MovimientoAcademico movimientoAcademico;
 
     @ElementCollection
     @CollectionTable(name = "carreras_ingresadas_ids", joinColumns = @JoinColumn(name = "estudiante_id"))
@@ -75,6 +72,10 @@ public class Estudiante {
     private long idPersona;
     @Transient
     private Persona persona;
+
+    private Long idPLanificacionAcademica;
+    @Transient
+    private PlanificacionAcademica planificacionAcademica;
 
     private LocalDateTime fechaCreacionEstudiante;
     private LocalDateTime fechaModificacionEstudiante;

@@ -76,19 +76,19 @@ public interface InscripcionFeign {
         return ResponseEntity.ok(new Inscripcion());
     }
 
-    default ResponseEntity<String> fallBackEliminarDatosInscripcion(Long id){
+    default ResponseEntity<String> fallBackEliminarDatosInscripcion(Long id, Exception e){
         return ResponseEntity.ok("No se pudo eliminar, fallbackMethod Activado");
     }
 
-    default ResponseEntity<List<Inscripcion>> fallBackListarInscripciones(){
+    default ResponseEntity<List<Inscripcion>> fallBackListarInscripciones(Exception e){
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    default ResponseEntity<Inscripcion> fallBackListarInscripcionesPorIdCB(Long id){
+    default ResponseEntity<Inscripcion> fallBackListarInscripcionesPorIdCB(Long id, Exception e){
         return ResponseEntity.ok(new Inscripcion());
     }
 
-    default ResponseEntity<Inscripcion> fallBackBuscarInscripcionPorIdUsuario(Long idUsuario){
+    default ResponseEntity<Inscripcion> fallBackBuscarInscripcionPorIdUsuario(Long idUsuario, Exception e){
         return ResponseEntity.ok(new Inscripcion());
     }
 }

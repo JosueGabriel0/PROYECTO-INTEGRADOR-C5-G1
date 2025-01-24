@@ -7,6 +7,9 @@ import InscripcionService from "../../../services/inscripcionServices/Inscripcio
 import OpcionNivelService from "../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
 import NivelEnsenanzaService from "../../../services/nivelDeEnsenanzaServices/NivelEnsenanzaService";
 import "../../../style-sheets/generalMomentaneo.css";
+import PlanificacionAcademicaService from "../../../services/planificacionAcademicaServices/PlanificacionAcademicaService";
+import CarreraService from "../../../services/carreraServices/CarreraService";
+import { useNavigate } from "react-router-dom";
 
 function SelectNivEnsenianzaMatriculaComponent() {
     const idInscripcion = getInscripcionId();
@@ -17,9 +20,18 @@ function SelectNivEnsenianzaMatriculaComponent() {
     //Datos de nivel ensenanza
     const [nombresNivel, setNombresNivel] = useState({});
 
+    //Datos de planificacion academica
+    const [nombresPlanificacion, setNombresPlanificacion] = useState({});
+
+    //Datos de Carrera
+    const [nombresCarreras, setNombresCarreras] = useState({});
+
     //Datos loading
     const [mensaje, setMensaje] = useState('');
     const [cargando, setCargando] = useState(true);
+
+    //React Router Dom
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Llamada al backend para validar si es estudiante
@@ -48,19 +60,34 @@ function SelectNivEnsenianzaMatriculaComponent() {
             setOpcionesNivel(response.data);
 
             // Obtener nombres de nivel en paralelo
-            const nombres = {};
+            const nombresNivelEnsenanza = {};
+            const nombresPlanificacionAcademica = {};
+            const nombresCarrerasOpcionNivel = {};
+
             await Promise.all(
                 response.data.map(async (opcionNivel) => {
                     const nivelResponse = await NivelEnsenanzaService.getNivelEnsenanzaByIdOpcionNivel(opcionNivel.idOpcionNivel);
-                    nombres[opcionNivel.idOpcionNivel] = nivelResponse.data.nombre;
+                    const planificacionResponse = await PlanificacionAcademicaService.getPlanificacionAcademicaById(opcionNivel.idPLanificacionAcademica);
+                    const carreraResponse = await CarreraService.getCarreraById(opcionNivel.idCarrera);
+
+                    nombresNivelEnsenanza[opcionNivel.idOpcionNivel] = nivelResponse.data.nombre;
+                    nombresPlanificacionAcademica[opcionNivel.idOpcionNivel] = planificacionResponse.data.nombrePlanEstudio;
+                    nombresCarrerasOpcionNivel[opcionNivel.idOpcionNivel] = carreraResponse.data.nombre;
                 })
             );
-            setNombresNivel(nombres);
+
+            setNombresNivel(nombresNivelEnsenanza);
+            setNombresPlanificacion(nombresPlanificacionAcademica);
+            setNombresCarreras(nombresCarrerasOpcionNivel);
         } catch (error) {
             console.error('Error al obtener las opciones de nivel:', error);
         } finally {
             setCargando(false);
         }
+    }
+
+    function nivelDeEnsenanzaSeleccionado(idOpcionNivel){
+        navigate(`/compromiso-consentimiento/${idOpcionNivel}`);
     }
 
     useEffect(() => {
@@ -73,17 +100,17 @@ function SelectNivEnsenianzaMatriculaComponent() {
                 <div>Cargando...</div>
             ) : (mensaje === 'Estudiante validado' ? (
                 <div>
-                    <h1>Seleccione una opcion Nivel.</h1>
+                    <h1>Seleccione un nivel de ensenanza.</h1>
                     {opcionesNivel ? (
                         opcionesNivel.map((opcionNivel) => {
                             return (
-                                <div className="card" key={opcionNivel.idOpcionNivel}>
+                                <div className="card" key={opcionNivel.idOpcionNivel} onClick={ (e) => {nivelDeEnsenanzaSeleccionado(opcionNivel.idOpcionNivel)}}>
                                     <h2 className="card-title">{nombresNivel[opcionNivel.idOpcionNivel] || 'Cargando...'}</h2>
                                     <div className="card-content">
                                         <p><strong>Semestre:</strong>{opcionNivel.semestre}</p>
                                         <p><strong>Campus:</strong>{opcionNivel.campus}</p>
-                                        <p><strong>Plan:</strong>{opcionNivel.idPLanificacionAcademica}</p>
-                                        <p><strong>Programa de estudio</strong>{opcionNivel.idCarrera}</p>
+                                        <p><strong>Plan:</strong>{nombresPlanificacion[opcionNivel.idPLanificacionAcademica] || 'Cargando...'}</p>
+                                        <p><strong>Programa de estudio</strong>{nombresCarreras[opcionNivel.idCarrera] || 'Cargando...'}</p>
                                         <p><strong>Modalidad de estudio</strong>{opcionNivel.modalidad}</p>
                                         <p><strong>Estado:</strong>{opcionNivel.estado}</p>
                                     </div>

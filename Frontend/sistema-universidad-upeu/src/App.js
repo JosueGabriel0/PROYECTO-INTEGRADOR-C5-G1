@@ -56,6 +56,10 @@ import AddVoucherComponent from './components/estudiante/portalDelEstudiante/opc
 import VerVoucherComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/voucher/VerVoucherComponent';
 import MostrarBoletaOFacturaComponent from './components/administrativo/validacionDePago/MostrarBoletaOFacturaComponent';
 import VerComprobanteComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/comprobante/VerComprobanteComponent';
+import CompromisoYConsentimientoComponent from './components/estudiante/matricula/CompromisoYConsentimientoComponent';
+import DatosPersonalesComponent from './components/estudiante/matricula/DatosPersonalesComponent';
+import MatriculaProtectedRouteComponent from './components/estudiante/matricula/matriculaProtectedRoute/MatriculaProtectedRouteComponent';
+import VerMensajeSeguridadComponent from './components/estudiante/matricula/matriculaProtectedRoute/VerMensajeSeguridadComponent';
 
 const App = () => {
   const nombreDelRol = getUserRole();
@@ -575,6 +579,35 @@ const App = () => {
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <VerComprobanteComponent />
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
+          <Route
+            path='/compromiso-consentimiento/:idOpcionNivel'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
+                <CompromisoYConsentimientoComponent />
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
+          <Route
+            path='/mensaje-seguridad'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
+                <VerMensajeSeguridadComponent />
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
+          <Route
+            path='/matricula-datos-personales/:idOpcionNivel'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
+                <MatriculaProtectedRouteComponent>
+                  <DatosPersonalesComponent />
+                </MatriculaProtectedRouteComponent>
               </GeneralProtectedRouteComponent>
             }
           />

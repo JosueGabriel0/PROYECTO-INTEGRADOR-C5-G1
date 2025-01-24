@@ -27,9 +27,6 @@ public class Estudiante {
     private Long idCuentaFinanciera;
     private CuentaFinanciera cuentaFinanciera;
 
-    private Long idMovimientoAcademico;
-    private MovimientoAcademico movimientoAcademico;
-
     private List<Long> carrerasIngresadasIds = new ArrayList<Long>();
 
     private List<String> asignaturasMatriculadas = new ArrayList<String>();
@@ -47,6 +44,9 @@ public class Estudiante {
 
     private long idPersona;
     private Persona persona;
+
+    private Long idPLanificacionAcademica;
+    private PlanificacionAcademica planificacionAcademica;
 
     private LocalDateTime fechaCreacionEstudiante;
     private LocalDateTime fechaModificacionEstudiante;
