@@ -49,8 +49,8 @@ spring:
           uri: lb://ms-inscripciones-service
           predicates:
             - Path=/inscripcion/**
-          #filters:
-            #- AuthFilter
+          filters:
+            - AuthFilter
 
         #- id: ms-realTimeChat-service
           #uri: lb://ms-realTimeChat-service

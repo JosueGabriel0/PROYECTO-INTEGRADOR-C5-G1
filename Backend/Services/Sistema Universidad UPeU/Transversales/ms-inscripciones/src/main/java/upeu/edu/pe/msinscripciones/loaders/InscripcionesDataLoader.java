@@ -57,7 +57,7 @@ public class InscripcionesDataLoader {
                 inscripcion4.setIdRol(3L);
                 inscripcion4.setIdUsuario(23L);
                 inscripcion4.setIdPersona(4L);
-                inscripcion4.setIdEstudiante(1L);
+                inscripcion4.setIdEstudiante(2L);
                 inscripcionesRepository.save(inscripcion4);
 
                 Inscripcion inscripcion5 = new Inscripcion();
@@ -87,7 +87,7 @@ public class InscripcionesDataLoader {
                 inscripcion7.setIdRol(7L);
                 inscripcion7.setIdUsuario(7L);
                 inscripcion7.setIdPersona(7L);
-                inscripcion7.setIdEstudiante(2L);
+                inscripcion7.setIdEstudiante(1L);
                 inscripcionesRepository.save(inscripcion7);
 
                 Inscripcion inscripcion8 = new Inscripcion();

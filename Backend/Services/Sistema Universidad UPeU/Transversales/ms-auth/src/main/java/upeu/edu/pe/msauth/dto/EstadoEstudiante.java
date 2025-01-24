@@ -4,5 +4,6 @@ public enum EstadoEstudiante {
     ACTIVO,
     SUSPENDIDO,
     GRADUADO,
-    RETIRADO
+    RETIRADO,
+    MATRICULADO
 }

@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
+
 public class Estudiante {
     private Long idEstudiante;
 
-
+    private String codigoUniversitario;
     private String matricula;
     private int cicloActual;
     private double promedioGeneral;
@@ -23,7 +24,13 @@ public class Estudiante {
     private String beca;
     private String numeroMatricula;
 
-    private List<String> carrerasIngresadas = new ArrayList<String>();
+    private Long idCuentaFinanciera;
+    private CuentaFinanciera cuentaFinanciera;
+
+    private Long idMovimientoAcademico;
+    private MovimientoAcademico movimientoAcademico;
+
+    private List<Long> carrerasIngresadasIds = new ArrayList<Long>();
 
     private List<String> asignaturasMatriculadas = new ArrayList<String>();
 
@@ -34,8 +41,9 @@ public class Estudiante {
 
     private List<String> practicasRealizadas = new ArrayList<String>();
 
-
     private List<RegistroAcademico> historialAcademico;
+
+    private ResponsableFinanciero responsableFinanciero;
 
     private long idPersona;
     private Persona persona;

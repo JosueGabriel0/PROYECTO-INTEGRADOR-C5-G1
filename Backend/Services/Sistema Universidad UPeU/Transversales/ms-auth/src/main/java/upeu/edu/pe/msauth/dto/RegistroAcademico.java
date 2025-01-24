@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class RegistroAcademico {
+
     private Long id;
 
     private Estudiante estudiante;
