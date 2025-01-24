@@ -5,7 +5,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upeu.edu.pe.msinscripciones.dto.Usuario;
-import upeu.edu.pe.msinscripciones.dto.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;

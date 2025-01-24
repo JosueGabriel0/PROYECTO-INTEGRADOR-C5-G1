@@ -58,7 +58,6 @@ public class DocenteController {
         return ResponseEntity.ok(docenteService.listarDocente());
     }
 
-    @CircuitBreaker(name = "docenteListarPorIdCB", fallbackMethod = "fallbackDocente")
     @GetMapping("/{id}")
     public ResponseEntity<Docente> buscarDocentePorIdResponseEntity(@PathVariable( required = true) Long id){
         return ResponseEntity.ok(docenteService.buscarDocentePorId(id));

@@ -58,7 +58,6 @@ public class AdministrativoController {
         return ResponseEntity.ok(administrativoService.listarAdministrativo());
     }
 
-    @CircuitBreaker(name = "AdministrativoListarPorIdCB", fallbackMethod = "fallbackAdministrativo")
     @GetMapping("/{id}")
     public ResponseEntity<Administrativo> buscarAdministrativoPorIdResponseEntity(@PathVariable( required = true) Long id){
         return ResponseEntity.ok(administrativoService.buscarAdministrativoPorId(id));
