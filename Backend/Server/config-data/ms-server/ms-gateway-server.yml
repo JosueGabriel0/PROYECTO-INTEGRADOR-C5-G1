@@ -102,7 +102,7 @@ spring:
         - id: ms-estudiante-service
           uri: lb://ms-estudiante-service
           predicates:
-            - Path=/estudiante/**
+            - Path=/estudiante/**, /responsableFinanciero/**
           filters:
             - AuthFilter
 

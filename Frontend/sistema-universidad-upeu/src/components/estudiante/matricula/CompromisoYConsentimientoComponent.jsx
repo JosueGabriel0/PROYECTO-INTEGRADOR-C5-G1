@@ -28,7 +28,7 @@ function CompromisoYConsentimientoComponent() {
         if (isButtonDisabled) {
             alert('Debes aceptar y seleccionar ambos checkboxes.');
         } else {
-            navigate(`/matricula-datos-personales/${idOpcionNivel}`);
+            navigate(`/matricula/${idOpcionNivel}`);
         }
     };
 

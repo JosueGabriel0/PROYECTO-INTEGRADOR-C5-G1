@@ -57,9 +57,10 @@ import VerVoucherComponent from './components/estudiante/portalDelEstudiante/opc
 import MostrarBoletaOFacturaComponent from './components/administrativo/validacionDePago/MostrarBoletaOFacturaComponent';
 import VerComprobanteComponent from './components/estudiante/portalDelEstudiante/opciones/estadoFinanciero/comprobante/VerComprobanteComponent';
 import CompromisoYConsentimientoComponent from './components/estudiante/matricula/CompromisoYConsentimientoComponent';
-import DatosPersonalesComponent from './components/estudiante/matricula/DatosPersonalesComponent';
 import MatriculaProtectedRouteComponent from './components/estudiante/matricula/matriculaProtectedRoute/MatriculaProtectedRouteComponent';
 import VerMensajeSeguridadComponent from './components/estudiante/matricula/matriculaProtectedRoute/VerMensajeSeguridadComponent';
+import MatriculaComponent from './components/estudiante/matricula/MatriculaComponent';
+import AddResponsableFinancieroComponent from './components/estudiante/matricula/matriculaSecciones/datosPersonales/AddResponsableFinancieroComponent';
 
 const App = () => {
   const nombreDelRol = getUserRole();
@@ -602,11 +603,22 @@ const App = () => {
           />
 
           <Route
-            path='/matricula-datos-personales/:idOpcionNivel'
+            path='/matricula/:idOpcionNivel'
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <MatriculaProtectedRouteComponent>
-                  <DatosPersonalesComponent />
+                  <MatriculaComponent />
+                </MatriculaProtectedRouteComponent>
+              </GeneralProtectedRouteComponent>
+            }
+          />
+
+          <Route
+            path='/add-responsableFinanciero/:idResponsableFinanciero'
+            element={
+              <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
+                <MatriculaProtectedRouteComponent>
+                  <AddResponsableFinancieroComponent />
                 </MatriculaProtectedRouteComponent>
               </GeneralProtectedRouteComponent>
             }
