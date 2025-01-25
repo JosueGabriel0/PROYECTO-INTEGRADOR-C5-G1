@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import upeu.edu.pe.msestudiante.dto.CuentaFinanciera;
 import upeu.edu.pe.msestudiante.dto.Persona;
+import upeu.edu.pe.msestudiante.dto.PlanificacionAcademica;
 import upeu.edu.pe.msestudiante.entity.Estudiante;
 import upeu.edu.pe.msestudiante.entity.RegistroAcademico;
 import upeu.edu.pe.msestudiante.exception.ResourceNotFoundException;
 import upeu.edu.pe.msestudiante.feign.CuentaFinancieraFeign;
 import upeu.edu.pe.msestudiante.feign.PersonaFeign;
+import upeu.edu.pe.msestudiante.feign.PlanificacionAcademicaFeign;
 import upeu.edu.pe.msestudiante.repository.EstudianteRepository;
 import upeu.edu.pe.msestudiante.service.EstudianteService;
 
@@ -29,6 +31,9 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Autowired
     private CuentaFinancieraFeign cuentaFinancieraFeign;
+
+    @Autowired
+    private PlanificacionAcademicaFeign planificacionAcademicaFeign;
 
     @Override
     public Estudiante guardarEstudiante(Estudiante estudiante) {
@@ -79,6 +84,16 @@ public class EstudianteServiceImpl implements EstudianteService {
             } catch (FeignException e) {
                 throw new RuntimeException("Error al obtener la Cuenta Financiera con ID " + estudiante.getIdCuentaFinanciera(), e);
             }
+
+            try {
+                ResponseEntity<PlanificacionAcademica> planificacionAcademicaResponse = planificacionAcademicaFeign.buscarPlanificacionAcademicaPorId(estudiante.getIdCuentaFinanciera());
+                if(planificacionAcademicaResponse.getBody() == null) {
+                    throw new ResourceNotFoundException("Planificacion Academica con ID " + estudiante.getIdCuentaFinanciera() + " no existe");
+                }
+                estudiante.setPlanificacionAcademica(planificacionAcademicaResponse.getBody());
+            } catch (FeignException e) {
+                throw new RuntimeException("Error al obtener la Planificacion Academica con ID " + estudiante.getIdCuentaFinanciera(), e);
+            }
         });
 
         return estudiantes;
@@ -111,6 +126,16 @@ public class EstudianteServiceImpl implements EstudianteService {
             estudiante.setCuentaFinanciera(cuentaFinancieraResponse.getBody());
         } catch (FeignException e) {
             throw new RuntimeException("Error al obtener la Cuenta Financiera con ID " + estudiante.getIdCuentaFinanciera(), e);
+        }
+
+        try {
+            ResponseEntity<PlanificacionAcademica> planificacionAcademicaResponse = planificacionAcademicaFeign.buscarPlanificacionAcademicaPorId(estudiante.getIdPLanificacionAcademica());
+            if(planificacionAcademicaResponse.getBody() == null) {
+                throw new ResourceNotFoundException("Planificacion Academica con ID "+ estudiante.getIdPLanificacionAcademica()+" no encontrado");
+            }
+            estudiante.setPlanificacionAcademica(planificacionAcademicaResponse.getBody());
+        }catch (FeignException e) {
+            throw new RuntimeException("Error al obtener la Planificacion Academica con ID " + estudiante.getIdPLanificacionAcademica(), e);
         }
 
         return estudiante;
