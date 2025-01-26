@@ -614,7 +614,7 @@ const App = () => {
           />
 
           <Route
-            path='/add-responsableFinanciero/:idResponsableFinanciero'
+            path='/add-responsableFinanciero/:idResponsableFinanciero/:idOpcionNivel'
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <MatriculaProtectedRouteComponent>

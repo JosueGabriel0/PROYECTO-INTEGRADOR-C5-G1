@@ -14,6 +14,7 @@ import java.util.List;
 public class ResponsableFinancieroController {
     @Autowired
     private ResponsableFinancieroService responsableFinancieroService;
+
     @PostMapping
     public ResponseEntity<ResponsableFinanciero> guardarResponsableFinanciero(@RequestBody ResponsableFinanciero responsableFinanciero) {
         return ResponseEntity.status(HttpStatus.CREATED).body(responsableFinancieroService.guardarResponsableFinanciero(responsableFinanciero));
@@ -39,5 +40,10 @@ public class ResponsableFinancieroController {
     public ResponseEntity<Void> eliminarResponsableFinanciero(@PathVariable Long id) {
         responsableFinancieroService.eliminarEstudiante(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/paraEstudiante/{idEstudiante}")
+    public ResponseEntity<ResponsableFinanciero> guardarResponsableFinancieroParaEstudiante(@PathVariable Long idEstudiante, @RequestBody ResponsableFinanciero responsableFinanciero) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(responsableFinancieroService.guardarResponsableFinancieroParaEstudiante(idEstudiante, responsableFinanciero));
     }
 }

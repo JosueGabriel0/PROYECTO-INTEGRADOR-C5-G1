@@ -80,7 +80,7 @@ function MatriculaComponent() {
     function verOpcionSeleccionada() {
         if (estado === "DATOS PERSONALES") {
             return (
-                <DatosPersonalesComponent />
+                <DatosPersonalesComponent idOpcionNivel={`${idOpcionNivel}`}/>
             )
         } else if (estado === "CURSOS") {
             return (

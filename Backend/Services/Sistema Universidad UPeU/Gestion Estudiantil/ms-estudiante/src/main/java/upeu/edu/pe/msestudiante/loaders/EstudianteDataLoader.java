@@ -73,8 +73,29 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante2.setIdPersona(5L);
             estudiante2.setIdPLanificacionAcademica(1L);
 
+            Estudiante estudiante3 = new Estudiante();
+            estudiante3.setCodigoUniversitario("202122864");
+            estudiante3.setMatricula("2024-002");
+            estudiante3.setCicloActual(2);
+            estudiante3.setPromedioGeneral(14.0);
+            estudiante3.setFechaIngreso(LocalDate.of(2024, 3, 1));
+            estudiante3.setEstado(EstadoEstudiante.ACTIVO);
+            estudiante3.setTipoEstudiante("Regular");
+            estudiante3.setBeca("Beca parcial");
+            estudiante3.setNumeroMatricula("654321");
+            estudiante3.setIdCuentaFinanciera(2L);
+            estudiante3.setCarrerasIngresadasIds(Arrays.asList(1L));
+            estudiante3.setAsignaturasMatriculadas(Arrays.asList("Química", "Física"));
+            estudiante3.setHorario("Lunes a Viernes 9am - 3pm");
+            estudiante3.setConsejeroAcademico("Prof. María López");
+            estudiante3.setFechaGraduacion(LocalDate.of(2028, 12, 1));
+            estudiante3.setPracticasRealizadas(Arrays.asList("Práctica 3"));
+            estudiante3.setHistorialAcademico(createHistorialAcademico(estudiante2));
+            estudiante3.setIdPersona(5L);
+            estudiante3.setIdPLanificacionAcademica(1L);
+
             // Guardar estudiantes en la base de datos
-            estudianteRepository.saveAll(Arrays.asList(estudiante1, estudiante2));
+            estudianteRepository.saveAll(Arrays.asList(estudiante1, estudiante2, estudiante3));
             System.out.println("Estudiantes de ejemplo cargados en la base de datos.");
         } else {
             System.out.println("Los estudiantes ya están cargados en la base de datos.");

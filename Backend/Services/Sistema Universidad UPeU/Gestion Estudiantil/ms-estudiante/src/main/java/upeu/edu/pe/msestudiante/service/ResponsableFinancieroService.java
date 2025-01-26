@@ -14,4 +14,6 @@ public interface ResponsableFinancieroService {
     public ResponsableFinanciero editarResponsableFinanciero(ResponsableFinanciero responsableFinanciero);
 
     public void eliminarEstudiante(Long id);
+
+    public ResponsableFinanciero guardarResponsableFinancieroParaEstudiante(Long idEstudiante, ResponsableFinanciero responsableFinanciero);
 }
