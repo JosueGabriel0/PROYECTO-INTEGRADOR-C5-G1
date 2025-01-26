@@ -2,12 +2,11 @@ package upeu.edu.pe.msnivelesdeensenanza.service.impl;
 
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import upeu.edu.pe.msnivelesdeensenanza.dto.Ciclo;
 import upeu.edu.pe.msnivelesdeensenanza.entity.CicloDetalle;
-import upeu.edu.pe.msnivelesdeensenanza.feign.CicloFeign;
+import upeu.edu.pe.msnivelesdeensenanza.feign.PlanificacionAcademicaFeign;
 import upeu.edu.pe.msnivelesdeensenanza.repository.CicloDetalleRepository;
 import upeu.edu.pe.msnivelesdeensenanza.service.CicloDetalleService;
 
@@ -19,7 +18,7 @@ public class CicloDetalleSerivceImpl implements CicloDetalleService {
     @Autowired
     private CicloDetalleRepository cicloDetalleRepository;
     @Autowired
-    private CicloFeign cicloFeign;
+    private PlanificacionAcademicaFeign planificacionAcademicaFeign;
 
     @Override
     public List<CicloDetalle> listarTodos() {
@@ -27,7 +26,7 @@ public class CicloDetalleSerivceImpl implements CicloDetalleService {
 
         ciclosDetalles.forEach((cicloDetalle) -> {
             try {
-                ResponseEntity<Ciclo> cicloResponse = cicloFeign.listarCicloPorId(cicloDetalle.getIdCiclo());
+                ResponseEntity<Ciclo> cicloResponse = planificacionAcademicaFeign.listarCicloPorId(cicloDetalle.getIdCiclo());
                 if(cicloResponse.getBody() == null) {
                     throw new IllegalArgumentException("Ciclo con ID " + cicloDetalle.getIdCiclo() + " no existe");
                 }
@@ -44,7 +43,7 @@ public class CicloDetalleSerivceImpl implements CicloDetalleService {
     public CicloDetalle obtenerPorId(Long id) {
         CicloDetalle cicloDetalleEncontrado = cicloDetalleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El ciclo con ID " + id + " no existe"));
         try {
-            ResponseEntity<Ciclo> cicloResponse = cicloFeign.listarCicloPorId(cicloDetalleEncontrado.getIdCiclo());
+            ResponseEntity<Ciclo> cicloResponse = planificacionAcademicaFeign.listarCicloPorId(cicloDetalleEncontrado.getIdCiclo());
             if(cicloResponse.getBody() == null) {
                 throw new IllegalArgumentException("El ciclo con ID " + cicloDetalleEncontrado.getIdCiclo() + " no existe.");
             }

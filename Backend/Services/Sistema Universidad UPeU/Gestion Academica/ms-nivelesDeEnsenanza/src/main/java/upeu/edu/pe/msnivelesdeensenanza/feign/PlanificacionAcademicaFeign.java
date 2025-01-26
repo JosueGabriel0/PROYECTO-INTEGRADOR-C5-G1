@@ -2,35 +2,46 @@ package upeu.edu.pe.msnivelesdeensenanza.feign;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upeu.edu.pe.msnivelesdeensenanza.dto.Ciclo;
 import upeu.edu.pe.msnivelesdeensenanza.dto.PlanificacionAcademica;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@FeignClient(name = "ms-planificacionAcademica-service", path = "/planificacionAcademica")
+@FeignClient(name = "ms-planificacionAcademica-service")
 public interface PlanificacionAcademicaFeign {
 
-    @PostMapping
+    @PostMapping("/planificacionAcademica")
     @CircuitBreaker(name = "crearPlanificacionAcademicaCB", fallbackMethod = "fallbackMethodCrearPlanificacionAcademica")
     ResponseEntity<PlanificacionAcademica> crearPlanificacionAcademicaDto(@RequestBody PlanificacionAcademica planificacionAcademica);
 
-    @GetMapping
+    @GetMapping("/planificacionAcademica")
     @CircuitBreaker(name = "listarPlanificacionesAcademicasCB", fallbackMethod = "fallbackMethodListarPlanificacionesAcademicas")
     ResponseEntity<List<PlanificacionAcademica>> listarPlanificacionesAcademicasDto();
 
-    @GetMapping("/{id}")
+    @GetMapping("/planificacionAcademica/{id}")
     @CircuitBreaker(name = "listarPlanificacionAcademicaPorIdCB", fallbackMethod = "fallbackMethodListarPlanificacionAcademicaPorId")
     ResponseEntity<PlanificacionAcademica> listarPlanificacionAcademicaDtoPorId(@PathVariable(required = true) Long id);
 
-    @PutMapping("/{id}")  // Añadir la ruta con el ID
+    @PutMapping("/planificacionAcademica/{id}") // Añadir la ruta con el ID
     @CircuitBreaker(name = "actualizarPlanificacionAcademicaCB", fallbackMethod = "fallbackMethodActualizarPlanificacionAcademica")
     ResponseEntity<PlanificacionAcademica> actualizarPlanificacionAcademicaDto(@PathVariable(required = true) Long id, @RequestBody PlanificacionAcademica planificacionAcademica);
 
-    @DeleteMapping("/{id}")  // Añadir la ruta con el ID
+    @DeleteMapping("/planificacionAcademica/{id}") // Añadir la ruta con el ID
     @CircuitBreaker(name = "eliminarPlanificacionAcademicaCB", fallbackMethod = "fallbackMethodEliminarPlanificacionAcademica")
     ResponseEntity<String> eliminarPlanificacionAcademicaDto(@PathVariable(required = true) Long id);
+
+    //Ciclo Feign
+    @GetMapping("/ciclo/{idCiclo}")
+    @CircuitBreaker(name = "listarCicloPorIdCB", fallbackMethod = "fallbackListarCicloPorId")
+    public ResponseEntity<Ciclo> listarCicloPorId(@PathVariable Long idCiclo);
+
+    default ResponseEntity<Ciclo> fallbackListarCicloPorId(Long idCiclo, Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Ciclo());
+    }
 
     default ResponseEntity<PlanificacionAcademica> fallbackMethodCrearPlanificacionAcademica(PlanificacionAcademica planificacionAcademica, Exception e){
         return ResponseEntity.ok(new PlanificacionAcademica());
