@@ -16,9 +16,5 @@ public interface PersonaService {
 
     public void eliminarPersona(Long id);
 
-    /*
-    public Usuario buscarUsuarioPorId(Long id);
-
-    public Rol buscarRolPorId(Long id);
-     */
+    public Persona actualizarDatosEspecificos(Long idPersona, Persona personaActualizada);
 }

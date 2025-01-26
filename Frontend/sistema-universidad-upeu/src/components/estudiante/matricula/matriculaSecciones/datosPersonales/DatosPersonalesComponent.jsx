@@ -2,12 +2,17 @@ import InscripcionService from "../../../../../services/inscripcionServices/Insc
 import { getInscripcionId } from "../../../../../services/authServices/authService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import PersonaService from "../../../../../services/personaServices/PersonaService";
+import EstudianteService from "../../../../../services/estudianteServices/estudiante/EstudianteService";
+import Swal from 'sweetalert2';
 
-function DatosPersonalesComponent({idOpcionNivel = "0"}) {
+function DatosPersonalesComponent({idOpcionNivel = "0", cambiarOpcion}) {
+
     //Datos de inscripcion
     const idInscripcion = getInscripcionId();
 
     //Datos de persona
+    const [idPersona, setIdPersona] = useState("");
     const [nombres, setNombres] = useState("");
     const [apellido_paterno, setApellido_paterno] = useState("");
     const [apellido_materno, setApellido_materno] = useState("");
@@ -17,6 +22,7 @@ function DatosPersonalesComponent({idOpcionNivel = "0"}) {
     const [email, setEmail] = useState("");
 
     //Datos de estudiante
+    const [idEstudiante, setIdEstudiante] = useState("");
     const [codigoUniversitario, setCodigoUniversitario] = useState("");
 
     //Datos de responsable financiero
@@ -26,6 +32,7 @@ function DatosPersonalesComponent({idOpcionNivel = "0"}) {
     function obtenerTodosLosDatos() {
         InscripcionService.getInscripcionById(idInscripcion).then((response) => {
             console.log("Esta es la inscripcion: " + JSON.stringify(response.data, null, 2));
+            setIdPersona(response.data.persona.id);
             setNombres(response.data.persona.nombres);
             setApellido_paterno(response.data.persona.apellido_paterno);
             setApellido_materno(response.data.persona.apellido_materno);
@@ -34,6 +41,7 @@ function DatosPersonalesComponent({idOpcionNivel = "0"}) {
             setTelefono(response.data.persona.telefono);
             setEmail(response.data.persona.email);
 
+            setIdEstudiante(response.data.estudiante.idEstudiante);
             setCodigoUniversitario(response.data.estudiante.codigoUniversitario);
 
             const idResponsableResponse = response.data.estudiante.responsableFinanciero?.idResponsableFinanciero;
@@ -41,6 +49,43 @@ function DatosPersonalesComponent({idOpcionNivel = "0"}) {
             setIdResponsableFinanciero(idResponsableResponse || "0");
             setNombreCompletoResponsableFinanciero(nombreCompletoResponsableResponse || "");
         })
+    }
+
+    async function actualizarPersonaConEstudiante(e){
+        e.preventDefault();
+        const datosPersona = {nombres, apellido_paterno, apellido_materno, tipoDocumento, numeroDocumento, telefono, email};
+        console.log("estos son los datos antes de enviar: " + datosPersona);
+        await PersonaService.putPersonaDatosEspecificos(idPersona, datosPersona).then((response) => {
+            console.log("Estos son los datos de la persona Actualizada: " + JSON.stringify(response.data, null, 2));
+        }).catch((error) => {
+            console.error(error);
+        });
+
+        await EstudianteService.putEstudianteCodigo(codigoUniversitario, idEstudiante).then((response) => {
+            console.log("Este es el response del estudiante Actualizado: " + JSON.stringify(response.data, null, 2));
+        }).catch((error) => {
+            console.error(error);
+        })
+
+        console.log("Datos de persona y estudiante actualizados correctamente");
+        Swal.fire({
+                    title: '¡Éxito!',
+                    text: `Datos personales guardados correctamente`,
+                    icon: 'success', // Icono que se mostrará en la alerta
+                    confirmButtonText: 'Aceptar', // Texto para el botón de confirmación
+                });
+    }
+
+    async function actualizarYContinuar(e){
+        e.preventDefault();
+        await actualizarPersonaConEstudiante(e);
+        await Swal.fire({
+            title: '¡Éxito!',
+            text: `Datos personales guardados correctamente`,
+            icon: 'success', // Icono que se mostrará en la alerta
+            confirmButtonText: 'Aceptar', // Texto para el botón de confirmación
+        });
+        cambiarOpcion("CURSOS");
     }
 
     useEffect(() => {
@@ -95,8 +140,8 @@ function DatosPersonalesComponent({idOpcionNivel = "0"}) {
                 <input type="text" placeholder="Ingrese el responsable financiero" value={nombreCompletoResponsableFinanciero} onChange={(e) => {setNombreCompletoResponsableFinanciero(e.target.value)}}/>
             </div>
 
-            <button>GUARDAR</button>
-            <button>GUARDAR Y CONTINUAR</button>
+            <button onClick={(e) => {actualizarPersonaConEstudiante(e)}}>GUARDAR</button>
+            <button onClick={(e) => {actualizarYContinuar(e)}}>GUARDAR Y CONTINUAR</button>
         </div>
     )
 }

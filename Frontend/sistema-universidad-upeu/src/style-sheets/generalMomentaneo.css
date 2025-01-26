@@ -50,3 +50,14 @@
   object-fit: cover;
   /* Ajusta la imagen para llenar el contenedor sin deformarse */
 }
+
+/* styles.css */
+.containerCursos {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* 3 columnas de igual ancho */
+  height: 100vh; /* Altura total de la pantalla */
+}
+.columnCursos {
+  padding: 16px;
+  border: 1px solid #ccc; /* Opcional: para visualizar las columnas */
+}

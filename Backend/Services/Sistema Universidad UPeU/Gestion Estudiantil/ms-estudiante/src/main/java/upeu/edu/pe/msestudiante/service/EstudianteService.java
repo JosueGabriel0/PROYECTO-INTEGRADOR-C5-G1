@@ -17,4 +17,6 @@ public interface EstudianteService {
     public void eliminarEstudiante(Long id);
 
     public Estudiante buscarPorCuentaFinanciera(Long id);
+
+    public Estudiante actualizarCodigo(Long idEstudiante, String codigo);
 }

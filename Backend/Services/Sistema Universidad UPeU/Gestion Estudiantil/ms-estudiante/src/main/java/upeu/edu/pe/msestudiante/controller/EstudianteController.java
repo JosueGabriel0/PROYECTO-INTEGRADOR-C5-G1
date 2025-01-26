@@ -79,4 +79,9 @@ public class EstudianteController {
     public ResponseEntity<Estudiante> buscarEstudiantePorCuentaFinanciera(@PathVariable( required = true) Long idCuentaFinanciera){
         return ResponseEntity.ok(estudianteService.buscarPorCuentaFinanciera(idCuentaFinanciera));
     }
+
+    @PutMapping("/codigoEstudiante/{codigo}/{idEstudiante}")
+    public ResponseEntity<Estudiante> actualizarCodigoEstudiante(@PathVariable Long idEstudiante, @PathVariable String codigo){
+        return ResponseEntity.status(HttpStatus.OK).body(estudianteService.actualizarCodigo(idEstudiante, codigo));
+    }
 }

@@ -20,6 +20,8 @@ public class PlanificacionAcademica {
     private String nombrePlanEstudio;
     private String codigoPlanEstudio;
     private String versionPlanEstudio;
+    private String semestre;
+    private String modo;//Regular
     private LocalDateTime fechaCreacionPlanificacionAcademica;
     private LocalDateTime fechaModificacionPlanificacionAcademica;
 

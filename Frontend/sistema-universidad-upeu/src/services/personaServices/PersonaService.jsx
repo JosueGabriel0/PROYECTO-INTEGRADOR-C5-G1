@@ -64,6 +64,14 @@ class PersonaService {
             return null; // Manejo de errores
         }
     }
+
+    putPersonaDatosEspecificos(idPersona, personaActualizada) {
+        return axios.put(`${PERSONA_BASE_REST_API_URL}/actualizarDatosPersona/${idPersona}`, personaActualizada, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        });
+    }
 }
 
 export default new PersonaService();

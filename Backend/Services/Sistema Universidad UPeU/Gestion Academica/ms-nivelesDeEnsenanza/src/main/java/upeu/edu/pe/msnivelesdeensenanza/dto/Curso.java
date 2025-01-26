@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 @Data
 public class Curso {
-
     private Long idCurso;
 
     private String nombre;

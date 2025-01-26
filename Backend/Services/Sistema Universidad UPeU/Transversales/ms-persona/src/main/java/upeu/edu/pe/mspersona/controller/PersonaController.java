@@ -152,4 +152,9 @@ public class PersonaController {
                     .body("Error al eliminar la persona: " + e.getMessage());
         }
     }
+
+    @PutMapping("/actualizarDatosPersona/{idPersona}")
+    public ResponseEntity<Persona> actualizarDatosEspecificos(@PathVariable Long idPersona, @RequestBody Persona personaActualizada) {
+        return ResponseEntity.status(HttpStatus.OK).body(personaService.actualizarDatosEspecificos(idPersona, personaActualizada));
+    }
 }

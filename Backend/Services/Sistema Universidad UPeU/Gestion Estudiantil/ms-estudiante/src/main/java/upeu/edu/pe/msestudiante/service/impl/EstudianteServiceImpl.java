@@ -156,4 +156,11 @@ public class EstudianteServiceImpl implements EstudianteService {
     public Estudiante buscarPorCuentaFinanciera(Long id){
         return estudianteRepository.findByIdCuentaFinanciera(id);
     }
+
+    @Override
+    public Estudiante actualizarCodigo(Long idEstudiante, String codigo){
+        Estudiante estudianteEncontrado = estudianteRepository.findById(idEstudiante).orElseThrow(() -> new ResourceNotFoundException("Estudiante con ID "+ idEstudiante +" no encontrado"));
+        estudianteEncontrado.setCodigoUniversitario(codigo);
+        return estudianteRepository.save(estudianteEncontrado);
+    }
 }

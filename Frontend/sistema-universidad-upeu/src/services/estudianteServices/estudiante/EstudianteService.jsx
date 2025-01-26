@@ -53,6 +53,17 @@ class EstudianteService{
             })
         );
     }
+
+    putEstudianteCodigo(codigo, idEstudiante){
+        const codigoLimpio = encodeURIComponent(codigo.trim());
+        return(
+            axios.put(`${ESTUDIANTE_BASE_REST_API_URL}/codigoEstudiante/${codigoLimpio}/${idEstudiante}`, null, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+        );
+    }
 }
 
 export default new EstudianteService();

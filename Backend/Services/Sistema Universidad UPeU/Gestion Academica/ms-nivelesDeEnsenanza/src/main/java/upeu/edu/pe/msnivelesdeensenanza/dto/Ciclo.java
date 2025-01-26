@@ -16,7 +16,6 @@ public class Ciclo {
 
     private PlanificacionAcademica planificacionAcademica;
 
-    // Lista de cursos asociados al ciclo
     private List<Long> cursosIds;
 
     private LocalDateTime fechaCreacionCiclo;

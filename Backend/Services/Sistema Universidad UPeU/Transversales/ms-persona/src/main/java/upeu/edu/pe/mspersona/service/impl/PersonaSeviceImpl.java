@@ -126,37 +126,16 @@ return persona;
         personaRepository.deleteById(id);
     }
 
-    /*
-    //INYECCION DE DEPENDENCIAS SECUNDARIAS PARA USUARIO CON SU ROL
-    @Autowired
-    private UsuarioFeign usuarioFeign;
+    @Override
+    public Persona actualizarDatosEspecificos(Long idPersona, Persona personaActualizada){
+        Persona personaEncontrada = personaRepository.findById(idPersona).orElseThrow(() -> new IllegalArgumentException("Persona con ID" + idPersona + " no existe"));
+        personaEncontrada.setNombres(personaActualizada.getNombres());
+        personaEncontrada.setApellido_paterno(personaActualizada.getApellido_paterno());
+        personaEncontrada.setApellido_materno(personaActualizada.getApellido_materno());
+        personaEncontrada.setTipoDocumento(personaActualizada.getTipoDocumento());
+        personaEncontrada.setTelefono(personaActualizada.getTelefono());
+        personaEncontrada.setEmail(personaActualizada.getEmail());
 
-    @Autowired
-    private RolFeign rolFeign;
-
-    //METODOS SECUNDARIOS PARA USUARIO CON SU ROL
-    public Usuario buscarUsuarioPorId(Long idUsuario) {
-        try {
-            ResponseEntity<Usuario> usuarioResponse = usuarioFeign.listarUsuarioDtoPorId(idUsuario);
-            if (usuarioResponse.getBody() == null) {
-                throw new ResourceNotFoundException("Usuario con ID " + idUsuario + " no existe");
-            }
-            return usuarioResponse.getBody();
-        } catch (FeignException e) {
-            throw new RuntimeException("Error al obtener el Usuario con ID " + idUsuario, e);
-        }
+        return personaRepository.save(personaEncontrada);
     }
-
-    public Rol buscarRolPorId(Long idRol) {
-        try {
-            ResponseEntity<Rol> rolResponse = rolFeign.listarRolDtoPorId(idRol);
-            if (rolResponse.getBody() == null) {
-                throw new ResourceNotFoundException("Rol con ID " + idRol + " no existe");
-            }
-            return rolResponse.getBody();
-        } catch (FeignException e) {
-            throw new RuntimeException("Error al obtener el Rol con ID " + idRol, e);
-        }
-    }
-     */
 }
