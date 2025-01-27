@@ -28,6 +28,9 @@ public class CursoDetalle {
 
     private String grupo;
 
+    private Integer cupos;
+    private Integer cuposDisponibles;
+
     @ElementCollection
     @CollectionTable(name = "docentes_ids", joinColumns = @JoinColumn(name = "entidad_id"))
     @Column(name = "docente_id")

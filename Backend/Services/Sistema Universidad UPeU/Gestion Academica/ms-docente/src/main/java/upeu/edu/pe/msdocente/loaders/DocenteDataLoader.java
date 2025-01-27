@@ -46,7 +46,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente1.setSupervisor("Dr. Carlos Gómez");
             docente1.setLogrosAcademicos(Arrays.asList("Mejor Docente 2021", "Reconocimiento a la Innovación"));
             docente1.setFechaJubilacion(null); // No está jubilado
-            docente1.setCursos(Arrays.asList(101L, 102L)); // IDs de cursos de ejemplo
+            docente1.setCursos(Arrays.asList(1L, 2L)); // IDs de cursos de ejemplo
             docente1.setIdPersona(3L);
 
             docenteRepository.save(docente1);
@@ -75,7 +75,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente2.setSupervisor("Dr. Ana Torres");
             docente2.setLogrosAcademicos(Arrays.asList("Premio a la Excelencia 2022"));
             docente2.setFechaJubilacion(null); // No está jubilado
-            docente2.setCursos(Arrays.asList(201L, 202L)); // IDs de cursos de ejemplo
+            docente2.setCursos(Arrays.asList(1L, 2L)); // IDs de cursos de ejemplo
             docente2.setIdPersona(6L);
 
             docenteRepository.save(docente2);
@@ -105,7 +105,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente3.setLogrosAcademicos(Arrays.asList("Investigador del Año 2021"));
             docente3.setFechaJubilacion(null);
             docente3.setCursos(Arrays.asList(301L, 302L));
-            docente2.setIdPersona(7L);
+            docente3.setIdPersona(7L);
 
             docenteRepository.save(docente3);
 
@@ -134,7 +134,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente4.setLogrosAcademicos(Arrays.asList("Mejor Proyecto de Investigación 2022"));
             docente4.setFechaJubilacion(null);
             docente4.setCursos(Arrays.asList(401L, 402L));
-            docente2.setIdPersona(8L);
+            docente4.setIdPersona(8L);
 
             docenteRepository.save(docente4);
 
@@ -163,7 +163,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente5.setLogrosAcademicos(Arrays.asList("Premio Nacional de Física 2021"));
             docente5.setFechaJubilacion(null);
             docente5.setCursos(Arrays.asList(501L, 502L));
-            docente2.setIdPersona(9L);
+            docente5.setIdPersona(9L);
 
             docenteRepository.save(docente5);
 
@@ -192,7 +192,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente6.setLogrosAcademicos(Arrays.asList("Investigadora del Año 2020"));
             docente6.setFechaJubilacion(null);
             docente6.setCursos(Arrays.asList(601L, 602L));
-            docente2.setIdPersona(10L);
+            docente6.setIdPersona(10L);
 
             docenteRepository.save(docente6);
 
@@ -221,7 +221,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente7.setLogrosAcademicos(Arrays.asList("Mejor Investigación 2021"));
             docente7.setFechaJubilacion(null);
             docente7.setCursos(Arrays.asList(701L, 702L));
-            docente2.setIdPersona(11L);
+            docente7.setIdPersona(11L);
 
             docenteRepository.save(docente7);
 
@@ -250,7 +250,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente8.setLogrosAcademicos(Arrays.asList("Premio a la Investigación Histórica 2022"));
             docente8.setFechaJubilacion(null);
             docente8.setCursos(Arrays.asList(801L, 802L));
-            docente2.setIdPersona(12L);
+            docente8.setIdPersona(12L);
 
             docenteRepository.save(docente8);
 
@@ -279,7 +279,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente9.setLogrosAcademicos(Arrays.asList("Reconocimiento a la Excelencia Académica 2021"));
             docente9.setFechaJubilacion(null);
             docente9.setCursos(Arrays.asList(901L, 902L));
-            docente2.setIdPersona(13L);
+            docente9.setIdPersona(13L);
 
             docenteRepository.save(docente9);
 
@@ -308,7 +308,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente10.setLogrosAcademicos(Arrays.asList("Mejor Tesis de Maestría 2020"));
             docente10.setFechaJubilacion(null);
             docente10.setCursos(Arrays.asList(1001L, 1002L));
-            docente2.setIdPersona(14L);
+            docente10.setIdPersona(14L);
 
             docenteRepository.save(docente10);
 
@@ -337,7 +337,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente11.setLogrosAcademicos(Arrays.asList("Premio a la Excelencia Legal 2019"));
             docente11.setFechaJubilacion(null);
             docente11.setCursos(Arrays.asList(1101L, 1102L));
-            docente2.setIdPersona(15L);
+            docente11.setIdPersona(15L);
 
             docenteRepository.save(docente11);
 
@@ -366,7 +366,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente12.setLogrosAcademicos(Arrays.asList("Reconocimiento a la Innovación Educativa 2021"));
             docente12.setFechaJubilacion(null);
             docente12.setCursos(Arrays.asList(1201L, 1202L));
-            docente2.setIdPersona(16L);
+            docente12.setIdPersona(16L);
 
             docenteRepository.save(docente12);
 
@@ -395,7 +395,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente13.setLogrosAcademicos(Arrays.asList("Premio Nacional de Arquitectura 2020"));
             docente13.setFechaJubilacion(null);
             docente13.setCursos(Arrays.asList(1301L, 1302L));
-            docente2.setIdPersona(17L);
+            docente13.setIdPersona(17L);
 
             docenteRepository.save(docente13);
 
@@ -424,7 +424,7 @@ public class DocenteDataLoader implements CommandLineRunner {
             docente14.setLogrosAcademicos(Arrays.asList("Premio a la Investigación Ambiental 2022"));
             docente14.setFechaJubilacion(null);
             docente14.setCursos(Arrays.asList(1401L, 1402L));
-            docente2.setIdPersona(18L);
+            docente14.setIdPersona(18L);
 
             docenteRepository.save(docente14);
 

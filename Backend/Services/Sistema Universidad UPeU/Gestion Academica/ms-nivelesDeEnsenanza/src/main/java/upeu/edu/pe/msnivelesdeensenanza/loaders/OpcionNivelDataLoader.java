@@ -47,22 +47,37 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 // Crear Ciclo Detalle asociado
                 CicloDetalle cicloDetalle1 = new CicloDetalle();
                 cicloDetalle1.setOpcionNivel(opcion1);
-                cicloDetalle1.setIdCiclo(201L);
+                cicloDetalle1.setIdCiclo(1L);
                 cicloDetalle1.setNumeroDeGrupos(3);
                 cicloDetalle1.setFechaCreacionCicloDetalle(LocalDateTime.now());
 
                 // Crear Curso Detalle asociado al Ciclo Detalle
                 CursoDetalle cursoDetalle1 = new CursoDetalle();
                 cursoDetalle1.setCicloDetalle(cicloDetalle1);
-                cursoDetalle1.setIdCurso(301L);
-                cursoDetalle1.setGrupo("A");
-                cursoDetalle1.setIdsDocentes(Arrays.asList(401L, 402L));
+                cursoDetalle1.setIdCurso(1L);
+                cursoDetalle1.setGrupo("G1");
+                cursoDetalle1.setCupos(20);
+                cursoDetalle1.setCuposDisponibles(20);
+                cursoDetalle1.setIdsDocentes(Arrays.asList(1L));
                 cursoDetalle1.setFechaCreacionCursoDetalle(LocalDateTime.now());
+
+                CursoDetalle cursoDetalle2 = new CursoDetalle();
+                cursoDetalle2.setCicloDetalle(cicloDetalle1);
+                cursoDetalle2.setIdCurso(2L);
+                cursoDetalle2.setGrupo("G2");
+                cursoDetalle2.setCupos(20);
+                cursoDetalle2.setCuposDisponibles(20);
+                cursoDetalle2.setIdsDocentes(Arrays.asList(1L, 2L));
+                cursoDetalle2.setFechaCreacionCursoDetalle(LocalDateTime.now());
 
                 // Crear Horario para el Curso Detalle
                 Horario horario1 = new Horario();
                 horario1.setFechaInicio(LocalDate.of(2024, 3, 1));
                 horario1.setFechaFin(LocalDate.of(2024, 7, 15));
+
+                Horario horario2 = new Horario();
+                horario2.setFechaInicio(LocalDate.of(2024, 3, 1));
+                horario2.setFechaFin(LocalDate.of(2024, 7, 15));
 
                 // Crear Detalles de Horario
                 HorarioDetalle detalleHorario1 = new HorarioDetalle();
@@ -77,9 +92,23 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 detalleHorario2.setHoraInicio(LocalTime.of(8, 0));
                 detalleHorario2.setHoraFin(LocalTime.of(10, 0));
 
+                HorarioDetalle detalleHorario3 = new HorarioDetalle();
+                detalleHorario3.setHorario(horario1);
+                detalleHorario3.setDia("Martes");
+                detalleHorario3.setHoraInicio(LocalTime.of(8, 0));
+                detalleHorario3.setHoraFin(LocalTime.of(10, 0));
+
+                HorarioDetalle detalleHorario4 = new HorarioDetalle();
+                detalleHorario4.setHorario(horario1);
+                detalleHorario4.setDia("Jueves");
+                detalleHorario4.setHoraInicio(LocalTime.of(8, 0));
+                detalleHorario4.setHoraFin(LocalTime.of(10, 0));
+
                 horario1.setHorarioDetalles(Arrays.asList(detalleHorario1, detalleHorario2));
+                horario2.setHorarioDetalles(Arrays.asList(detalleHorario3, detalleHorario4));
                 cursoDetalle1.setHorario(horario1);
-                cicloDetalle1.setCursoDetalles(Arrays.asList(cursoDetalle1));
+                cursoDetalle2.setHorario(horario2);
+                cicloDetalle1.setCursoDetalles(Arrays.asList(cursoDetalle1, cursoDetalle2));
                 opcion1.setCicloDetalle(Arrays.asList(cicloDetalle1));
 
                 // Crear Opción Nivel para Postgrado (similar a la anterior)

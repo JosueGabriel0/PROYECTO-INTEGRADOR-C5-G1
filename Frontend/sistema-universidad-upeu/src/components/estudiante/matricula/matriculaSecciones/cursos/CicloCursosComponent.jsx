@@ -1,0 +1,133 @@
+import { useEffect, useState } from "react";
+import OpcionNivelService from "../../../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
+import DocenteService from "../../../../../services/docenteServices/docente/DocenteService";
+
+function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agregarCurso, eliminarCurso, cursosSeleccionados, setIdsDocente }) {
+    //Datos de Ciclo
+    const [numeroCiclo, setNumeroCiclo] = useState("");
+
+    //Datos Opcion nivel carrera
+    const [nombre, setNombre] = useState("");
+
+    //Datos de curso detalle
+    const [cursoDetalles, setCursoDetalles] = useState([]);
+
+    //Hover
+    const [hoveredIndex, setHoveredIndex] = useState([]);
+
+    //Datos de docente
+    const [docentesNombres, setDocentesNombres] = useState([]);
+
+    const handleMouseEnter = (index) => setHoveredIndex(index);
+    const handleMouseLeave = () => setHoveredIndex(null);
+
+    const handleSelection = (curso) => {
+        const seleccionado = cursosSeleccionados.find((c) => c.idCurso === curso.idCurso);
+        if (seleccionado) {
+            eliminarCurso(curso.idCurso);
+        } else {
+            agregarCurso(curso);
+        }
+    };
+
+    const isSelected = (idCurso) => {
+        return !!cursosSeleccionados.find((c) => c.idCurso === idCurso);
+    };
+
+    function listarDatos() {
+        setNumeroCiclo(cicloDetalleConMayorNumero.ciclo.numeroCiclo);
+
+        OpcionNivelService.getOpcionNivelById(idOpcionNivel).then((response) => {
+            setNombre(response.data.carrera.nombre);
+        }).catch((error) => {
+            console.error(error);
+        })
+
+        setCursoDetalles(cicloDetalleConMayorNumero.cursoDetalles);
+    }
+
+    useEffect(() => {
+        listarDatos();
+    }, [cicloDetalleConMayorNumero, idOpcionNivel])
+
+    const estiloContenedor = {
+        border: "1px solid #000", // Borde negro de 1px
+        padding: "16px",          // Espaciado interno
+        margin: "16px",           // Espaciado externo
+        borderRadius: "8px",      // Bordes redondeados opcionales
+        backgroundColor: "#f9f9f9", // Color de fondo opcional
+        width: "300px",           // Ancho fijo opcional
+        cursor: "pointer",
+    };
+
+    async function mostrarDocentes(idsDocentes) {
+        const docentes = [];
+
+        for (let idDocente of idsDocentes) {
+            try {
+                const docenteResponse = await DocenteService.getDocenteById(idDocente);
+
+                const docenteNombreCompleto = `${docenteResponse.data.persona.nombres} ${docenteResponse.data.persona.apellido_paterno} ${docenteResponse.data.persona.apellido_materno}`;
+
+                docentes.push({
+                    idDocente: idDocente,
+                    nombreCompletoDocente: docenteNombreCompleto
+                });
+            } catch (error) {
+                console.error(`Error al obtener el docente con ID: ${idDocente}`, error);
+            }
+        }
+
+        setDocentesNombres(docentes);
+    }
+
+    useEffect(() => {
+        if (cursoDetalles.length > 0) {
+            cursoDetalles.forEach((detalle) => {
+                if (detalle.idsDocentes) {
+                    setIdsDocente(detalle.idsDocentes);
+                    mostrarDocentes(detalle.idsDocentes);
+                }
+            });
+        }
+    }, [cursoDetalles])
+
+
+    return (
+        <div className="container">
+            {cursoDetalles.length > 0 ? (cursoDetalles.map((cursoDetalle, index) => {
+                return (
+                    <div key={cursoDetalle.idCurso} onClick={() => handleSelection(cursoDetalle)} style={estiloContenedor} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                        <label style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <input type="checkbox" checked={isSelected(cursoDetalle.idCurso)} style={{ display: "inline-block" }} />
+                            <span style={{ fontWeight: "bold" }}>{cursoDetalle.curso.nombre}</span>
+                        </label>
+                        <p>Ciclo <b>{numeroCiclo}</b>| Grupo <b>{cursoDetalle.grupo}</b>| Creditos <b>{cursoDetalle.curso.creditos}</b>| H.teoricas <b>{cursoDetalle.curso.horasTeoricas}</b>| H. practicas <b>{cursoDetalle.curso.horasPracticas}</b>| Cupos <b>{cursoDetalle.cupos}</b>| Cupos disponibles <b>{cursoDetalle.cuposDisponibles}</b></p>
+
+                        {hoveredIndex === index && (
+                            <>
+                                {docentesNombres.length > 0 ? (
+                                    docentesNombres.map((docente) => {
+                                        return (
+                                            <div key={docente.idDocente}>
+                                                <p>Docente <strong>{docente.nombreCompletoDocente}</strong></p>
+                                            </div>
+                                        )
+                                    })
+                                ) : (
+                                    <p>No hay docentes</p>
+                                )}
+                                <p>Escuela <strong>{nombre}</strong></p>
+                            </>
+                        )}
+                    </div>
+                )
+            })
+            ) : (
+                <p>No hay cursos disponibles</p>
+            )}
+        </div>
+    );
+}
+
+export default CicloCursosComponent;

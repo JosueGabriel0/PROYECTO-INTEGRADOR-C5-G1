@@ -5,10 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import upeu.edu.pe.msnivelesdeensenanza.dto.Carrera;
+import upeu.edu.pe.msnivelesdeensenanza.dto.Ciclo;
+import upeu.edu.pe.msnivelesdeensenanza.dto.Curso;
 import upeu.edu.pe.msnivelesdeensenanza.dto.PlanificacionAcademica;
+import upeu.edu.pe.msnivelesdeensenanza.entity.CicloDetalle;
+import upeu.edu.pe.msnivelesdeensenanza.entity.CursoDetalle;
 import upeu.edu.pe.msnivelesdeensenanza.entity.OpcionNivel;
 import upeu.edu.pe.msnivelesdeensenanza.exception.ResourceNotFoundException;
 import upeu.edu.pe.msnivelesdeensenanza.feign.CarreraFeign;
+import upeu.edu.pe.msnivelesdeensenanza.feign.CursoFeign;
 import upeu.edu.pe.msnivelesdeensenanza.feign.PlanificacionAcademicaFeign;
 import upeu.edu.pe.msnivelesdeensenanza.repository.OpcionNivelRepository;
 import upeu.edu.pe.msnivelesdeensenanza.service.OpcionNivelService;
@@ -25,6 +30,8 @@ public class OpcionNivelServiceImpl implements OpcionNivelService {
     private CarreraFeign carreraFeign;
     @Autowired
     private PlanificacionAcademicaFeign planificacionAcademicaFeign;
+    @Autowired
+    private CursoFeign cursoFeign;
 
     @Override
     public List<OpcionNivel> obtenerOpcionesPorNivel(Long nivelId) {
@@ -60,6 +67,33 @@ public class OpcionNivelServiceImpl implements OpcionNivelService {
                 // Manejar el error en el servidor de OpenFeign para rol
                 throw new RuntimeException("Error al obtener la planiicacion academica con ID " + opcionNivel.getIdPLanificacionAcademica(), e);
             }
+
+            List<CicloDetalle> ciclosDetallesEncontrados = opcionNivel.getCicloDetalle();
+
+            ciclosDetallesEncontrados.forEach(cicloDetalle -> {
+                try {
+                    ResponseEntity<Ciclo> cicloResponse = planificacionAcademicaFeign.listarCicloPorId(cicloDetalle.getIdCiclo());
+                    if(cicloResponse.getBody() == null) {
+                        throw new IllegalArgumentException("El ciclo con ID " + cicloDetalle.getIdCiclo() + " no existe.");
+                    }
+                    cicloDetalle.setCiclo(cicloResponse.getBody());
+                } catch (FeignException e){
+                    throw new IllegalArgumentException("Error al comunicarse con el servicio de Ciclo", e);
+                }
+
+                List<CursoDetalle> cursosDetallesEncontrados = cicloDetalle.getCursoDetalles();
+                cursosDetallesEncontrados.forEach(cursoDetalle -> {
+                    try {
+                        ResponseEntity<Curso> cursoResponse = cursoFeign.listarCursoPorId(cursoDetalle.getIdCurso());
+                        if(cursoResponse.getBody() == null) {
+                            throw new IllegalArgumentException("El curso con ID" + cursoDetalle.getIdCurso() + " no existe.");
+                        }
+                        cursoDetalle.setCurso(cursoResponse.getBody());
+                    } catch (FeignException e){
+                        throw new IllegalArgumentException("Error al comunicarse con el servicio de Curso", e);
+                    }
+                });
+            });
         });
 
         return opcionesNivel;
@@ -95,6 +129,33 @@ public class OpcionNivelServiceImpl implements OpcionNivelService {
             // Manejar el error en el servidor de OpenFeign para rol
             throw new RuntimeException("Error al obtener la planificacion academica con ID " + opcionNivel.getIdPLanificacionAcademica(), e);
         }
+
+        List<CicloDetalle> ciclosDetallesEncontrados = opcionNivel.getCicloDetalle();
+
+        ciclosDetallesEncontrados.forEach(cicloDetalle -> {
+            try {
+                ResponseEntity<Ciclo> cicloResponse = planificacionAcademicaFeign.listarCicloPorId(cicloDetalle.getIdCiclo());
+                if(cicloResponse.getBody() == null) {
+                    throw new IllegalArgumentException("El ciclo con ID " + cicloDetalle.getIdCiclo() + " no existe.");
+                }
+                cicloDetalle.setCiclo(cicloResponse.getBody());
+            } catch (FeignException e){
+                throw new IllegalArgumentException("Error al comunicarse con el servicio de Ciclo", e);
+            }
+
+            List<CursoDetalle> cursosDetallesEncontrados = cicloDetalle.getCursoDetalles();
+            cursosDetallesEncontrados.forEach(cursoDetalle -> {
+                try {
+                    ResponseEntity<Curso> cursoResponse = cursoFeign.listarCursoPorId(cursoDetalle.getIdCurso());
+                    if(cursoResponse.getBody() == null) {
+                        throw new IllegalArgumentException("El curso con ID" + cursoDetalle.getIdCurso() + " no existe.");
+                    }
+                    cursoDetalle.setCurso(cursoResponse.getBody());
+                } catch (FeignException e){
+                    throw new IllegalArgumentException("Error al comunicarse con el servicio de Curso", e);
+                }
+            });
+        });
 
         return opcionNivel;
     }
