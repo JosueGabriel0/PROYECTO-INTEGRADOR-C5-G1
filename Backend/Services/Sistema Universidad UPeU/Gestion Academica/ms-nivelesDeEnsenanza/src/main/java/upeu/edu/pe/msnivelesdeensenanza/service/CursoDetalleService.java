@@ -10,4 +10,5 @@ public interface CursoDetalleService {
     public CursoDetalle crear(CursoDetalle cursoDetalle);
     public CursoDetalle actualizar(CursoDetalle cursoDetalle);
     public void eliminar(Long id);
+    public List<CursoDetalle> buscarPorIds(List<Long> idsCursoDetalle);
 }

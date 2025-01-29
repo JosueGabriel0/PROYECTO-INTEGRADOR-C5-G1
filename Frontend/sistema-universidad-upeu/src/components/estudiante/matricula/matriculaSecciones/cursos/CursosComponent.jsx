@@ -7,31 +7,59 @@ import OtrasEscuelasComponent from "./OtrasEscuelasComponent";
 import CursosSeleccionadosComponent from "./CursosSeleccionadosComponent";
 import HorarioComponent from "./HorarioComponent";
 
-function CursosComponent({ idOpcionNivel = "0", cambiarOpcion }) {
+function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado, idNivelEnsenanza, cursosSeleccionados, setCursosSeleccionados, totalCreditos, setTotalCreditos, cicloDetalleConMayorNumero, setCicloDetalleConMayorNumero, idsDocente, setIdsDocente, totalHoras, setTotalHoras }) {
     //Estados para ciclo cursos
     const [estadoCicloCursos, setEstadoCicloCursos] = useState("CICLO");
 
     //Datos de Ciclo Detalle
     const [ciclosDetalles, setCiclosDetalles] = useState([]);
-    const [cicloDetalleConMayorNumero, setCicloDetalleConMayorNumero] = useState(null);
 
     //Datos de Ciclo
     const [numeroCiclo, setNumeroCiclo] = useState("");
 
-    //Datos de Curso
-    const [cursosSeleccionados, setCursosSeleccionados] = useState([]);
+    //Datos Opcion nivel carrera
+    const [nombre, setNombre] = useState("");
 
-    //Datos de Docente
-    const [idsDocente, setIdsDocente] = useState([]);
+    //Datos de horario detalle
+    const [horariosSeleccionados, setHorariosSeleccionados] = useState([]);
 
     const agregarCurso = (curso) => {
         if (!cursosSeleccionados.find((c) => c.idCurso === curso.idCurso)) {
             setCursosSeleccionados([...cursosSeleccionados, curso]);
+
+            if (curso.horario && curso.horario.horarioDetalles) {
+                agregarHorario(curso.horario.horarioDetalles);
+            }
+            console.log("Horario Agregado: " + JSON.stringify(curso.horario.horarioDetalles, null, 2));
         }
     };
 
     const eliminarCurso = (idCurso) => {
+        const cursoAEliminar = cursosSeleccionados.find((curso) => curso.idCurso === idCurso);
         setCursosSeleccionados(cursosSeleccionados.filter((curso) => curso.idCurso !== idCurso));
+
+        if (cursoAEliminar && cursoAEliminar.horario && cursoAEliminar.horario.horarioDetalles) {
+            eliminarHorario(cursoAEliminar.horario.horarioDetalles);
+        }
+        console.log("Horario Eliminado: " + JSON.stringify(cursoAEliminar.horario.horarioDetalles, null, 2));
+    };
+
+    const agregarHorario = (horarios) => {
+        setHorariosSeleccionados([...horariosSeleccionados, ...horarios]);
+    };
+
+    const eliminarHorario = (horarios) => {
+        setHorariosSeleccionados((prev) =>
+            prev.filter(
+                (h) =>
+                    !horarios.some(
+                        (horario) =>
+                            horario.dia === h.dia &&
+                            horario.horaInicio === h.horaInicio &&
+                            horario.horaFin === h.horaFin
+                    )
+            )
+        );
     };
 
     function verComponenteSeleccionado() {
@@ -45,6 +73,13 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion }) {
                     eliminarCurso={eliminarCurso}
                     cursosSeleccionados={cursosSeleccionados}
                     setIdsDocente={setIdsDocente}
+                    setTotalCreditos={setTotalCreditos}
+                    nombre={nombre}
+                    setNombre={setNombre}
+                    agregarHorario={agregarHorario}
+                    eliminarHorario={eliminarHorario}
+                    horariosSeleccionados={horariosSeleccionados}
+                    setTotalHoras={setTotalHoras}
                 />
             )
         } else if (estadoCicloCursos === "OTROS_CICLOS") {
@@ -89,7 +124,6 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion }) {
 
     return (
         <div className="container">
-            <h1>CURSOS</h1>
             <div className="containerCursos">
                 <div className="columnCursos">
                     <h3>Cursos</h3>
@@ -108,11 +142,24 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion }) {
                         idOpcionNivel={idOpcionNivel}
                         eliminarCurso={eliminarCurso}
                         cursosSeleccionados={cursosSeleccionados}
+                        setCursosSeleccionados={setCursosSeleccionados}
                         idsDocente={idsDocente}
+                        totalCreditos={totalCreditos}
+                        setTotalCreditos={setTotalCreditos}
+                        setEstado={setEstado}
+                        idNivelEnsenanza={idNivelEnsenanza}
+                        totalHoras={totalHoras}
+                        setTotalHoras={setTotalHoras}
                     />
                 </div>
                 <div className="columnCursos">
-                    <HorarioComponent />
+                    <HorarioComponent
+                        cicloDetalleConMayorNumero={cicloDetalleConMayorNumero}
+                        campus={campus}
+                        nombre={nombre}
+                        horariosSeleccionados={horariosSeleccionados}
+                        cursosSeleccionados={cursosSeleccionados}
+                    />
                 </div>
             </div>
         </div>

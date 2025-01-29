@@ -27,6 +27,9 @@ public class PlanificacionAcademicaDataLoader implements CommandLineRunner {
             planificacionIngenieriaSistemas2024_1.setNombrePlanEstudio("Plan de Estudios Ingeniería de Sistemas 2024-1");
             planificacionIngenieriaSistemas2024_1.setCodigoPlanEstudio("PLAN-ING-SIS-2024");
             planificacionIngenieriaSistemas2024_1.setVersionPlanEstudio("2024-1");
+            planificacionIngenieriaSistemas2024_1.setSemestre("2024-1");
+            planificacionIngenieriaSistemas2024_1.setModo("REGULAR");
+            planificacionIngenieriaSistemas2024_1.setIdCarrera(1L);
             planificacionIngenieriaSistemas2024_1.setDescripcionGeneral("Planificación académica para Ingeniería de Sistemas.");
             planificacionIngenieriaSistemas2024_1.setEstado(EstadoPlanificacion.ACTIVO);
             planificacionIngenieriaSistemas2024_1.setCursosProgramadosIds(List.of(1L, 2L, 3L, 4L)); // IDs de cursos de ejemplo
@@ -52,6 +55,9 @@ public class PlanificacionAcademicaDataLoader implements CommandLineRunner {
             planificacionAdministracion2024_1.setNombrePlanEstudio("Plan de Estudios Administración 2024-1");
             planificacionAdministracion2024_1.setCodigoPlanEstudio("PLAN-ADM-2024");
             planificacionAdministracion2024_1.setVersionPlanEstudio("2024-1");
+            planificacionIngenieriaSistemas2024_1.setSemestre("2024-1");
+            planificacionIngenieriaSistemas2024_1.setModo("REGULAR");
+            planificacionIngenieriaSistemas2024_1.setIdCarrera(1L);
             planificacionAdministracion2024_1.setDescripcionGeneral("Planificación académica para Administración.");
             planificacionAdministracion2024_1.setEstado(EstadoPlanificacion.ACTIVO);
             planificacionAdministracion2024_1.setCursosProgramadosIds(List.of(5L, 6L, 7L)); // IDs de cursos de ejemplo

@@ -585,7 +585,7 @@ const App = () => {
           />
 
           <Route
-            path='/compromiso-consentimiento/:idOpcionNivel'
+            path='/compromiso-consentimiento/:idOpcionNivel/:idNivelEnsenanza'
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <CompromisoYConsentimientoComponent />
@@ -603,7 +603,7 @@ const App = () => {
           />
 
           <Route
-            path='/matricula/:idOpcionNivel'
+            path='/matricula/:idOpcionNivel/:idNivelEnsenanza'
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
                 <MatriculaProtectedRouteComponent>

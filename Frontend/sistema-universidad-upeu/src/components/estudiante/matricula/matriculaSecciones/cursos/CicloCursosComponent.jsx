@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 import OpcionNivelService from "../../../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
 import DocenteService from "../../../../../services/docenteServices/docente/DocenteService";
 
-function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agregarCurso, eliminarCurso, cursosSeleccionados, setIdsDocente }) {
+function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agregarCurso, eliminarCurso, cursosSeleccionados, setIdsDocente, setTotalCreditos, nombre, setNombre, agregarHorario, eliminarHorario, setTotalHoras}) {
     //Datos de Ciclo
     const [numeroCiclo, setNumeroCiclo] = useState("");
-
-    //Datos Opcion nivel carrera
-    const [nombre, setNombre] = useState("");
 
     //Datos de curso detalle
     const [cursoDetalles, setCursoDetalles] = useState([]);
@@ -25,13 +22,37 @@ function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agreg
         const seleccionado = cursosSeleccionados.find((c) => c.idCurso === curso.idCurso);
         if (seleccionado) {
             eliminarCurso(curso.idCurso);
+            eliminarHorario(curso.horario.horarioDetalles)
+            restarCreditos(curso.curso.creditos);
+            const horas = curso.curso.horasTeoricas + curso.curso.horasPracticas;
+            restarHoras(horas);
         } else {
             agregarCurso(curso);
+            agregarHorario(curso.horario.horarioDetalles);
+            sumarCreditos(curso.curso.creditos);
+            const horas = curso.curso.horasTeoricas + curso.curso.horasPracticas;
+            sumarHoras(horas);
         }
     };
 
     const isSelected = (idCurso) => {
         return !!cursosSeleccionados.find((c) => c.idCurso === idCurso);
+    };
+
+    const sumarCreditos = (creditos) => {
+        setTotalCreditos((prev) => prev + creditos);
+    };
+
+    const restarCreditos = (creditos) => {
+        setTotalCreditos((prev) => prev - creditos);
+    };
+
+    const sumarHoras = (horas) => {
+        setTotalHoras((prev) => prev + horas);
+    };
+
+    const restarHoras = (horas) => {
+        setTotalHoras((prev) => prev - horas);
     };
 
     function listarDatos() {

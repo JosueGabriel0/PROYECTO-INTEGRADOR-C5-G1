@@ -64,6 +64,16 @@ class MatriculaService{
             })
         )
     }
+
+    getMatriculaByIdEstudiante(idEstudiante){
+        return(
+            axios.get(`${MATRICULA_DATABASE_REST_API_URL}/buscarPorIdEstudiante/${idEstudiante}`, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+        )
+    }
 }
 
 export default new MatriculaService();

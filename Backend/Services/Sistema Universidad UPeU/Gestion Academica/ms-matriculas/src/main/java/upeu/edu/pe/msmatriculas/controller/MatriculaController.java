@@ -65,4 +65,9 @@ public class MatriculaController {
                     .body(Map.of("mensaje", "Estudiante no encontrado"));
         }
     }
+
+    @GetMapping("/buscarPorIdEstudiante/{idEstudiante}")
+    public ResponseEntity<Matricula> buscarPorIdEstudiante(@PathVariable Long idEstudiante) {
+        return ResponseEntity.status(HttpStatus.OK).body(matriculaService.buscarMatriculaPorIdEstudiante(idEstudiante));
+    }
 }

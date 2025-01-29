@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import upeu.edu.pe.msmatriculas.dto.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,11 @@ public class Matricula {
 
     private int numeroDeCreditos;
 
+    private int horas;
+
+    private BigDecimal costoMatricula;
+    private BigDecimal costoEnsenanza;
+
     private double costoTotal;
 
     private Long idCiclo;
@@ -78,9 +85,22 @@ public class Matricula {
 
     // Fecha y hora de la matrícula
     @Column(name = "fecha_matricula", nullable = false)
-    private LocalDateTime fechaMatricula;
+    private LocalDate fechaMatricula;
 
     // Observaciones o notas adicionales sobre la matrícula
     @Column(name = "observaciones")
     private String observaciones;
+
+    private LocalDateTime fechaCreacionMatricula;
+    private LocalDateTime fechaModificacionMatricula;
+
+    @PrePersist
+    public void onCreate() {
+        fechaCreacionMatricula = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        fechaModificacionMatricula = LocalDateTime.now();
+    }
 }

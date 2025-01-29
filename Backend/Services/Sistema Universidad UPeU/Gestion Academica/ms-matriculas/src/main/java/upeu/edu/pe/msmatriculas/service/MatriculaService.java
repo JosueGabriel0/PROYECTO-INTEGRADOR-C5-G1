@@ -17,4 +17,6 @@ public interface MatriculaService {
     public void eliminarMatricula(Long idMatricula);
 
     public boolean validarEstudiante(Long idInscripcion);
+
+    public Matricula buscarMatriculaPorIdEstudiante(Long idEstudiante);
 }

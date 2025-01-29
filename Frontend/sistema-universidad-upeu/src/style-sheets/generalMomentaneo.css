@@ -54,10 +54,86 @@
 /* styles.css */
 .containerCursos {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr; /* 3 columnas de igual ancho */
-  height: 100vh; /* Altura total de la pantalla */
+  grid-template-columns: 1fr 1fr 1fr;
+  /* 3 columnas de igual ancho */
+  height: 100vh;
+  /* Altura total de la pantalla */
 }
+
 .columnCursos {
   padding: 16px;
-  border: 1px solid #ccc; /* Opcional: para visualizar las columnas */
+  border: 1px solid #ccc;
+  /* Opcional: para visualizar las columnas */
+}
+
+.horario-celda.coloreada {
+  background-color: #1877e4;
+  /* Color de fondo */
+  border: 1px solid #000000;
+  /* Borde */
+}
+
+
+.horario-celda {
+  text-align: center;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  color: #000; /* Contraste con el fondo */
+  transition: background-color 0.3s ease;
+}
+
+/* Mostrar el tooltip cuando la celda es hoverada */
+.horario-celda:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Tooltip - mensaje flotante */
+.tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Aparece arriba de la celda */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* styles.css */
+.containerPago {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  /* 3 columnas de igual ancho */
+  height: 100vh;
+  /* Altura total de la pantalla */
+}
+
+.columnPago {
+  padding: 16px;
+  border: 1px solid #ccc;
+  /* Opcional: para visualizar las columnas */
 }

@@ -6,6 +6,7 @@ import upeu.edu.pe.msnivelesdeensenanza.repository.OpcionNivelRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -49,6 +50,8 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 cicloDetalle1.setOpcionNivel(opcion1);
                 cicloDetalle1.setIdCiclo(1L);
                 cicloDetalle1.setNumeroDeGrupos(3);
+                cicloDetalle1.setFechaInicio(LocalDate.of(2024, 3, 20));
+                cicloDetalle1.setFechaFin(LocalDate.of(2024, 7, 7));
                 cicloDetalle1.setFechaCreacionCicloDetalle(LocalDateTime.now());
 
                 // Crear Curso Detalle asociado al Ciclo Detalle
@@ -56,6 +59,7 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 cursoDetalle1.setCicloDetalle(cicloDetalle1);
                 cursoDetalle1.setIdCurso(1L);
                 cursoDetalle1.setGrupo("G1");
+                cursoDetalle1.setCostoTotalPorCreditos(BigDecimal.valueOf(900));
                 cursoDetalle1.setCupos(20);
                 cursoDetalle1.setCuposDisponibles(20);
                 cursoDetalle1.setIdsDocentes(Arrays.asList(1L));
@@ -65,6 +69,7 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 cursoDetalle2.setCicloDetalle(cicloDetalle1);
                 cursoDetalle2.setIdCurso(2L);
                 cursoDetalle2.setGrupo("G2");
+                cursoDetalle2.setCostoTotalPorCreditos(BigDecimal.valueOf(1200));
                 cursoDetalle2.setCupos(20);
                 cursoDetalle2.setCuposDisponibles(20);
                 cursoDetalle2.setIdsDocentes(Arrays.asList(1L, 2L));
@@ -83,31 +88,34 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 HorarioDetalle detalleHorario1 = new HorarioDetalle();
                 detalleHorario1.setHorario(horario1);
                 detalleHorario1.setDia("Lunes");
-                detalleHorario1.setHoraInicio(LocalTime.of(8, 0));
-                detalleHorario1.setHoraFin(LocalTime.of(10, 0));
+                detalleHorario1.setHoraInicio(LocalTime.of(8, 25));
+                detalleHorario1.setHoraFin(LocalTime.of(12, 10));
 
                 HorarioDetalle detalleHorario2 = new HorarioDetalle();
                 detalleHorario2.setHorario(horario1);
-                detalleHorario2.setDia("Miércoles");
-                detalleHorario2.setHoraInicio(LocalTime.of(8, 0));
-                detalleHorario2.setHoraFin(LocalTime.of(10, 0));
-
-                HorarioDetalle detalleHorario3 = new HorarioDetalle();
-                detalleHorario3.setHorario(horario1);
-                detalleHorario3.setDia("Martes");
-                detalleHorario3.setHoraInicio(LocalTime.of(8, 0));
-                detalleHorario3.setHoraFin(LocalTime.of(10, 0));
-
-                HorarioDetalle detalleHorario4 = new HorarioDetalle();
-                detalleHorario4.setHorario(horario1);
-                detalleHorario4.setDia("Jueves");
-                detalleHorario4.setHoraInicio(LocalTime.of(8, 0));
-                detalleHorario4.setHoraFin(LocalTime.of(10, 0));
+                detalleHorario2.setDia("Miercoles");
+                detalleHorario2.setHoraInicio(LocalTime.of(8, 25));
+                detalleHorario2.setHoraFin(LocalTime.of(12, 10));
 
                 horario1.setHorarioDetalles(Arrays.asList(detalleHorario1, detalleHorario2));
+
+                HorarioDetalle detalleHorario3 = new HorarioDetalle();
+                detalleHorario3.setHorario(horario2);
+                detalleHorario3.setDia("Martes");
+                detalleHorario3.setHoraInicio(LocalTime.of(14, 55));
+                detalleHorario3.setHoraFin(LocalTime.of(18, 45));
+
+                HorarioDetalle detalleHorario4 = new HorarioDetalle();
+                detalleHorario4.setHorario(horario2);
+                detalleHorario4.setDia("Jueves");
+                detalleHorario4.setHoraInicio(LocalTime.of(13, 10));
+                detalleHorario4.setHoraFin(LocalTime.of(16, 55));
+
                 horario2.setHorarioDetalles(Arrays.asList(detalleHorario3, detalleHorario4));
+
                 cursoDetalle1.setHorario(horario1);
                 cursoDetalle2.setHorario(horario2);
+
                 cicloDetalle1.setCursoDetalles(Arrays.asList(cursoDetalle1, cursoDetalle2));
                 opcion1.setCicloDetalle(Arrays.asList(cicloDetalle1));
 

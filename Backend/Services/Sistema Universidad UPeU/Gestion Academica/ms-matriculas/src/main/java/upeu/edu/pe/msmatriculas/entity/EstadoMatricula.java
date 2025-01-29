@@ -4,5 +4,6 @@ public enum EstadoMatricula {
     PENDIENTE,
     PAGADO,
     COMPLETADO,
-    CANCELADO
+    CANCELADO,
+    INICIADO
 }

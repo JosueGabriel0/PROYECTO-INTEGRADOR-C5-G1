@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useParams } from "
 
 function CompromisoYConsentimientoComponent() {
     //React router dom
-    const { idOpcionNivel } = useParams();
+    const { idOpcionNivel, idNivelEnsenanza } = useParams();
     const navigate = useNavigate();
 
     //Datos de checkboxes y boton
@@ -28,7 +28,7 @@ function CompromisoYConsentimientoComponent() {
         if (isButtonDisabled) {
             alert('Debes aceptar y seleccionar ambos checkboxes.');
         } else {
-            navigate(`/matricula/${idOpcionNivel}`);
+            navigate(`/matricula/${idOpcionNivel}/${idNivelEnsenanza}`);
         }
     };
 

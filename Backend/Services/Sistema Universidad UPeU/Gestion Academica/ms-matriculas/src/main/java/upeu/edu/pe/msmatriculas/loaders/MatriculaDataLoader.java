@@ -6,6 +6,7 @@ import upeu.edu.pe.msmatriculas.repository.MatriculaRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -34,10 +35,11 @@ public class MatriculaDataLoader implements CommandLineRunner {
             matricula1.setIdAdministrativo(1L);
             matricula1.setTipoAlumno("Regular");
             matricula1.setNumeroDeCreditos(22);
+            matricula1.setHoras(22);
             matricula1.setCostoTotal(3000);
             matricula1.setCursosDetalleIds(Arrays.asList(1L, 2L, 3L));
             matricula1.setEstado(EstadoMatricula.PENDIENTE);
-            matricula1.setFechaMatricula(LocalDateTime.now());
+            matricula1.setFechaMatricula(LocalDate.now());
             matricula1.setObservaciones("Primera matrícula del estudiante.");
 
             Matricula matricula2 = new Matricula();
@@ -48,12 +50,13 @@ public class MatriculaDataLoader implements CommandLineRunner {
             matricula2.setIdPago(3002L);
             matricula2.setIdRequisito(4002L);
             matricula2.setIdAdministrativo(5002L);
-            matricula1.setTipoAlumno("Regular");
-            matricula1.setNumeroDeCreditos(22);
-            matricula1.setCostoTotal(3000);
-            matricula1.setCursosDetalleIds(Arrays.asList(1L, 2L, 3L));
+            matricula2.setTipoAlumno("Regular");
+            matricula2.setNumeroDeCreditos(22);
+            matricula2.setCostoTotal(3000);
+            matricula2.setHoras(22);
+            matricula2.setCursosDetalleIds(Arrays.asList(1L, 2L, 3L));
             matricula2.setEstado(EstadoMatricula.PAGADO);
-            matricula2.setFechaMatricula(LocalDateTime.now());
+            matricula2.setFechaMatricula(LocalDate.now());
             matricula2.setObservaciones("Pago confirmado.");
 
             Matricula matricula3 = new Matricula();
@@ -64,12 +67,12 @@ public class MatriculaDataLoader implements CommandLineRunner {
             matricula3.setIdPago(3003L);
             matricula3.setIdRequisito(4003L);
             matricula3.setIdAdministrativo(5003L);
-            matricula1.setTipoAlumno("Regular");
-            matricula1.setNumeroDeCreditos(22);
-            matricula1.setCostoTotal(3000);
-            matricula1.setCursosDetalleIds(Arrays.asList(1L, 2L, 3L));
+            matricula3.setTipoAlumno("Regular");
+            matricula3.setNumeroDeCreditos(22);
+            matricula3.setCostoTotal(3000);
+            matricula3.setCursosDetalleIds(Arrays.asList(1L, 2L, 3L));
             matricula3.setEstado(EstadoMatricula.COMPLETADO);
-            matricula3.setFechaMatricula(LocalDateTime.now());
+            matricula3.setFechaMatricula(LocalDate.now());
             matricula3.setObservaciones("Matrícula completada exitosamente.");
 
             // Guardar las matrículas en la base de datos

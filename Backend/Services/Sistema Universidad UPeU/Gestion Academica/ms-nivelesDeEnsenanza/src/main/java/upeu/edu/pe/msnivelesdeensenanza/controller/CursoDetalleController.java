@@ -1,6 +1,7 @@
 package upeu.edu.pe.msnivelesdeensenanza.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upeu.edu.pe.msnivelesdeensenanza.entity.CursoDetalle;
@@ -40,5 +41,17 @@ public class CursoDetalleController {
     public ResponseEntity<Void> eliminar(@PathVariable Long id) {
         cursoDetalleService.eliminar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/buscarCursosDetallePorIds")
+    public ResponseEntity<List<CursoDetalle>> buscarCursosDetallePorIds(@RequestBody List<Long> idsCursoDetalle) {
+        try {
+            List<CursoDetalle> cursosDetalles = cursoDetalleService.buscarPorIds(idsCursoDetalle);
+            return ResponseEntity.status(HttpStatus.OK).body(cursosDetalles);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

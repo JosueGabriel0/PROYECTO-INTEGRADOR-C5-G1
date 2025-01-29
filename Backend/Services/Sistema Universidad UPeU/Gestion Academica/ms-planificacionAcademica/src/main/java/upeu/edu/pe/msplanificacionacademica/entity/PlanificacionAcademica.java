@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import upeu.edu.pe.msplanificacionacademica.dto.Carrera;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +25,10 @@ public class PlanificacionAcademica {
     private String modo;//Regular
     private LocalDateTime fechaCreacionPlanificacionAcademica;
     private LocalDateTime fechaModificacionPlanificacionAcademica;
+
+    private Long idCarrera;
+    @Transient
+    private Carrera carrera;
 
     @Enumerated(EnumType.STRING)
     private EstadoPlanificacion estado; //Activo, Inactivo o En revision

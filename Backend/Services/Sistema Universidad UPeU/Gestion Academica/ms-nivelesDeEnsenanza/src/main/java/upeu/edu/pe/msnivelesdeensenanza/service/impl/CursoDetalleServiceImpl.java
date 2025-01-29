@@ -68,4 +68,12 @@ public class CursoDetalleServiceImpl implements CursoDetalleService {
     public void eliminar(Long id) {
         cursoDetalleRepository.deleteById(id);
     }
+
+    @Override
+    public List<CursoDetalle> buscarPorIds(List<Long> idsCursoDetalle){
+        if(idsCursoDetalle == null || idsCursoDetalle.isEmpty()) {
+            throw new IllegalArgumentException("La lista de ids del curso detalle no puede ser vacia.");
+        }
+        return cursoDetalleRepository.findAllById(idsCursoDetalle);
+    }
 }

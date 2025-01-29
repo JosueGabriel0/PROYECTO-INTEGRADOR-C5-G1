@@ -11,7 +11,7 @@ import java.util.List;
 public interface MatriculaRepository extends JpaRepository<Matricula, Long> {
 
     // Buscar todas las matrículas de un estudiante por su ID
-    List<Matricula> findByIdEstudiante(Long idEstudiante);
+    Matricula findByIdEstudiante(Long idEstudiante);
 
     // Buscar matrículas por estado
     List<Matricula> findByEstado(String estado);

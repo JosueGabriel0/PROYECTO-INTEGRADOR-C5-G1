@@ -7,6 +7,7 @@ import lombok.Data;
 import upeu.edu.pe.msnivelesdeensenanza.dto.Ciclo;
 import upeu.edu.pe.msnivelesdeensenanza.dto.EstadoCiclo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class CicloDetalle {
     private Ciclo ciclo;
 
     private int numeroDeGrupos;
+
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
 
     @OneToMany(mappedBy = "cicloDetalle", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

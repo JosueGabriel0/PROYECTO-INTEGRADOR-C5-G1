@@ -313,4 +313,9 @@ public class MatriculaServiceImpl implements MatriculaService {
         }
     }
 
+    @Override
+    public Matricula buscarMatriculaPorIdEstudiante(Long idEstudiante){
+        return matriculaRepository.findByIdEstudiante(idEstudiante);
+    }
+
 }

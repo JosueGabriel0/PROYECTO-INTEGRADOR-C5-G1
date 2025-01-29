@@ -14,6 +14,9 @@ import { useNavigate } from "react-router-dom";
 function SelectNivEnsenianzaMatriculaComponent() {
     const idInscripcion = getInscripcionId();
 
+    //Datos de nivel ensenanza
+    const [idNivelEnsenanza, setIdNivelEnsenanza] = useState("");
+
     //Datos de opciones de nivel de ensenanza
     const [opcionesNivel, setOpcionesNivel] = useState([]);
 
@@ -71,6 +74,7 @@ function SelectNivEnsenianzaMatriculaComponent() {
                     const carreraResponse = await CarreraService.getCarreraById(opcionNivel.idCarrera);
 
                     nombresNivelEnsenanza[opcionNivel.idOpcionNivel] = nivelResponse.data.nombre;
+                    setIdNivelEnsenanza(nivelResponse.data.idNivelEnsenanza);
                     nombresPlanificacionAcademica[opcionNivel.idOpcionNivel] = planificacionResponse.data.nombrePlanEstudio;
                     nombresCarrerasOpcionNivel[opcionNivel.idOpcionNivel] = carreraResponse.data.nombre;
                 })
@@ -87,7 +91,7 @@ function SelectNivEnsenianzaMatriculaComponent() {
     }
 
     function nivelDeEnsenanzaSeleccionado(idOpcionNivel){
-        navigate(`/compromiso-consentimiento/${idOpcionNivel}`);
+        navigate(`/compromiso-consentimiento/${idOpcionNivel}/${idNivelEnsenanza}`);
     }
 
     useEffect(() => {

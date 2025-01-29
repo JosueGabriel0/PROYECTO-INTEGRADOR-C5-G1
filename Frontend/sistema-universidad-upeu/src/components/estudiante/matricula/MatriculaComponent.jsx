@@ -12,7 +12,7 @@ import PagoComponent from "./matriculaSecciones/pago/PagoComponent";
 
 function MatriculaComponent() {
     //React router dom
-    const { idOpcionNivel } = useParams();
+    const { idOpcionNivel, idNivelEnsenanza } = useParams();
 
     //Handle estado
     const [estado, setEstado] = useState("DATOS PERSONALES");
@@ -42,6 +42,21 @@ function MatriculaComponent() {
 
     //Datos de nivel de ensenanza
     const [nombreNivelEnsenanza, setNombreNivelEnsenanza] = useState("");
+
+    //Datos de Curso
+    const [cursosSeleccionados, setCursosSeleccionados] = useState([]);
+
+    //Creditos totales
+    const [totalCreditos, setTotalCreditos] = useState(0);
+
+    //Horas Totales
+    const [totalHoras, setTotalHoras] = useState(0);
+
+    //Datos de Ciclo Detalle
+    const [cicloDetalleConMayorNumero, setCicloDetalleConMayorNumero] = useState(null);
+
+    //Datos de Docente
+    const [idsDocente, setIdsDocente] = useState([]);
 
     async function obtenerTodosLosDatos() {
         InscripcionService.getInscripcionById(idInscripcion).then(async (response) => {
@@ -80,15 +95,15 @@ function MatriculaComponent() {
     function verOpcionSeleccionada() {
         if (estado === "DATOS PERSONALES") {
             return (
-                <DatosPersonalesComponent idOpcionNivel={`${idOpcionNivel}`} cambiarOpcion={(nuevaOpcion) => {setEstado(nuevaOpcion)}}/>
+                <DatosPersonalesComponent idOpcionNivel={`${idOpcionNivel}`} cambiarOpcion={(nuevaOpcion) => { setEstado(nuevaOpcion) }} />
             )
         } else if (estado === "CURSOS") {
             return (
-                <CursosComponent idOpcionNivel={`${idOpcionNivel}`} cambiarOpcion={(nuevaOpcion) => {setEstado(nuevaOpcion)}}/>
+                <CursosComponent idOpcionNivel={`${idOpcionNivel}`} cambiarOpcion={(nuevaOpcion) => { setEstado(nuevaOpcion) }} campus={campus} setEstado={setEstado} idNivelEnsenanza={idNivelEnsenanza} cursosSeleccionados={cursosSeleccionados} setCursosSeleccionados={setCursosSeleccionados} totalCreditos={totalCreditos} setTotalCreditos={setTotalCreditos} cicloDetalleConMayorNumero={cicloDetalleConMayorNumero} setCicloDetalleConMayorNumero={setCicloDetalleConMayorNumero} idsDocente={idsDocente} setIdsDocente={setIdsDocente} totalHoras={totalHoras} setTotalHoras={setTotalHoras}/>
             )
         } else if (estado === "PAGO") {
             return (
-                <PagoComponent />
+                <PagoComponent cursosSeleccionados={cursosSeleccionados} totalCreditos={totalCreditos} cicloDetalleConMayorNumero={cicloDetalleConMayorNumero} idOpcionNivel={idOpcionNivel} idsDocente={idsDocente} totalHoras={totalHoras}/>
             )
         }
     }

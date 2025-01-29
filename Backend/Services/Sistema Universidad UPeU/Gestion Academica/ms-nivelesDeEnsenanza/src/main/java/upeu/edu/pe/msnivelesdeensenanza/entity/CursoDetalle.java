@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import upeu.edu.pe.msnivelesdeensenanza.dto.Curso;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class CursoDetalle {
     private Curso curso;
 
     private String grupo;
+    private BigDecimal costoTotalPorCreditos;
 
     private Integer cupos;
     private Integer cuposDisponibles;
