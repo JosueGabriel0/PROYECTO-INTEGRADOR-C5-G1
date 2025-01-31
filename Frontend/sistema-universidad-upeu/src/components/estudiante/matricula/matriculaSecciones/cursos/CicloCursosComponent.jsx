@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import OpcionNivelService from "../../../../../services/nivelDeEnsenanzaServices/OpcionNivelService";
 import DocenteService from "../../../../../services/docenteServices/docente/DocenteService";
 
-function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agregarCurso, eliminarCurso, cursosSeleccionados, setIdsDocente, setTotalCreditos, nombre, setNombre, agregarHorario, eliminarHorario, setTotalHoras}) {
+function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agregarCurso, eliminarCurso, cursosSeleccionados, setIdsDocente, setTotalCreditos, nombre, setNombre, agregarHorario, eliminarHorario, setTotalHoras, sumarCreditos, restarCreditos, sumarHoras, restarHoras, estadoMatriculaView }) {
     //Datos de Ciclo
     const [numeroCiclo, setNumeroCiclo] = useState("");
 
@@ -39,22 +39,6 @@ function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agreg
         return !!cursosSeleccionados.find((c) => c.idCurso === idCurso);
     };
 
-    const sumarCreditos = (creditos) => {
-        setTotalCreditos((prev) => prev + creditos);
-    };
-
-    const restarCreditos = (creditos) => {
-        setTotalCreditos((prev) => prev - creditos);
-    };
-
-    const sumarHoras = (horas) => {
-        setTotalHoras((prev) => prev + horas);
-    };
-
-    const restarHoras = (horas) => {
-        setTotalHoras((prev) => prev - horas);
-    };
-
     function listarDatos() {
         setNumeroCiclo(cicloDetalleConMayorNumero.ciclo.numeroCiclo);
 
@@ -66,10 +50,6 @@ function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agreg
 
         setCursoDetalles(cicloDetalleConMayorNumero.cursoDetalles);
     }
-
-    useEffect(() => {
-        listarDatos();
-    }, [cicloDetalleConMayorNumero, idOpcionNivel])
 
     const estiloContenedor = {
         border: "1px solid #000", // Borde negro de 1px
@@ -103,6 +83,10 @@ function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agreg
     }
 
     useEffect(() => {
+        listarDatos();
+    }, [cicloDetalleConMayorNumero, idOpcionNivel, estadoMatriculaView])
+
+    useEffect(() => {
         if (cursoDetalles.length > 0) {
             cursoDetalles.forEach((detalle) => {
                 if (detalle.idsDocentes) {
@@ -111,14 +95,14 @@ function CicloCursosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, agreg
                 }
             });
         }
-    }, [cursoDetalles])
+    }, [cursoDetalles]);
 
 
     return (
         <div className="container">
             {cursoDetalles.length > 0 ? (cursoDetalles.map((cursoDetalle, index) => {
                 return (
-                    <div key={cursoDetalle.idCurso} onClick={() => handleSelection(cursoDetalle)} style={estiloContenedor} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
+                    <div key={cursoDetalle.idCurso} onClick={() => estadoMatriculaView === "INICIADO" ? handleSelection(cursoDetalle) : undefined} style={estiloContenedor} onMouseEnter={() => handleMouseEnter(index)} onMouseLeave={handleMouseLeave}>
                         <label style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
                             <input type="checkbox" checked={isSelected(cursoDetalle.idCurso)} style={{ display: "inline-block" }} />
                             <span style={{ fontWeight: "bold" }}>{cursoDetalle.curso.nombre}</span>

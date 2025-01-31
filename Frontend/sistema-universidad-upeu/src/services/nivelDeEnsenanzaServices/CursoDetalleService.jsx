@@ -63,6 +63,26 @@ class CursoDetalleService {
             })
         );
     }
+
+    postCursoDetalleRestarCupo(cursoDetalleRequest){
+        return(
+            axios.post(`${CURSODETALLE_BASE_REST_API_URL}/restarCuposCursoDetalle`, cursoDetalleRequest, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+        );
+    }
+    
+    postCursoDetalleSumarCupo(cursoDetalleRequest){
+        return(
+            axios.post(`${CURSODETALLE_BASE_REST_API_URL}/sumarCuposCursoDetalle`, cursoDetalleRequest, {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+        );
+    }
 }
 
 export default new CursoDetalleService();

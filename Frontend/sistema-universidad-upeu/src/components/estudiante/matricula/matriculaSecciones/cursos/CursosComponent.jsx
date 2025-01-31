@@ -7,7 +7,8 @@ import OtrasEscuelasComponent from "./OtrasEscuelasComponent";
 import CursosSeleccionadosComponent from "./CursosSeleccionadosComponent";
 import HorarioComponent from "./HorarioComponent";
 
-function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado, idNivelEnsenanza, cursosSeleccionados, setCursosSeleccionados, totalCreditos, setTotalCreditos, cicloDetalleConMayorNumero, setCicloDetalleConMayorNumero, idsDocente, setIdsDocente, totalHoras, setTotalHoras }) {
+function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado, idNivelEnsenanza, cursosSeleccionados, setCursosSeleccionados, totalCreditos, setTotalCreditos, cicloDetalleConMayorNumero, setCicloDetalleConMayorNumero, idsDocente, setIdsDocente, totalHoras, setTotalHoras, sumarCreditos, restarCreditos, sumarHoras, restarHoras, contador, setContador, idMatricula, setIdMatricula }) {
+
     //Estados para ciclo cursos
     const [estadoCicloCursos, setEstadoCicloCursos] = useState("CICLO");
 
@@ -22,6 +23,9 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
 
     //Datos de horario detalle
     const [horariosSeleccionados, setHorariosSeleccionados] = useState([]);
+
+    //Estado para manejar el boton y seleccion de cursos
+    const [estadoMatriculaView, setEstadoMatriculaView] = useState("");
 
     const agregarCurso = (curso) => {
         if (!cursosSeleccionados.find((c) => c.idCurso === curso.idCurso)) {
@@ -66,29 +70,40 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
         console.log("este es el estado: " + estadoCicloCursos);
         if (estadoCicloCursos === "CICLO") {
             return (
-                <CicloCursosComponent
-                    cicloDetalleConMayorNumero={cicloDetalleConMayorNumero}
-                    idOpcionNivel={idOpcionNivel}
-                    agregarCurso={agregarCurso}
-                    eliminarCurso={eliminarCurso}
-                    cursosSeleccionados={cursosSeleccionados}
-                    setIdsDocente={setIdsDocente}
-                    setTotalCreditos={setTotalCreditos}
-                    nombre={nombre}
-                    setNombre={setNombre}
-                    agregarHorario={agregarHorario}
-                    eliminarHorario={eliminarHorario}
-                    horariosSeleccionados={horariosSeleccionados}
-                    setTotalHoras={setTotalHoras}
-                />
+                <div>
+                    <CicloCursosComponent
+                        cicloDetalleConMayorNumero={cicloDetalleConMayorNumero}
+                        idOpcionNivel={idOpcionNivel}
+                        agregarCurso={agregarCurso}
+                        eliminarCurso={eliminarCurso}
+                        cursosSeleccionados={cursosSeleccionados}
+                        setIdsDocente={setIdsDocente}
+                        setTotalCreditos={setTotalCreditos}
+                        nombre={nombre}
+                        setNombre={setNombre}
+                        agregarHorario={agregarHorario}
+                        eliminarHorario={eliminarHorario}
+                        horariosSeleccionados={horariosSeleccionados}
+                        setTotalHoras={setTotalHoras}
+                        sumarCreditos={sumarCreditos}
+                        restarCreditos={restarCreditos}
+                        sumarHoras={sumarHoras}
+                        restarHoras={restarHoras}
+                        estadoMatriculaView={estadoMatriculaView}
+                    />
+                </div>
             )
         } else if (estadoCicloCursos === "OTROS_CICLOS") {
             return (
-                <OtrosCiclosCursosComponent />
+                <div>
+                    <OtrosCiclosCursosComponent />
+                </div>
             )
         } else if (estadoCicloCursos === "OTRAS_ESCUELAS") {
             return (
-                <OtrasEscuelasComponent />
+                <div>
+                    <OtrasEscuelasComponent />
+                </div>
             )
         }
     }
@@ -150,6 +165,16 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
                         idNivelEnsenanza={idNivelEnsenanza}
                         totalHoras={totalHoras}
                         setTotalHoras={setTotalHoras}
+                        sumarCreditos={sumarCreditos}
+                        restarCreditos={restarCreditos}
+                        sumarHoras={sumarHoras}
+                        restarHoras={restarHoras}
+                        estadoMatriculaView={estadoMatriculaView}
+                        setEstadoMatriculaView={setEstadoMatriculaView}
+                        contador={contador}
+                        setContador={setContador}
+                        idMatricula={idMatricula}
+                        setIdMatricula={setIdMatricula}
                     />
                 </div>
                 <div className="columnCursos">

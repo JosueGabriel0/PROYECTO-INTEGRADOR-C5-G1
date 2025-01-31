@@ -1,10 +1,12 @@
 package upeu.edu.pe.msnivelesdeensenanza.service.impl;
 
 import feign.FeignException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import upeu.edu.pe.msnivelesdeensenanza.dto.Curso;
+import upeu.edu.pe.msnivelesdeensenanza.dto.CursoDetalleRequest;
 import upeu.edu.pe.msnivelesdeensenanza.entity.CicloDetalle;
 import upeu.edu.pe.msnivelesdeensenanza.entity.CursoDetalle;
 import upeu.edu.pe.msnivelesdeensenanza.feign.CursoFeign;
@@ -74,6 +76,42 @@ public class CursoDetalleServiceImpl implements CursoDetalleService {
         if(idsCursoDetalle == null || idsCursoDetalle.isEmpty()) {
             throw new IllegalArgumentException("La lista de ids del curso detalle no puede ser vacia.");
         }
-        return cursoDetalleRepository.findAllById(idsCursoDetalle);
+
+        List<CursoDetalle> cursosDetallesEncontrados = cursoDetalleRepository.findAllById(idsCursoDetalle);
+        cursosDetallesEncontrados.forEach((cursoDetalle) -> {
+            try {
+                ResponseEntity<Curso> cursoResponse = cursoFeign.listarCursoPorId(cursoDetalle.getIdCurso());
+                if(cursoResponse.getBody() == null) {
+                    throw new IllegalArgumentException("El curso con ID " + cursoDetalle.getIdCurso() + "no existe");
+                }
+                cursoDetalle.setCurso(cursoResponse.getBody());
+            } catch (FeignException e){
+                throw new IllegalArgumentException("Error al comunicarse con el servicio de Curso", e);
+            }
+        });
+        return cursosDetallesEncontrados;
+    }
+
+    @Override
+    @Transactional
+    public CursoDetalle restarCupoCursoDetalle(CursoDetalleRequest cursoDetalleRequest){
+        Long cursoDetalleIdOperacion = cursoDetalleRequest.getCursoDetalleIdOperacion();
+        CursoDetalle cursoDetalleEncontrado = cursoDetalleRepository.findById(cursoDetalleIdOperacion).orElseThrow(() -> new IllegalArgumentException("Curso detalle con ID " + cursoDetalleIdOperacion + " no existe"));
+        if(cursoDetalleEncontrado.getCupos() > 0) {
+            cursoDetalleEncontrado.setCupos(cursoDetalleEncontrado.getCupos() - 1);
+            return cursoDetalleRepository.save(cursoDetalleEncontrado);
+        } else {
+            throw new RuntimeException("No hay cupos disponibles");
+        }
+    }
+
+    @Override
+    @Transactional
+    public CursoDetalle sumarCupoCursoDetalle(CursoDetalleRequest cursoDetalleRequest){
+        Long cursoDetalleIdOperacion = cursoDetalleRequest.getCursoDetalleIdOperacion();
+        CursoDetalle cursoDetalleEncontrado = cursoDetalleRepository.findById(cursoDetalleIdOperacion).orElseThrow(() -> new IllegalArgumentException("Curso detalle con ID " + cursoDetalleIdOperacion + " no existe"));
+
+        cursoDetalleEncontrado.setCupos(cursoDetalleEncontrado.getCupos() + 1);
+        return cursoDetalleRepository.save(cursoDetalleEncontrado);
     }
 }

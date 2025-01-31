@@ -215,7 +215,7 @@ function ValidarPagoComponent() {
             crearMovimientoAcademico(movimientoAcademico);
         }
 
-        const estado = "PROCESADO"
+        const estado = "PROCESADO";
         try {
             await cambiarDeEstadoVoucher(idVoucher, estado);
 

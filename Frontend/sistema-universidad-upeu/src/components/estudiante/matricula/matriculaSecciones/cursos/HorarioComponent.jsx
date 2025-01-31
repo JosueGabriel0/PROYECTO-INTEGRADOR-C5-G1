@@ -151,7 +151,7 @@ function HorarioComponent({ cicloDetalleConMayorNumero, campus, nombre, horarios
             setFechaFin(formatFechaManual(cicloDetalleConMayorNumero.fechaFin));
         }
         calcularCeldasColoreadas();
-    }, [cicloDetalleConMayorNumero, horariosSeleccionados]);
+    }, [cicloDetalleConMayorNumero, horariosSeleccionados, cursosSeleccionados]);
 
     return (
         <div className="container">
