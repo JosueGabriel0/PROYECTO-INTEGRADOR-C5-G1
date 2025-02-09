@@ -89,7 +89,7 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
             cuenta2.setSaldoFinalCredito(0.0);
 
             MovimientoAcademico movimiento3 = new MovimientoAcademico();
-            movimiento3.setFecha(LocalDate.of(2024, 1, 5));
+            movimiento3.setFecha(LocalDate.of(2025, 1, 5));
             movimiento3.setVoucher(12347);
             movimiento3.setLote("Lote-003");
             movimiento3.setDocumento("Doc-12347");
@@ -111,7 +111,7 @@ public class CuentaFinancieraDataLoader implements CommandLineRunner {
 
             SaldoAFavor saldoAFavor2 = new SaldoAFavor();
             saldoAFavor2.setMontoSaldoAFavor(BigDecimal.ZERO);
-            saldoAFavor2.setFechaSaldoAFavor(LocalDate.of(2024, 1, 1));
+            saldoAFavor2.setFechaSaldoAFavor(LocalDate.of(2025, 1, 1));
             saldoAFavor2.setCuentaFinanciera(cuenta2);
 
             cuenta2.setMovimientosAcademicos(List.of(movimiento3));

@@ -63,6 +63,21 @@ class SaldoAFavorService {
             })
         );
     }
+
+    postSaldoAFavorRestarByCuentaFinanciera(idCuentaFinanciera, monto) {
+        console.log(`${SALDOAFAVOR_BASE_REST_API_URL}/restarSaldoAFavor/${idCuentaFinanciera}`);
+        console.log("Este es el monto: " + JSON.stringify(monto));
+        return axios.post(
+            `${SALDOAFAVOR_BASE_REST_API_URL}/restarSaldoAFavor/${idCuentaFinanciera}`, 
+            monto,
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+    }    
 }
 
 export default new SaldoAFavorService();

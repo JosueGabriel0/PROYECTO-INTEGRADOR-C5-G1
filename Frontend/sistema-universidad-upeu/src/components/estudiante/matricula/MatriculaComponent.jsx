@@ -80,12 +80,10 @@ function MatriculaComponent() {
 
     async function obtenerTodosLosDatos() {
         InscripcionService.getInscripcionById(idInscripcion).then(async (response) => {
-            console.log("Este es la inscripcion: " + JSON.stringify(response.data, null, 2));
 
             const fotoPerfilResponse = response.data.persona.fotoPerfil;
             if (fotoPerfilResponse) {
                 const imagenUrl = await PersonaService.getPersonaImagen(fotoPerfilResponse);
-                console.log("URL de la imagen de Persona:", imagenUrl);
                 setImagenDePersona(imagenUrl);
             } else {
                 console.warn("La persona no tiene una foto de perfil definida");

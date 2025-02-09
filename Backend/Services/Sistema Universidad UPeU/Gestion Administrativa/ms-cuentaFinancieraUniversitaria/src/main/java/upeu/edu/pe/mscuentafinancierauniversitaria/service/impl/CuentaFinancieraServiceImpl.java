@@ -61,10 +61,8 @@ public class CuentaFinancieraServiceImpl implements CuentaFinancieraService {
     @Transactional
     @Override
     public void actualizarSaldoAFavorPorAnio(Long cuentaFinancieraId, Integer anio) {
-        // Filtrar movimientos por cuenta financiera y año
         List<MovimientoAcademico> movimientos = movimientoAcademicoService.buscarPorCuentaYAnio(cuentaFinancieraId, anio);
 
-        // Calcular las sumas de débito y crédito
         BigDecimal totalDebito = movimientos.stream()
                 .map(mov -> new BigDecimal(mov.getDebito()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -72,9 +70,6 @@ public class CuentaFinancieraServiceImpl implements CuentaFinancieraService {
         BigDecimal totalCredito = movimientos.stream()
                 .map(mov -> new BigDecimal(mov.getCredito()))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        // Sumar totalDebito y totalCredito
-        BigDecimal totalSaldoAFavor = totalDebito.add(totalCredito);
 
         // Obtener SaldoAFavor correspondiente
         SaldoAFavor saldoAFavor = saldoAFavorService.buscarPorCuentaYAnio(cuentaFinancieraId, anio);
@@ -87,7 +82,8 @@ public class CuentaFinancieraServiceImpl implements CuentaFinancieraService {
         }
 
         // Actualizar el montoSaldoAFavor
-        saldoAFavor.setMontoSaldoAFavor(totalSaldoAFavor);
+        saldoAFavor.setMontoSaldoAFavor(totalCredito);
+        saldoAFavor.setMontoGastado(totalDebito);
 
         // Guardar el SaldoAFavor
         saldoAFavorRepository.save(saldoAFavor);

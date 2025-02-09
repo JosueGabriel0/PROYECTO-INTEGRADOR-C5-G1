@@ -17,8 +17,7 @@ function InicioMatriculaComponent() {
             const validarEstudiante = async () => {
                 try {
                     const response = await MatriculaService.getValidationEstudianteMatricula(idInscripcion);
-                    setMensaje(response.data.mensaje); // Asume que el backend devuelve { mensaje: "..." }
-                    console.log("Este es el mensaje del Backend: " + response.data.mensaje);
+                    setMensaje(response.data.mensaje);
                 } catch (error) {
                     console.error('Error al validar estudiante:', error);
                     setMensaje('Estudiante no encontrado');

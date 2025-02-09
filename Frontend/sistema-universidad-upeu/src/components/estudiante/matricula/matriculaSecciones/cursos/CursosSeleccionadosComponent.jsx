@@ -7,7 +7,7 @@ import InscripcionService from "../../../../../services/inscripcionServices/Insc
 import Swal from "sweetalert2";
 import CursoDetalleService from "../../../../../services/nivelDeEnsenanzaServices/CursoDetalleService";
 
-function CursosSeleccionadosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, eliminarCurso, cursosSeleccionados, setCursosSeleccionados, idsDocente, totalCreditos, setTotalCreditos, setEstado, idNivelEnsenanza, totalHoras, setTotalHoras, sumarCreditos, restarCreditos, sumarHoras, restarHoras, estadoMatriculaView, setEstadoMatriculaView, contador, setContador, idMatricula, setIdMatricula }) {
+function CursosSeleccionadosComponent({ cicloDetalleConMayorNumero, idOpcionNivel, eliminarCurso, cursosSeleccionados, setCursosSeleccionados, idsDocente, totalCreditos, setTotalCreditos, setEstado, idNivelEnsenanza, totalHoras, setTotalHoras, sumarCreditos, restarCreditos, sumarHoras, restarHoras, estadoMatriculaView, setEstadoMatriculaView, contador, setContador, idMatricula, setIdMatricula, estadoValidacion }) {
     //Datos de Inscripcion
     const idInscripcion = getInscripcionId();
     //Datos de Ciclo
@@ -32,32 +32,26 @@ function CursosSeleccionadosComponent({ cicloDetalleConMayorNumero, idOpcionNive
     const handleMouseLeave = () => setHoveredIndex(null);
 
     async function crearMatriculaInicial(idEstudiante) {
-        console.log("este es el idEstudiante: " + idEstudiante);
         try {
             const responseMatricula = await MatriculaService.getMatriculaByIdEstudiante(idEstudiante);
 
             // Verificar si responseMatricula.data está vacío o no
             if (responseMatricula.data && Object.keys(responseMatricula.data).length > 0) {
-                console.log("Matrícula ya registrada");
                 setEstadoMatriculaView(responseMatricula.data.estado);
                 setIdMatricula(responseMatricula.data.idMatricula);
-
-                console.log("Estos son los ids de curso detalle: " + JSON.stringify(responseMatricula.data.cursosDetalleIds, null, 2));
+                localStorage.setItem("idMatricula", responseMatricula.data.idMatricula);
 
                 await CursoDetalleService.getCursosDetalleByIds(responseMatricula.data.cursosDetalleIds).then((responseCursoDetalle) => {
-                    console.log("Estos son los cursos para poner en cursos seleccionados: " + JSON.stringify(responseCursoDetalle.data, null, 2))
                     setCursosSeleccionados(responseCursoDetalle.data);
 
                     let creditosSumados = 0;
                     responseCursoDetalle.data.forEach((cursoDetalle) => {
-                        console.log("Estos son los creditos: " + cursoDetalle.curso.creditos);
                         creditosSumados = cursoDetalle.curso.creditos + creditosSumados;
                     });
                     setTotalCreditos(creditosSumados);
 
                     let horasSumadas = 0;
                     responseCursoDetalle.data.forEach((cursoDetalle) => {
-                        console.log("Estos son las horas teoricas y practicas: " + cursoDetalle.curso.horasTeoricas + " " + cursoDetalle.curso.horasPracticas);
                         const horas = cursoDetalle.curso.horasTeoricas + cursoDetalle.curso.horasPracticas;
                         horasSumadas = horas + horasSumadas;
                     });
@@ -107,40 +101,46 @@ function CursosSeleccionadosComponent({ cicloDetalleConMayorNumero, idOpcionNive
     function updateMatriculaPendiente(e) {
         e.preventDefault();
 
-        Swal.fire({
-            title: "¿Está seguro de confirmar los cursos seleccionados?",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Aceptar",
-            cancelButtonText: "Cancelar",
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const fechaActual = new Date().toLocaleDateString('en-CA');
+        if (estadoValidacion === "SINCONFLICTOS") {
+            Swal.fire({
+                title: "¿Está seguro de confirmar los cursos seleccionados?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const fechaActual = new Date().toLocaleDateString('en-CA');
 
-                const idNivelEnsenanzaANumero = parseInt(idNivelEnsenanza, 10)
-                const matricula = { idNivelEnsenanza: idNivelEnsenanzaANumero, idEstudiante, idCarrera, idCalendarioAcademico: 0, IdPago: 0, idRequisito: 0, idAdministrativo: 0, tipoAlumno: "REGULAR", numeroDeCreditos: totalCreditos, costoTotal: 0, idCiclo, cursosDetalleIds, estado: "PENDIENTE", fechaMatricula: fechaActual, observaciones: "Ninguna" };
-                console.log("Esta es la matricula: " + JSON.stringify(matricula, null, 2));
-                await MatriculaService.putMatricula(idMatricula, matricula).then((response) => {
-                    console.log("Matricula guardada: " + JSON.stringify(response.data, null, 2));
-                    setEstado("PAGO");
-                }).catch((error) => {
-                    console.error(error);
-                });
-
-                obtenerIdEstudianteMatricula();
-                cursosDetalleIds.forEach((cursoDetalleId) => {
-                    const cursoDetalleRequest = { cursoDetalleIdOperacion:cursoDetalleId };
-                    CursoDetalleService.postCursoDetalleRestarCupo(cursoDetalleRequest).then((response) => {
-                        console.log("Este es el curso al que se le resto el cupo: " + JSON.stringify(response.data, null, 2));
+                    const idNivelEnsenanzaANumero = parseInt(idNivelEnsenanza, 10)
+                    const matricula = { idNivelEnsenanza: idNivelEnsenanzaANumero, idEstudiante, idCarrera, idCalendarioAcademico: 0, IdPago: 0, idRequisito: 0, idAdministrativo: 0, tipoAlumno: "REGULAR", numeroDeCreditos: totalCreditos, costoTotal: 0, idCiclo, cursosDetalleIds, estado: "PENDIENTE", fechaMatricula: fechaActual, observaciones: "Ninguna" };
+                    await MatriculaService.putMatricula(idMatricula, matricula).then((response) => {
+                        setEstado("PAGO");
+                        localStorage.setItem("idMatricula", response.data.idMatricula);
                     }).catch((error) => {
                         console.error(error);
-                    })
-                });
-            } else {
-                console.log("Accion cancelada");
-            }
-        })
+                    });
 
+                    obtenerIdEstudianteMatricula();
+                    cursosDetalleIds.forEach((cursoDetalleId) => {
+                        const cursoDetalleRequest = { cursoDetalleIdOperacion: cursoDetalleId };
+                        CursoDetalleService.postCursoDetalleRestarCupo(cursoDetalleRequest).then((response) => {
+                        }).catch((error) => {
+                            console.error(error);
+                        })
+                    });
+                } else {
+                    console.log("Accion cancelada");
+                }
+            })
+        } else if (estadoValidacion === "CONFLICTOS") {
+            Swal.fire({
+                title: "⚠️ Conflicto en los cursos",
+                text: "Alguno(s) cursos tienen cruce de horarios, vuelva a seleccionar los cursos",
+                icon: "error",
+                confirmButtonText: "Entendido",
+            });
+        }
     }
 
     function updateMatriculaIniciado(e) {
@@ -158,17 +158,15 @@ function CursosSeleccionadosComponent({ cicloDetalleConMayorNumero, idOpcionNive
 
                 const idNivelEnsenanzaANumero = parseInt(idNivelEnsenanza, 10)
                 const matricula = { idNivelEnsenanza: idNivelEnsenanzaANumero, idEstudiante, idCarrera, idCalendarioAcademico: 0, IdPago: 0, idRequisito: 0, idAdministrativo: 0, tipoAlumno: "REGULAR", numeroDeCreditos: totalCreditos, costoTotal: 0, idCiclo, cursosDetalleIds, estado: "INICIADO", fechaMatricula: fechaActual, observaciones: "Ninguna" };
-                console.log("Esta es la matricula: " + JSON.stringify(matricula, null, 2));
                 await MatriculaService.putMatricula(idMatricula, matricula).then((response) => {
-                    console.log("Matricula guardada: " + JSON.stringify(response.data, null, 2));
+                    localStorage.setItem("idMatricula", response.data.idMatricula);
                 }).catch((error) => {
                     console.error(error);
                 });
 
                 cursosDetalleIds.forEach((cursoDetalleId) => {
-                    const cursoDetalleRequest = { cursoDetalleIdOperacion:cursoDetalleId };
+                    const cursoDetalleRequest = { cursoDetalleIdOperacion: cursoDetalleId };
                     CursoDetalleService.postCursoDetalleSumarCupo(cursoDetalleRequest).then((response) => {
-                        console.log("Este es el curso al que se le sumo el cupo: " + JSON.stringify(response.data, null, 2));
                     }).catch((error) => {
                         console.error(error);
                     })

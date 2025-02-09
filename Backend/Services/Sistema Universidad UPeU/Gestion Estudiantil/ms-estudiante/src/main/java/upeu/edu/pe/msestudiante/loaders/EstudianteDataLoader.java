@@ -83,7 +83,7 @@ public class EstudianteDataLoader implements CommandLineRunner {
             estudiante3.setTipoEstudiante("Regular");
             estudiante3.setBeca("Beca parcial");
             estudiante3.setNumeroMatricula("654321");
-            estudiante3.setIdCuentaFinanciera(2L);
+            estudiante3.setIdCuentaFinanciera(3L);
             estudiante3.setCarrerasIngresadasIds(Arrays.asList(1L));
             estudiante3.setAsignaturasMatriculadas(Arrays.asList("Química", "Física"));
             estudiante3.setHorario("Lunes a Viernes 9am - 3pm");

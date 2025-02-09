@@ -27,6 +27,8 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
     //Estado para manejar el boton y seleccion de cursos
     const [estadoMatriculaView, setEstadoMatriculaView] = useState("");
 
+    const [estadoValidacion, setEstadoValidacion] = useState("SINCONFLICTOS");
+
     const agregarCurso = (curso) => {
         if (!cursosSeleccionados.find((c) => c.idCurso === curso.idCurso)) {
             setCursosSeleccionados([...cursosSeleccionados, curso]);
@@ -34,7 +36,6 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
             if (curso.horario && curso.horario.horarioDetalles) {
                 agregarHorario(curso.horario.horarioDetalles);
             }
-            console.log("Horario Agregado: " + JSON.stringify(curso.horario.horarioDetalles, null, 2));
         }
     };
 
@@ -45,7 +46,6 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
         if (cursoAEliminar && cursoAEliminar.horario && cursoAEliminar.horario.horarioDetalles) {
             eliminarHorario(cursoAEliminar.horario.horarioDetalles);
         }
-        console.log("Horario Eliminado: " + JSON.stringify(cursoAEliminar.horario.horarioDetalles, null, 2));
     };
 
     const agregarHorario = (horarios) => {
@@ -67,7 +67,6 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
     };
 
     function verComponenteSeleccionado() {
-        console.log("este es el estado: " + estadoCicloCursos);
         if (estadoCicloCursos === "CICLO") {
             return (
                 <div>
@@ -175,6 +174,7 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
                         setContador={setContador}
                         idMatricula={idMatricula}
                         setIdMatricula={setIdMatricula}
+                        estadoValidacion={estadoValidacion}
                     />
                 </div>
                 <div className="columnCursos">
@@ -184,6 +184,7 @@ function CursosComponent({ idOpcionNivel = "0", cambiarOpcion, campus, setEstado
                         nombre={nombre}
                         horariosSeleccionados={horariosSeleccionados}
                         cursosSeleccionados={cursosSeleccionados}
+                        setEstadoValidacion={setEstadoValidacion}
                     />
                 </div>
             </div>

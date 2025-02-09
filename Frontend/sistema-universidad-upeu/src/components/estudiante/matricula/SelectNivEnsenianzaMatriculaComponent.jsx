@@ -36,29 +36,10 @@ function SelectNivEnsenianzaMatriculaComponent() {
     //React Router Dom
     const navigate = useNavigate();
 
-    useEffect(() => {
-        // Llamada al backend para validar si es estudiante
-        const validarEstudiante = async () => {
-            try {
-                const response = await MatriculaService.getValidationEstudianteMatricula(idInscripcion);
-                setMensaje(response.data.mensaje); // Asume que el backend devuelve { mensaje: "..." }
-                console.log("Este es el mensaje del Backend: " + response.data.mensaje);
-            } catch (error) {
-                console.error('Error al validar estudiante:', error);
-                setMensaje('Estudiante no encontrado');
-            } finally {
-                setCargando(false); // Termina la carga
-            }
-        };
-
-        validarEstudiante();
-    }, [idInscripcion]);
-
     async function obtenerOpcionesNivel() {
         try {
             const inscripcion = await InscripcionService.getInscripcionById(idInscripcion);
             const idEstudiante = inscripcion.data.idEstudiante;
-            console.log("Este es el id del estudiante: " + inscripcion.data.idEstudiante);
             const response = await OpcionNivelService.getOpcionesNivelPorCarrerasEstudiante(idEstudiante);
             setOpcionesNivel(response.data);
 
@@ -90,13 +71,30 @@ function SelectNivEnsenianzaMatriculaComponent() {
         }
     }
 
-    function nivelDeEnsenanzaSeleccionado(idOpcionNivel){
+    function nivelDeEnsenanzaSeleccionado(idOpcionNivel) {
         navigate(`/compromiso-consentimiento/${idOpcionNivel}/${idNivelEnsenanza}`);
     }
 
     useEffect(() => {
         obtenerOpcionesNivel();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        // Llamada al backend para validar si es estudiante
+        const validarEstudiante = async () => {
+            try {
+                const response = await MatriculaService.getValidationEstudianteMatricula(idInscripcion);
+                setMensaje(response.data.mensaje);
+            } catch (error) {
+                console.error('Error al validar estudiante:', error);
+                setMensaje('Estudiante no encontrado');
+            } finally {
+                setCargando(false); // Termina la carga
+            }
+        };
+
+        validarEstudiante();
+    }, [idInscripcion]);
 
     return (
         <div className="container">
@@ -108,7 +106,7 @@ function SelectNivEnsenianzaMatriculaComponent() {
                     {opcionesNivel ? (
                         opcionesNivel.map((opcionNivel) => {
                             return (
-                                <div className="card" key={opcionNivel.idOpcionNivel} onClick={ (e) => {nivelDeEnsenanzaSeleccionado(opcionNivel.idOpcionNivel)}}>
+                                <div className="card" key={opcionNivel.idOpcionNivel} onClick={(e) => { nivelDeEnsenanzaSeleccionado(opcionNivel.idOpcionNivel) }}>
                                     <h2 className="card-title">{nombresNivel[opcionNivel.idOpcionNivel] || 'Cargando...'}</h2>
                                     <div className="card-content">
                                         <p><strong>Semestre:</strong>{opcionNivel.semestre}</p>

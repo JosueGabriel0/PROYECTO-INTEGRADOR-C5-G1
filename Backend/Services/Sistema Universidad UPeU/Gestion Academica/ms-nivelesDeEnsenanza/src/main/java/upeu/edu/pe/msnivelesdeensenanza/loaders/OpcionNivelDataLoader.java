@@ -75,6 +75,16 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 cursoDetalle2.setIdsDocentes(Arrays.asList(1L, 2L));
                 cursoDetalle2.setFechaCreacionCursoDetalle(LocalDateTime.now());
 
+                CursoDetalle cursoDetalle3 = new CursoDetalle();
+                cursoDetalle3.setCicloDetalle(cicloDetalle1);
+                cursoDetalle3.setIdCurso(3L);
+                cursoDetalle3.setGrupo("G2");
+                cursoDetalle3.setCostoTotalPorCreditos(BigDecimal.valueOf(1200));
+                cursoDetalle3.setCupos(20);
+                cursoDetalle3.setCuposDisponibles(20);
+                cursoDetalle3.setIdsDocentes(Arrays.asList(1L));
+                cursoDetalle3.setFechaCreacionCursoDetalle(LocalDateTime.now());
+
                 // Crear Horario para el Curso Detalle
                 Horario horario1 = new Horario();
                 horario1.setFechaInicio(LocalDate.of(2024, 3, 1));
@@ -83,6 +93,10 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
                 Horario horario2 = new Horario();
                 horario2.setFechaInicio(LocalDate.of(2024, 3, 1));
                 horario2.setFechaFin(LocalDate.of(2024, 7, 15));
+
+                Horario horario3 = new Horario();
+                horario3.setFechaInicio(LocalDate.of(2024, 3, 1));
+                horario3.setFechaFin(LocalDate.of(2024, 7, 15));
 
                 // Crear Detalles de Horario
                 HorarioDetalle detalleHorario1 = new HorarioDetalle();
@@ -113,10 +127,25 @@ public class OpcionNivelDataLoader implements CommandLineRunner {
 
                 horario2.setHorarioDetalles(Arrays.asList(detalleHorario3, detalleHorario4));
 
+                HorarioDetalle detalleHorario5 = new HorarioDetalle();
+                detalleHorario5.setHorario(horario3);
+                detalleHorario5.setDia("Martes");
+                detalleHorario5.setHoraInicio(LocalTime.of(14, 55));
+                detalleHorario5.setHoraFin(LocalTime.of(18, 45));
+
+                HorarioDetalle detalleHorario6 = new HorarioDetalle();
+                detalleHorario6.setHorario(horario3);
+                detalleHorario6.setDia("Jueves");
+                detalleHorario6.setHoraInicio(LocalTime.of(13, 10));
+                detalleHorario6.setHoraFin(LocalTime.of(16, 55));
+
+                horario3.setHorarioDetalles(Arrays.asList(detalleHorario5, detalleHorario6));
+
                 cursoDetalle1.setHorario(horario1);
                 cursoDetalle2.setHorario(horario2);
+                cursoDetalle3.setHorario(horario3);
 
-                cicloDetalle1.setCursoDetalles(Arrays.asList(cursoDetalle1, cursoDetalle2));
+                cicloDetalle1.setCursoDetalles(Arrays.asList(cursoDetalle1, cursoDetalle2, cursoDetalle3));
                 opcion1.setCicloDetalle(Arrays.asList(cicloDetalle1));
 
                 // Crear Opción Nivel para Postgrado (similar a la anterior)

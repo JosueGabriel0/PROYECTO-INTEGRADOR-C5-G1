@@ -31,7 +31,6 @@ function DatosPersonalesComponent({idOpcionNivel = "0", cambiarOpcion}) {
 
     function obtenerTodosLosDatos() {
         InscripcionService.getInscripcionById(idInscripcion).then((response) => {
-            console.log("Esta es la inscripcion: " + JSON.stringify(response.data, null, 2));
             setIdPersona(response.data.persona.id);
             setNombres(response.data.persona.nombres);
             setApellido_paterno(response.data.persona.apellido_paterno);
@@ -54,20 +53,16 @@ function DatosPersonalesComponent({idOpcionNivel = "0", cambiarOpcion}) {
     async function actualizarPersonaConEstudiante(e){
         e.preventDefault();
         const datosPersona = {nombres, apellido_paterno, apellido_materno, tipoDocumento, numeroDocumento, telefono, email};
-        console.log("estos son los datos antes de enviar: " + datosPersona);
         await PersonaService.putPersonaDatosEspecificos(idPersona, datosPersona).then((response) => {
-            console.log("Estos son los datos de la persona Actualizada: " + JSON.stringify(response.data, null, 2));
         }).catch((error) => {
             console.error(error);
         });
 
         await EstudianteService.putEstudianteCodigo(codigoUniversitario, idEstudiante).then((response) => {
-            console.log("Este es el response del estudiante Actualizado: " + JSON.stringify(response.data, null, 2));
         }).catch((error) => {
             console.error(error);
         })
 
-        console.log("Datos de persona y estudiante actualizados correctamente");
         Swal.fire({
                     title: '¡Éxito!',
                     text: `Datos personales guardados correctamente`,
@@ -89,7 +84,6 @@ function DatosPersonalesComponent({idOpcionNivel = "0", cambiarOpcion}) {
     }
 
     useEffect(() => {
-        console.log("Este es el parametro: " + idOpcionNivel);
         obtenerTodosLosDatos();
     }, [])
     return (

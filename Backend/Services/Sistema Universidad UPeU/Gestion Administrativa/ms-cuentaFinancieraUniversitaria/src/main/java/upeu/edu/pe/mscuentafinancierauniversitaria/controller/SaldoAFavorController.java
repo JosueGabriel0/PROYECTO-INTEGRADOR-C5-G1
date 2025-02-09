@@ -1,15 +1,15 @@
 package upeu.edu.pe.mscuentafinancierauniversitaria.controller;
 
-import feign.Body;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upeu.edu.pe.mscuentafinancierauniversitaria.entity.SaldoAFavor;
 import upeu.edu.pe.mscuentafinancierauniversitaria.service.SaldoAFavorService;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/saldoAFavor")
@@ -51,5 +51,13 @@ public class SaldoAFavorController {
     ResponseEntity<String> eliminarSaldoAFavor(@PathVariable Long idSaldoAFavor){
         saldoAFavorService.eliminarSaldoAFavorPorId(idSaldoAFavor);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Saldo a Favor con Id "+ idSaldoAFavor +" eliminado");
+    }
+
+    @PostMapping("/restarSaldoAFavor/{idCuentaFinanciera}")
+    ResponseEntity<SaldoAFavor> restarSaldoAFavorPorCuentaFinanciera(@PathVariable Long idCuentaFinanciera, @RequestBody Map<String, BigDecimal> requestBody){
+        BigDecimal monto = requestBody.get("monto");
+        System.out.println("Este es el monto" + monto);
+        SaldoAFavor saldoAFavorRestado = saldoAFavorService.restarSaldoAFavorAcuentaFinanciera(idCuentaFinanciera, monto);
+        return ResponseEntity.status(HttpStatus.OK).body(saldoAFavorRestado);
     }
 }

@@ -24,6 +24,7 @@ function EstadoFinancieroComponent() {
 
     //Datos de Saldo A Favor
     const [montoSaldoAFavor, setMontoSaldoAFavor] = useState("");
+    const [montoGastado, setMontoGastado] = useState("");
     const [fechaSaldoAFavor, setFechaSaldoAFavor] = useState("");
 
     //Datos Personales
@@ -75,6 +76,7 @@ function EstadoFinancieroComponent() {
             console.log("Este es el response: " + JSON.stringify(response.data, null, 2));
             console.log("Este es el monto del saldo a favor: " + response.data.montoSaldoAFavor + " y esta la fecha: " + response.data.fechaSaldoAFavor)
             setMontoSaldoAFavor(response.data.montoSaldoAFavor);
+            setMontoGastado(response.data.montoGastado);
             setFechaSaldoAFavor(response.data.fechaSaldoAFavor);
         }).catch((error) => {
             console.log(error);
@@ -325,7 +327,7 @@ function EstadoFinancieroComponent() {
                             <tr>
                                 <td colSpan="6"></td>
                                 <td colSpan="1">Saldo Final:</td>
-                                <td colSpan="1">0.00</td>
+                                <td colSpan="1">{montoGastado}</td>
                                 <td colSpan="1">{montoSaldoAFavor}</td>
                                 <td colSpan="1"></td>
                             </tr>

@@ -62,7 +62,6 @@ function PagoMedioComponent({ estadoMedioDePago, importeADepositar, costoDeMatri
     }
 
     function mostrarMedioDePago() {
-        console.log("Este es el estado: " + estadoMedioDePago) //CONTADO
         if (estadoMedioDePago === "CONTADO") {
             return contado();
         } else if (estadoMedioDePago === "5_CUOTAS") {

@@ -17,9 +17,11 @@ public class SaldoAFavor {
 
     private BigDecimal montoSaldoAFavor;
 
+    private BigDecimal montoGastado;
+
     private LocalDate fechaSaldoAFavor;
 
-    private LocalDateTime fecheCreacionSaldoAFavor;
+    private LocalDateTime fechaCreacionSaldoAFavor;
     private LocalDateTime fechaModificacionSaldoAFavor;
 
     @ManyToOne
@@ -29,7 +31,7 @@ public class SaldoAFavor {
 
     @PrePersist
     public void onCreate(){
-        fecheCreacionSaldoAFavor = LocalDateTime.now();
+        fechaCreacionSaldoAFavor = LocalDateTime.now();
     }
 
     @PreUpdate

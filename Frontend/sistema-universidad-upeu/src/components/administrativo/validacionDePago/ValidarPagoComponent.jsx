@@ -138,8 +138,6 @@ function ValidarPagoComponent() {
             text: `Voucher ${estadoVoucher} correctamente`,
             icon: 'success', // Icono que se mostrará en la alerta
             confirmButtonText: 'Aceptar', // Texto para el botón de confirmación
-        }).then(() => {
-            window.location.reload();
         });
     }
 

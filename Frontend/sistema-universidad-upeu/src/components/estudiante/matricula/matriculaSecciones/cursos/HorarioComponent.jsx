@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import "../../../../../style-sheets/generalMomentaneo.css";
 
-function HorarioComponent({ cicloDetalleConMayorNumero, campus, nombre, horariosSeleccionados, cursosSeleccionados }) {
+function HorarioComponent({ cicloDetalleConMayorNumero, campus, nombre, horariosSeleccionados, cursosSeleccionados, setEstadoValidacion }) {
     // Datos de Ciclo Detalle
     const [fechaInicio, setFechaInicio] = useState("");
     const [fechaFin, setFechaFin] = useState("");
@@ -80,9 +81,7 @@ function HorarioComponent({ cicloDetalleConMayorNumero, campus, nombre, horarios
     function calcularCeldasColoreadas() {
         const celdas = {};
         const colores = asignarColoresACursos(cursosSeleccionados);
-
-        console.log("Cursos obtenidos: " + JSON.stringify(cursosSeleccionados, null, 2));
-        console.log("Horario obtenido: " + JSON.stringify(horariosSeleccionados, null, 2));
+        const conflictos = {}; // Almacena los conflictos detectados
 
         cursosSeleccionados.forEach((curso, index) => {
             const { curso: cursoInfo, horario } = curso;
@@ -107,23 +106,45 @@ function HorarioComponent({ cicloDetalleConMayorNumero, campus, nombre, horarios
 
                         if (horaInicioFormateadoComparacion <= horaInicioComparacion && horaFinComparacion <= horaFinFormateadoComparacion) {
                             if (!celdas[diaAbreviado]) {
-                                celdas[diaAbreviado] = {}; // Si no existe, inicializa un objeto vacío para ese día
+                                celdas[diaAbreviado] = {};
                             }
 
-                            // Asocia el nombre del curso y el color a la celda
-                            celdas[diaAbreviado][rangoHora] = {
-                                nombreCurso,
-                                color: colorCurso,
-                                index,
-                            };
+                            // Si ya hay un curso en la misma celda, se detecta un conflicto
+                            if (celdas[diaAbreviado][rangoHora]) {
+                                conflictos[diaAbreviado] = conflictos[diaAbreviado] || {};
+                                conflictos[diaAbreviado][rangoHora] = [
+                                    ...(conflictos[diaAbreviado][rangoHora] || []),
+                                    nombreCurso,
+                                ];
+                                celdas[diaAbreviado][rangoHora].color = "red"; // Marcar en rojo si hay conflicto
+                            } else {
+                                // Asigna el color si no hay conflicto
+                                celdas[diaAbreviado][rangoHora] = {
+                                    nombreCurso,
+                                    color: colorCurso,
+                                    index,
+                                };
+                            }
                         }
                     });
                 });
             });
         });
 
-        console.log("Este es el objeto: " + JSON.stringify(celdas, null, 2));
         setCeldasColoreadas(celdas);
+
+        if (Object.keys(conflictos).length > 0) {
+            setEstadoValidacion("CONFLICTOS");
+            Swal.fire({
+                title: "⚠️ Conflicto detectado",
+                text: `El curso que acaba de seleccionar acaba de generar un conflicto de horarios. Verifícalo.`,
+                icon: "warning",
+                confirmButtonText: "Revisar",
+            });
+            console.warn("Conflictos detectados:", conflictos);
+        } else {
+            setEstadoValidacion("SINCONFLICTOS");
+        }
     }
 
     const coloresPredefinidos = [

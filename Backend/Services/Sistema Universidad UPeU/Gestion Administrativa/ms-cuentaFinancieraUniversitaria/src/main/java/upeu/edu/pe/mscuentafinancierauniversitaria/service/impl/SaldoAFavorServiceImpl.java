@@ -8,6 +8,7 @@ import upeu.edu.pe.mscuentafinancierauniversitaria.repository.CuentaFinancieraRe
 import upeu.edu.pe.mscuentafinancierauniversitaria.repository.SaldoAFavorRepository;
 import upeu.edu.pe.mscuentafinancierauniversitaria.service.SaldoAFavorService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,7 +42,8 @@ public class SaldoAFavorServiceImpl implements SaldoAFavorService {
     public SaldoAFavor buscarPorCuentaYAnio(Long idCuentaFinanciera, Integer anio) {
         LocalDate startDate = LocalDate.of(anio, 1, 1);
         LocalDate endDate = LocalDate.of(anio, 12, 31);
-        SaldoAFavor saldoAFavorEncontrado = saldoAFavorRepository.findByCuentaFinancieraIdCuentaFinancieraAndFechaSaldoAFavorBetween(idCuentaFinanciera, startDate, endDate);
+        List<SaldoAFavor> saldosAFavorEncontrados = saldoAFavorRepository.findByCuentaFinancieraIdCuentaFinancieraAndFechaSaldoAFavorBetween(idCuentaFinanciera, startDate, endDate);
+        SaldoAFavor saldoAFavorEncontrado = saldosAFavorEncontrados.get(saldosAFavorEncontrados.size() - 1);
         return saldoAFavorEncontrado;
     }
 
@@ -58,5 +60,33 @@ public class SaldoAFavorServiceImpl implements SaldoAFavorService {
     @Override
     public void eliminarSaldoAFavorPorId(Long idSaldoAFavor) {
         saldoAFavorRepository.deleteById(idSaldoAFavor);
+    }
+
+    @Override
+    public SaldoAFavor restarSaldoAFavorAcuentaFinanciera(Long idCuentaFinanciera, BigDecimal valor) {
+        List<SaldoAFavor> saldosAFavorEncontrados = saldoAFavorRepository.findByCuentaFinancieraIdCuentaFinanciera(idCuentaFinanciera);
+
+        if (saldosAFavorEncontrados.isEmpty()) {
+            throw new RuntimeException("No se encontraron saldos a favor para la cuenta financiera con ID " + idCuentaFinanciera);
+        }
+
+        SaldoAFavor saldoAFavorAnterior = saldosAFavorEncontrados.get(saldosAFavorEncontrados.size() - 1);
+
+        if (saldoAFavorAnterior.getMontoSaldoAFavor().compareTo(valor) < 0) {
+            throw new RuntimeException("Saldo insuficiente en la cuenta financiera con ID " + idCuentaFinanciera +
+                    ". Saldo actual: " + saldoAFavorAnterior.getMontoSaldoAFavor() + ", intento de resta: " + valor);
+        }
+
+        CuentaFinanciera cuentaFinanciera = cuentaFinancieraRepository.findById(idCuentaFinanciera)
+                .orElseThrow(() -> new RuntimeException("La cuenta financiera con ID " + idCuentaFinanciera + " no encontrada"));
+
+        SaldoAFavor nuevoSaldoAFavor = new SaldoAFavor();
+        nuevoSaldoAFavor.setCuentaFinanciera(cuentaFinanciera);
+        nuevoSaldoAFavor.setFechaSaldoAFavor(LocalDate.now());
+        nuevoSaldoAFavor.setMontoSaldoAFavor(saldoAFavorAnterior.getMontoSaldoAFavor().subtract(valor));
+        nuevoSaldoAFavor.setMontoGastado(saldoAFavorAnterior.getMontoGastado());
+
+        // Guardar y retornar el nuevo saldo
+        return saldoAFavorRepository.save(nuevoSaldoAFavor);
     }
 }

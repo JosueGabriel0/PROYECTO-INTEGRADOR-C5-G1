@@ -46,14 +46,12 @@ function AddResponsableFinancieroComponent() {
 
         if (JSON.stringify(responsableFinansieroResponse) !== "{}") {
             ResponsableFinancieroService.putResponsableFinanciero(idResponsableFinanciero, responsableFinanciero).then((response) => {
-                console.log("Este es el responsable financiero actualizado: " + JSON.stringify(response.data, null, 2));
                 navigate(`/matricula/${idOpcionNivel}`);
             }).catch((error) => {
                 console.error(error);
             });
         } else {
             ResponsableFinancieroService.postResponsableFinancieroToEstudiante(idEstudiante, responsableFinanciero).then((response) => {
-                console.log("Este es el responsable financiero creado: " + JSON.stringify(response.data, null, 2));
                 navigate(`/matricula/${idOpcionNivel}`);
             }).catch((error) => {
                 console.error(error);
@@ -68,14 +66,12 @@ function AddResponsableFinancieroComponent() {
 
         if (JSON.stringify(responsableFinansieroResponse) !== "{}") {
             ResponsableFinancieroService.putResponsableFinanciero(idResponsableFinanciero, responsableFinanciero).then((response) => {
-                console.log("Este es el responsable financiero actualizado (AUTOSUSTENTO): " + JSON.stringify(response.data, null, 2));
                 navigate(`/matricula/${idOpcionNivel}`);
             }).catch((error) => {
                 console.error(error);
             });
         } else {
             ResponsableFinancieroService.postResponsableFinancieroToEstudiante(idEstudiante, responsableFinanciero).then((response) => {
-                console.log("Este es el responsable financiero creado (AUTOSUSTENTO): " + JSON.stringify(response.data, null, 2));
                 navigate(`/matricula/${idOpcionNivel}`);
             }).catch((error) => {
                 console.error(error);
@@ -87,7 +83,6 @@ function AddResponsableFinancieroComponent() {
     function obtenerDatosEstudianteYPersona() {
         InscripcionService.getInscripcionById(idInscripcion).then((response) => {
             const idDelEstudiante = response.data.estudiante.idEstudiante;
-            console.log("Este es el id del Estudiante: " + idDelEstudiante)
             setIdEstudiante(idDelEstudiante);
 
             setNacionalidadPersona(response.data.persona.nacionalidad);
@@ -105,7 +100,6 @@ function AddResponsableFinancieroComponent() {
     async function verificarResponsableFinanciero() {
         if (idResponsableFinanciero !== "0") {
             ResponsableFinancieroService.getResponsablesFinancierosById(idResponsableFinanciero).then((response) => {
-                console.log("Este es el responsable financiero: " + JSON.stringify(response.data, null, 2));
                 setResponsableFinansieroResponse(response.data);
                 setParentesco(response.data.parentesco);
                 setNacionalidad(response.data.nacionalidad);
