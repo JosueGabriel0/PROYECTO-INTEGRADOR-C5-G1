@@ -1,4 +1,6 @@
 import React from 'react';
+
+import "./App.css";
 import { BrowserRouter as BrowserRouter, Routes, Route } from 'react-router-dom';
 import GeneralProtectedRouteComponent from './components/general/GeneralProtectedRouteComponent';
 import ListRolComponent from './components/administrador/GestionarRol/ListRolComponent';
@@ -16,7 +18,7 @@ import AddDocenteComponent from './components/administrador/GestionarDocente/Add
 import ListEstudianteComponent from './components/administrador/GestionarEstudiante/ListEstudianteComponent';
 import AddEstudianteComponent from './components/administrador/GestionarEstudiante/AddEstudianteComponent';
 
-import GeneralInicioComponent from './components/general/GeneralInicioComponent';
+import GeneralInicioDashboardComponent from './components/general/inicioDashboard/GeneralInicioDashboardComponent';
 import GeneralLoginComponent from './components/general/GeneralLoginComponent';
 import AdministradorDashboardComponent from './components/administrador/AdministradorDashboardComponent';
 import { getUserRole, isAuthenticated } from './services/authServices/authService'; // Importa la función de verificación de autenticación
@@ -69,7 +71,7 @@ const App = () => {
     <BrowserRouter>
       <div className='container'>
         <Routes>
-          <Route exact path='/' element={<GeneralInicioComponent />} />
+          <Route exact path='/' element={<GeneralInicioDashboardComponent />} />
 
           {/* Ruta de login pública */}
           <Route path='/login' element={<GeneralLoginComponent />} />
