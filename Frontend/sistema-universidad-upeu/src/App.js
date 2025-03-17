@@ -475,7 +475,7 @@ const App = () => {
             path='/dashboard-estudiante'
             element={
               <GeneralProtectedRouteComponent allowedRoles={['ESTUDIANTE']}>
-                <EstudianteDashboardComponent />
+              < EstudianteDashboardComponent />
               </GeneralProtectedRouteComponent>
             }
           />

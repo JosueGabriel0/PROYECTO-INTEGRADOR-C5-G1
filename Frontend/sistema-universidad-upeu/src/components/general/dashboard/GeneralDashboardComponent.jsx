@@ -4,16 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import Spline from '@splinetool/react-spline';
 import GeneralProfileCardComponent from './GeneralProfileCardComponent';
 
-import { getUserRole } from '../../../services/authServices/authService';
+import { getUserRole, logout } from '../../../services/authServices/authService';
+
+import GeneralDashboardComponentCSS from "../../../style-sheets/general/dashboard/GeneralDashboardComponentCSS.module.css";
+
+import { FaRegFileLines } from "react-icons/fa6";
+import { RiHome3Line } from "react-icons/ri";
+import { BsPersonSquare } from "react-icons/bs";
+import { PiStudent } from "react-icons/pi";
+import { LuPenLine } from "react-icons/lu";
 
 function GeneralDashboardComponent({ titulo = "Dshboard" }) {
   const nombreRol = getUserRole();
+  const navigate = useNavigate();
   function opcionesSegunRol() {
     if (nombreRol === "ADMINISTRADOR") {
       return (
         <div>
-          <section style={{ marginTop: "20px" }}>
-            <h2>Acciones</h2>
+          <section>
             <Link to="/inscripciones">Inscripciones</Link>&nbsp;&nbsp;
             <Link to="/roles">Roles</Link>&nbsp;&nbsp;
             <Link to="/usuarios">Usuarios</Link>&nbsp;&nbsp;
@@ -26,20 +34,18 @@ function GeneralDashboardComponent({ titulo = "Dshboard" }) {
           </section>
         </div>
       )
-    } else if(nombreRol === "ADMINISTRATIVO"){
-      return(
+    } else if (nombreRol === "ADMINISTRATIVO") {
+      return (
         <div>
-          <section style={{ marginTop: "20px" }}>
-            <h2>Acciones</h2>
+          <section>
             <Link to="/validacion-pagos">Validar Voucher a Pago</Link>
           </section>
         </div>
       )
-    }else if(nombreRol === "DOCENTE"){
-      return(
+    } else if (nombreRol === "DOCENTE") {
+      return (
         <div>
-          <section style={{ marginTop: "20px" }}>
-            <h2>Acciones</h2>
+          <section>
             <Link to="/inscripciones">Inscripciones</Link>&nbsp;&nbsp;
             <Link to="/roles">Roles</Link>&nbsp;&nbsp;
             <Link to="/usuarios">Usuarios</Link>&nbsp;&nbsp;
@@ -52,71 +58,107 @@ function GeneralDashboardComponent({ titulo = "Dshboard" }) {
           </section>
         </div>
       )
-    }else if(nombreRol === "ESTUDIANTE"){
-      return(
-        <div>
-          <section style={{ marginTop: "20px" }}>
-            <h2>Acciones</h2>
-            <Link to="/portal-academico">PORTAL DEL ESTUDIANTE</Link>&nbsp;&nbsp;
-            <Link to="/inicio-matricula-virtual-estudiante">MATRÍCULA</Link>&nbsp;&nbsp;
-            <Link to="/usuarios">BIENESTAR UNIV.</Link>&nbsp;&nbsp;
-            <Link to="/personas">B-LEARNING</Link>&nbsp;&nbsp;
-            <Link to="/administradores">LAMB LEARNING</Link>&nbsp;&nbsp;
-          </section>
+    } else if (nombreRol === "ESTUDIANTE") {
+      return (
+        <div className={GeneralDashboardComponentCSS["opciones"]}>
+          <Link to="/portal-academico" style={{ textDecoration: "none", height: 0 }}>
+            <div className={GeneralDashboardComponentCSS["card"]}>
+              <div className={GeneralDashboardComponentCSS["card__border"]} />
+              <div className={GeneralDashboardComponentCSS["card_title__container"]}>
+                <span className={GeneralDashboardComponentCSS["card_title"]}>PORTAL DEL ESTUDIANTE</span>
+                <p className={GeneralDashboardComponentCSS["card_paragraph"]}>Conoce el portal del estudiante para conocer a detalle las opciones del estudiante</p>
+              </div>
+              <hr className={GeneralDashboardComponentCSS["line"]} />
+              <div className={GeneralDashboardComponentCSS["portalAcademico-icon"]}>
+                <BsPersonSquare size={150} color="white" />
+              </div>
+              <button className={GeneralDashboardComponentCSS["button"]}>Ingresar a portal</button>
+            </div>
+          </Link>
+          <Link to="/inicio-matricula-virtual-estudiante" style={{ textDecoration: "none", height: 0 }}>
+            <div className={GeneralDashboardComponentCSS["card"]}>
+              <div className={GeneralDashboardComponentCSS["card__border"]} />
+              <div className={GeneralDashboardComponentCSS["card_title__container"]}>
+                <span className={GeneralDashboardComponentCSS["card_title"]}>MATRÍCULA</span>
+                <p className={GeneralDashboardComponentCSS["card_paragraph"]}>Realiza una matricula o visualiza los programas en los que estas matriculado</p>
+              </div>
+              <hr className={GeneralDashboardComponentCSS["line"]} />
+              <div className={GeneralDashboardComponentCSS["matricula-icon"]}>
+                <FaRegFileLines size={150} color='white' />
+              </div>
+              <button className={GeneralDashboardComponentCSS["button"]}>Ingresar a matricula</button>
+            </div></Link>
+          <Link to="/usuarios" style={{ textDecoration: "none", height: 0 }}>
+            <div className={GeneralDashboardComponentCSS["card"]}>
+              <div className={GeneralDashboardComponentCSS["card__border"]} />
+              <div className={GeneralDashboardComponentCSS["card_title__container"]}>
+                <span className={GeneralDashboardComponentCSS["card_title"]}>BIENESTAR UNIV.</span>
+                <p className={GeneralDashboardComponentCSS["card_paragraph"]}>Descubre los servicios de bienestar universitario que la UPEU ofrese</p>
+              </div>
+              <hr className={GeneralDashboardComponentCSS["line"]} />
+              <div className={GeneralDashboardComponentCSS["bienestarU-icon"]}>
+                <RiHome3Line size={150} color="white" />
+              </div>
+              <button className={GeneralDashboardComponentCSS["button"]}>Ingresar a bienestar U</button>
+            </div></Link>
+          <Link to="/personas" style={{ textDecoration: "none", height: 0 }}>
+            <div className={GeneralDashboardComponentCSS["card"]}>
+              <div className={GeneralDashboardComponentCSS["card__border"]} />
+              <div className={GeneralDashboardComponentCSS["card_title__container"]}>
+                <span className={GeneralDashboardComponentCSS["card_title"]}>B-LEARNING</span>
+                <p className={GeneralDashboardComponentCSS["card_paragraph"]}>Ingresa al sistema academico B-LEARNING para conocer tus cursos matriculados, tareas, etc</p>
+              </div>
+              <hr className={GeneralDashboardComponentCSS["line"]} />
+              <div className={GeneralDashboardComponentCSS["blearning-icon"]}>
+                <PiStudent size={150} color="white" />
+              </div>
+              <button className={GeneralDashboardComponentCSS["button"]}>Ingresar a B-learning</button>
+            </div></Link>
+          <Link to="/administradores" style={{ textDecoration: "none" }}>
+            <div className={GeneralDashboardComponentCSS["card"]}>
+              <div className={GeneralDashboardComponentCSS["card__border"]} />
+              <div className={GeneralDashboardComponentCSS["card_title__container"]}>
+                <span className={GeneralDashboardComponentCSS["card_title"]}>LAMB LEARNING</span>
+                <p className={GeneralDashboardComponentCSS["card_paragraph"]}>Ingresa al anterrior sistema academico LAMB LEARNING para ver tareas enviadas, cursos anteriores, etc</p>
+              </div>
+              <hr className={GeneralDashboardComponentCSS["line"]} />
+              <div className={GeneralDashboardComponentCSS["lambLearning-icon"]}>
+                <LuPenLine size={150} color="white" />
+              </div>
+              <button className={GeneralDashboardComponentCSS["button"]}>Ingresar a lamb learning</button>
+            </div></Link>
         </div>
       )
     }
   }
+
+  function handleLogOut(e){
+    e.preventDefault();
+    logout();
+    navigate('/login');
+  }
+  
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-      {/* Fondo Spline */}
-      <div
-        style={{
-          width: "100%",
-          height: "100vh",
-          overflow: "hidden",
-        }}
-      >
-        {/*<Spline scene="https://prod.spline.design/MwtxV8UARi6sJ67B/scene.splinecode" />
-        <Spline scene="https://prod.spline.design/qYVvRyxsQv9ZTLJD/scene.splinecode" />
-        */}
-        <Spline scene="https://prod.spline.design/WyaY6g5euT7Rs7lf/scene.splinecode" />
+    <div className={GeneralDashboardComponentCSS["container"]}>
+      <div className={GeneralDashboardComponentCSS["fondo"]}>
+        <Spline scene="https://prod.spline.design/QHiH5hEWV5v9Y8Vs/scene.splinecode" />
       </div>
 
-      {/* Contenido encima del fondo */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          color: "white",
-          textAlign: "center",
-          padding: "20px",
-        }}
-      >
-        <h1>{titulo}</h1>
-        <p>Bienvenido al panel principal de administración del sistema universitario UPeU.</p>
-
-        <GeneralProfileCardComponent />
-
-        {/* Resumen rápido */}
-        <section style={{ marginTop: "20px" }}>
-          <h2>Resumen rápido</h2>
-          <ul>
-            <li>Estudiantes registrados: 1200</li>
-            <li>Cursos disponibles: 45</li>
-            <li>Profesores activos: 75</li>
-          </ul>
-        </section>
-
-        {/* Acciones rápidas */}
-        {opcionesSegunRol()}
+      <div className={GeneralDashboardComponentCSS["content"]}>
+        <div className={GeneralDashboardComponentCSS["primer-contenido"]}>
+          {opcionesSegunRol()}
+        </div>
+        <div className={GeneralDashboardComponentCSS["segundo-contenido"]}>
+          <div className={GeneralDashboardComponentCSS["contenedor-logo"]}>
+            <img src="/images/logoo.png" alt="" />
+          </div>
+          <div className={GeneralDashboardComponentCSS["perfil-card"]}>
+            <GeneralProfileCardComponent />
+          </div>
+          <div className={GeneralDashboardComponentCSS["opcion-cerrar-sesion"]}>
+            <button onClick={(e) => {handleLogOut(e)}}>CERRAR SESIÓN</button>
+          </div>
+        </div>
       </div>
     </div>
 

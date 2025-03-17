@@ -103,8 +103,6 @@ const GeneralLoginComponent = () => {
                     <div className={GeneralLoginComponentCSS["login-container-1"]}>
                         <div className={GeneralLoginComponentCSS["login-container-data"]}>
                             <h2>Iniciar sesión aquí</h2>
-                            {error && <p>{error}</p>}
-
                             <form onSubmit={handleLogin}>
                                 <div className={GeneralLoginComponentCSS["user-container"]}>
                                     <label>Usuario</label>
@@ -153,6 +151,7 @@ const GeneralLoginComponent = () => {
                                     <Link to="/restablecimiento-contrasenia" className={GeneralLoginComponentCSS["forgot-password"]}>¿Olvidaste la contraseña?</Link>
                                 </div>
 
+                                {error && <div className={GeneralLoginComponentCSS["error"]}>{error}</div>}
                                 <button type="submit" className={GeneralLoginComponentCSS["login-button"]}>Iniciar Sesión</button>
                             </form>
 

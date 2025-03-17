@@ -240,6 +240,11 @@ label {
     font-size: 15px;
 }
 
+.error {
+    font-size: 15px;
+    color: red;
+}
+
 .login-button {
     margin-top: 15px;
     width: 100%;
